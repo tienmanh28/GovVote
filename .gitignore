@@ -1,0 +1,16 @@
+# Compiler files
+cache/
+out/
+
+# Commonly ignored directories
+.logs/
+.ignore/
+
+# Log của forge script (tx hash, địa chỉ, calldata) cho MỌI chain: không đưa vào Git.
+# Địa chỉ/tx cần công khai sẽ được ghi tay vào báo cáo demo sau khi kiểm tra.
+broadcast/
+
+# Dotenv file
+.env
+.env.*
+!.env.example

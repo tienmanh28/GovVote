@@ -1,0 +1,35 @@
+# Cấu hình Foundry cho GovVote v1.1
+# Tham chiếu: đặc tả mục 4.3 (fuzz/invariant) và Phụ lục B (lệnh).
+
+[profile.default]
+src = "src"          # contract nghiệp vụ: GovToken.sol, GovVote.sol
+test = "test"        # test tách khỏi src (đặc tả 3.1)
+script = "script"    # Deploy.s.sol, SeedDemo.s.sol
+out = "out"          # artifact biên dịch (ABI, bytecode), bị .gitignore
+libs = ["lib"]       # thư viện khóa theo git submodule
+
+# Khóa đúng phiên bản compiler, không để Foundry tự chọn bản khác.
+solc_version = "0.8.28"
+# OZ 5.6.1 dùng opcode `mcopy`, cần EVM từ bản Cancun trở lên.
+# Ghi rõ ra thay vì dựa vào giá trị mặc định có thể đổi giữa các bản Foundry.
+evm_version = "cancun"
+
+# Bật optimizer với 200 runs (cân bằng giữa chi phí deploy và chi phí gọi hàm).
+optimizer = true
+optimizer_runs = 200
+
+# Fuzz test: số input ngẫu nhiên cho mỗi hàm test có tham số.
+# Đặc tả: khởi đầu 1000; trước release chạy --fuzz-runs 10000.
+[fuzz]
+runs = 1000
+
+# Invariant test: 256 chuỗi thao tác ngẫu nhiên, mỗi chuỗi 50 lời gọi.
+[invariant]
+runs = 256
+depth = 50
+
+# Định dạng code cho `forge fmt` (dùng mặc định, chỉ ghi rõ vài mục chính).
+[fmt]
+line_length = 120
+tab_width = 4
+bracket_spacing = false
