@@ -1,0 +1,60 @@
+# GovVote v1.1: threat model
+
+Phạm vi: `src/GovToken.sol`, `src/GovVote.sol` và script kiểm chứng `scripts/verify/`.
+
+Tài liệu này chỉ ghi những gì v1.1 làm và không làm, kèm bằng chứng test. Mọi tên test bên dưới đều đã được grep trong `test/` hoặc `scripts/verify/test/`.
+
+## Tài sản cần bảo vệ
+
+| Tài sản | Ý nghĩa |
+|---|---|
+| Tính đúng của tally | `forVotes` / `againstVotes` bằng đúng tổng weight hợp lệ. Mỗi phiếu tính một lần, với weight lấy tại snapshot |
+| Tính đúng của kết quả | `state()` trả Succeeded khi và chỉ khi đạt quorum và For > Against, chỉ sau deadline (đặc tả mục 2.3 và 2.5) |
+| Tổng cung GOV | 1.000.000 GOV, không đổi sau deploy. Quorum dựa vào tổng cung tại snapshot (tổng cung: mục 2.1 và 3.2; quorum: mục 2.5) |
+
+## Các bên
+
+| Bên | Làm được gì | Tin cậy ở mức nào |
+|---|---|---|
+| Người bỏ phiếu | Delegate, vote một lần mỗi proposal bằng weight tại snapshot | Không tin cậy. Contract tự kiểm mọi điều kiện |
+| Người đề xuất | Tạo proposal nếu có ít nhất 1.000 GOV voting power ở block trước | Không tin cậy |
+| Kẻ tấn công có GOV | Mua, vay, chuyển hoặc delegate GOV, tạo nhiều proposal | Không tin cậy. Đây là đối tượng chính của bảng dưới |
+| Nhà cung cấp RPC | Trả log, storage và block cho frontend và script verify | Được tin một phần. Có thể sai, chậm hoặc bỏ sót |
+| Người vận hành frontend | Quyết định UI hiển thị gì | Được tin một phần. Không thể đổi dữ liệu on-chain nhưng có thể hiển thị sai |
+
+## Bảng mối đe dọa
+
+| Mối đe dọa | Biện pháp trong v1.1 | Test kiểm chứng | Rủi ro còn lại |
+|---|---|---|---|
+| Bỏ phiếu hai lần | `hasVoted[id][voter]` được ghi trước khi cộng tally (CEI). Lần hai revert `AlreadyVoted`, kể cả khi đổi lựa chọn | `test_RevertWhenAlreadyVoted`, `invariant_I5_OneVotePerVoter` | Chặn theo **địa chỉ**, không theo người thật. Một người chia GOV ra nhiều ví vẫn chỉ có tổng weight như cũ, nhưng không thể chứng minh 1 người = 1 phiếu (mục 2.4) |
+| Vote khi chưa đủ quyền (giữ GOV nhưng chưa được delegate) | Weight = `getPastVotes(voter, snapshotBlock)`. Weight bằng 0 thì revert `NoVotingPower`. Số dư `balanceOf` không được dùng làm weight (mục 4.4) | `test_RevertWhenNotDelegated`, `test_DelegateAfterSnapshotDoesNotCount`, `testFuzz_WeightEqualsPastVotes` | Contract chặn đúng. Người dùng có thể nhầm "có GOV là vote được". Việc giải thích sự khác nhau giữa số dư và voting power thuộc về UI (Phase 3, chưa làm) |
+| Chuyển token sau snapshot để dùng lại quyền vote | Weight = `getPastVotes(voter, snapshotBlock)`. Token hoặc delegation đến sau snapshot không có weight cho proposal đó | `testFuzz_WeightEqualsPastVotes`, `test_TransferAfterSnapshotDoesNotChangeTally`, `test_DelegateAfterSnapshotDoesNotCount`, `test_FlashLoanVoteDoesNotCount`, `invariant_I1_TallyWithinSnapshotSupply`, `invariant_I2_TallyMatchesGhostWeights` | Không còn rủi ro trong mô hình này, với điều kiện token tuân thủ đúng `IVotes` |
+| **Mua hoặc vay GOV trước snapshot rồi bỏ phiếu** | **Snapshot KHÔNG chặn được.** Token có và được delegate trước khi snapshot kết thúc, kể cả trong chính `snapshotBlock`, vẫn được tính đầy đủ | `test_DelegateBeforeSnapshotCounts` chứng minh **rủi ro vẫn tồn tại**: delegate tại `snapshotBlock` vẫn có weight. `test_FlashLoanVoteDoesNotCount` chỉ chứng minh trường hợp token đến **sau** snapshot | **Rủi ro còn lại, chấp nhận có chủ đích** (mục 2.4). Không tuyên bố đã chống flash-loan hay governance attack. `votingDelayBlocks` chỉ cho cộng đồng thời gian để nhận ra |
+| Spam đề xuất | `proposalThreshold` (1.000 GOV) đọc ở `block.number − 1`. Title 1–100 byte, description tối đa 1.000 byte | `test_RevertWhenBelowThreshold`, `testFuzz_ThresholdBoundary`, `test_ThresholdReadsPreviousBlock`, `test_RevertWhenTitleInvalid`, `test_RevertWhenDescriptionTooLong` | Một ví giàu GOV vẫn spam được, chỉ tốn gas. Rate-limit, cooldown hay deposit là ý tưởng v2 (mục 2.2) |
+| Chèn dữ liệu dài (tăng gas, giao diện khó đọc) | Title 1–100 byte, description tối đa 1.000 byte, đo bằng `bytes(...).length` (`MAX_TITLE_BYTES`, `MAX_DESCRIPTION_BYTES`). Escape output khi hiển thị bằng React: chưa làm, thuộc Phase 3 (mục 4.4) | `test_RevertWhenTitleInvalid`, `test_RevertWhenDescriptionTooLong` | Contract chỉ đo độ dài, không kiểm nội dung. Chuỗi không phải UTF-8 hợp lệ, ký tự điều khiển hoặc văn bản gây hiểu nhầm vẫn được lưu vĩnh viễn. Hiển thị an toàn phụ thuộc hoàn toàn vào frontend |
+| Giao quyền vote cho người không vote | Không có biện pháp trong contract. Delegation là quyền của chủ token | `test_DelegateSelfAndOther`, `test_RevertWhenNotDelegated`, `test_UndelegatedSupplyRaisesQuorumBar` | Contract không ngăn được. Weight giao cho người không vote coi như mất, và quorum khó đạt hơn vì mẫu số là toàn bộ tổng cung (mục 2.5). Chỉ UI hiển thị và hướng dẫn được |
+| Quorum không hợp lý (ít tham gia nhưng muốn thông qua; thao túng từ cá voi) | `quorumBps` chọn lúc deploy (demo 1.000 = 10%) và `immutable` sau đó. Quorum tính trên tổng cung tại snapshot, làm tròn lên. Ngưỡng được test ở biên (mục 2.5, 4.4) | `test_SucceedsWhenQuorumMet`, `test_DefeatedWhenForOnlyBelowQuorum`, `test_DefeatedWhenQuorumNotMet`, `test_QuorumRoundsUp` | **Không chống được cá voi** (mục 4.4). Một ví có từ 100.000 GOV voting power trở lên tự thông qua được proposal, miễn là tổng Against của người khác nhỏ hơn số For của ví đó. Với phân phối demo, Alice giữ 40% nên tự thông qua được. Chưa có test riêng cho trường hợp một ví tự thông qua; kết luận này suy ra từ công thức ở mục 2.5 |
+| Tổng cung bị phình | GovToken chỉ gọi `_mint` trong constructor, không có hàm mint, burn, pause hay owner. Quorum đọc `getPastTotalSupply(snapshot)`, không dùng tổng cung hiện tại | `test_TotalSupplyFixed`, `test_QuorumUsesSnapshotSupply` (dùng mock có mint, chỉ trong test), `test_QuorumRoundsUp` | Không còn rủi ro với GovToken. Nếu GovVote được deploy với một token `IVotes` khác có mint, thì supply tại snapshot vẫn đúng nhưng phân phối quyền lực phụ thuộc token đó |
+| Bỏ phiếu ngoài thời gian, hoặc đổi kết quả sau deadline | `castVote` chỉ chấp nhận khi Active (`snapshot < N ≤ deadline`). Sau deadline, tally không đổi | `test_RevertWhenVotingWhilePending`, `test_RevertAfterDeadlineBlock`, `test_PendingAtSnapshotBlock`, `test_ActiveAtDeadlineBlock`, `invariant_I4_TallyFrozenAfterDeadline`, `invariant_I6_SucceededImpliesQuorumAndMajority` | Không còn rủi ro trong contract. Thời gian thực của 7.200 block chỉ là ước tính (mục 2.3) |
+| Vote sát giờ đóng (race giữa UI và chain) | Contract xét `block.number` của block chứa giao dịch, không xét lúc người dùng bấm nút. Block `deadlineBlock` vẫn nhận phiếu, từ `deadlineBlock + 1` thì revert `NotActive` (mục 2.3, 4.4). Frontend giải thích lý do khi revert: chưa làm, thuộc Phase 3 | `test_ActiveAtDeadlineBlock`, `test_RevertAfterDeadlineBlock` | Giao dịch gửi ở block deadline nhưng được đưa vào block sau sẽ revert, và người dùng vẫn mất gas đã dùng. Không có thời gian ân hạn |
+| Nhà cung cấp RPC trả dữ liệu sai hoặc mất dữ liệu | `scripts/verify` đối chiếu log `VoteCast` với storage tại cùng block `head`, khử trùng log, và báo MISMATCH khi thiếu hoặc sai log. Script kiểm `chainId == 31337` và đọc lịch sử theo cửa sổ 10.000 block (mục 4.4). Retry và fallback RPC: chưa làm | `scripts/verify/test/verify.test.ts`: ca (c) weight bị sửa, (d) thiếu log, (f) trùng khóa khác nội dung, (g) id ngoài phạm vi | Log và storage đi qua cùng một RPC. Nếu RPC trả sai cả hai một cách nhất quán thì script không phát hiện được. Chi tiết ở `docs/phase2b-verify-report.md` |
+| Frontend sai hoặc độc hại (hiện kết quả không khớp chain), **trong phạm vi**, kể cả khi hosting của dự án bị chiếm | Đã có: `scripts/verify` đối chiếu event `VoteCast` với storage, người dùng tự chạy được (mục 4.4, 4.5). Chưa có: link Etherscan và source đã verify công khai trên Etherscan (chưa làm, thuộc Phase 4), frontend (Phase 3) | `scripts/verify/test/verify.test.ts`: ca (a) log hợp lệ cho VERIFIED, (c) weight bị sửa, (d) thiếu log | Script hiện chỉ chạy trên Anvil (chainId 31337). Người dùng không tự chạy script thì vẫn phải tin UI. Bản thân script lại tin RPC (xem dòng RPC) |
+| Quyền quản trị bị lạm dụng | Không có owner, không có role, không có setter. Năm tham số cấu hình là `immutable`, được kiểm tra trong constructor (`InvalidConfiguration`). Muốn đổi quy tắc thì phải deploy bản mới (mục 3.7) | `test_RevertWhenInvalidParameters`, `test_ConstructorAcceptsBoundaryValues`, `test_RevertWhenVotingWindowExceedsUint48`. Grep `Ownable`, `onlyOwner`, `AccessControl` trong `src/` cho 0 kết quả | Người deploy chọn cấu hình và người nhận toàn bộ GOV lúc deploy. Phân phối ban đầu quyết định quyền lực, nên không được gọi hệ thống là "phi tập trung hoàn toàn" (mục 3.7) |
+| Lộ private key (ví demo hoặc ví deployer bị chiếm) | Không có key trong repo. Deploy và lifecycle trên Anvil dùng `--unlocked`. `.gitignore` chặn `.env`, `.env.*` và `broadcast/`. `.env.example` chỉ chứa tên biến. Ký bằng `cast wallet` (keystore) và dùng ví deployer tách biệt cho Sepolia: chưa làm, thuộc Phase 4 (mục 4.4) | Không có test riêng. Bằng chứng: `git grep` trên file đã track không tìm thấy `--private-key`, `PRIVATE_KEY` hay mnemonic, ngoài 2 dòng cảnh báo trong `.env.example` và `docs/phase1-demo-report.md`. Cũng không tìm thấy key Anvil mặc định | `README.md` (bản mẫu của `forge init`, chưa track) còn ví dụ `--private-key <your_private_key>`, trái quy tắc dự án, cần sửa ở Phase 4. File keystore đặt trong repo sẽ không bị `.gitignore` chặn; `cast wallet import` lưu keystore ở `~/.foundry/keystores/`, ngoài repo. Key của Anvil là key công khai, chỉ dùng ở local |
+| Sybil hoặc token tập trung (một người kiểm soát nhiều GOV hoặc nhiều ví) | Không có biện pháp kỹ thuật. Đây là token-weighted voting (weight theo lượng GOV), không phải identity voting (mỗi người một phiếu). `hasVoted` chỉ chặn theo địa chỉ (mục 2.4, 4.4). Chuyển GOV sang ví khác sau snapshot không tạo thêm weight | `testFuzz_TallyNeverExceedsSupply` (vote xong rồi chuyển token cho ví kế tiếp, tổng phiếu vẫn không vượt tổng cung tại snapshot), `invariant_I1_TallyWithinSnapshotSupply` | Không chống được. Một người có thể giữ cả 4 ví demo (mục 2.1). Người nắm nhiều GOV chi phối kết quả. Chỉ ghi hạn chế này, không tuyên bố DAO phi tập trung |
+| Reentrancy qua token | `castVote` gọi `getPastVotes` (hàm view của token, token là contract của dự án) trước khi ghi `hasVoted`. Lời gọi này không chuyển giá trị và không ghi state của token nên rủi ro thấp. Không có lời gọi chuyển ETH hay token nào | Không có test riêng. Trace `forge test -vvvv` cho thấy `getPastVotes` bên trong `castVote` chạy dưới dạng `[staticcall]` | Không khẳng định tuyệt đối an toàn. Phải review lại CEI và reentrancy khi thêm execute hoặc treasury ở v2 (mục 3.5 và 4.4) |
+
+Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục 4.4, cộng đoạn Reentrancy cuối mục này. Các dòng đánh dấu "chưa làm, thuộc Phase 3/4" là biện pháp đặc tả yêu cầu nhưng chưa có trong code hiện tại.
+
+## Ngoài phạm vi
+
+- **Mua phiếu** (vote buying, hối lộ off-chain): phiếu công khai và không có cơ chế chống mua bán. Commit-reveal hoặc ZK thuộc v2.
+- **Phishing domain giả mạo hoàn toàn** (trang không phải của dự án). Trường hợp frontend **của dự án** hiển thị sai hoặc bị chèn mã độc, kể cả khi hosting bị chiếm, thì nằm **trong** phạm vi: xem dòng "Frontend sai hoặc độc hại" trong bảng.
+- **Lỗi của MetaMask** hay của ví nói chung, và lỗi của trình duyệt.
+- Rủi ro kinh tế của token: GOV chỉ là token thử nghiệm, không có giá trị tiền thật (mục 1.2).
+
+## Ghi chú kiểm chứng
+
+- Coverage của `src/GovVote.sol`: 100% dòng, câu lệnh, nhánh và hàm (`forge coverage`, optimizer tắt).
+- `forge test` không cố định seed fuzz (`foundry.toml` không khai báo `seed`). Ngược lại, `forge snapshot` dùng seed cố định, nên `forge snapshot --check` ổn định nhưng chỉ phản ánh tập đầu vào của seed đó.
+- Độ phủ của invariant còn giới hạn: trong 40 seed, chỉ khoảng 25% run có ít nhất một proposal Succeeded. Chi tiết ở `docs/phase2a-invariant-report.md`. Các nhánh kết quả được kiểm thêm bằng unit test xác định trong `test/GovVote.t.sol`.
