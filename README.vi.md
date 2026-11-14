@@ -176,3 +176,7 @@ Tài liệu (phần lớn bằng tiếng Việt):
 - Deploy Sepolia và verify source trên Etherscan
 - CI (tích hợp liên tục)
 - Hosting công khai cho frontend
+
+## Tác giả và giấy phép
+
+Tác giả: Lê Tiến Mạnh. Phát hành theo [giấy phép MIT](LICENSE).

@@ -1,0 +1,167 @@
+# CI của GovVote: chỉ chạy trên runner, không secret, không gọi RPC công khai, không deploy ra mạng thật.
+# Mọi action ghim theo commit SHA đầy đủ (tag ghi ở comment). Foundry và Node ghim đúng bản dùng ở máy local.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FOUNDRY_VERSION: v1.7.1
+  NODE_VERSION: 24.19.0
+
+jobs:
+  contracts:
+    name: contracts (forge)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf # v1.9.2
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+          cache: false
+      - name: forge --version
+        run: forge --version
+      - name: forge fmt --check
+        run: forge fmt --check
+      - name: forge build --sizes
+        run: forge build --sizes
+      - name: forge test (fuzz/invariant theo foundry.toml)
+        run: forge test -vv
+      - name: forge snapshot --check (so với .gas-snapshot)
+        run: forge snapshot --check
+
+  frontend:
+    name: frontend (typecheck, format, Vitest, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: npm ci
+        run: npm ci --ignore-scripts
+      - name: typecheck
+        run: npm run typecheck
+      - name: format:check (Prettier)
+        run: npm run format:check
+      - name: Vitest
+        run: npm test
+      - name: build
+        run: npm run build
+      # Ngoại lệ DUY NHẤT được phép lỗi mà không chặn: Owner chọn cảnh báo-only cho tới khi xong spike wagmi v3.
+      - name: npm audit (chỉ cảnh báo)
+        continue-on-error: true
+        run: npm audit
+
+  verify-cli:
+    name: verify-cli (scripts/verify)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts/verify
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: scripts/verify/package-lock.json
+      - name: npm ci
+        run: npm ci --ignore-scripts
+      - name: typecheck
+        run: npm run typecheck
+      - name: test
+        run: npm test
+
+  e2e:
+    name: e2e (Anvil + Playwright)
+    needs: [contracts, frontend]
+    runs-on: ubuntu-latest
+    env:
+      # Anvil chỉ nghe trên loopback của runner.
+      ANVIL_PORT: "8545"
+      RPC_URL: http://127.0.0.1:8545
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf # v1.9.2
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+          cache: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            scripts/verify/package-lock.json
+      - name: npm ci (frontend)
+        working-directory: frontend
+        run: npm ci --ignore-scripts
+      - name: npm ci (scripts/verify, E2E gọi npm run verify)
+        working-directory: scripts/verify
+        run: npm ci --ignore-scripts
+      - name: Cài Chromium cho Playwright
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Khởi động Anvil (127.0.0.1, chain 31337)
+        run: |
+          # Output khởi động của Anvil có in key test nên bỏ vào /dev/null. prepare-chain.sh tự chờ RPC.
+          nohup anvil --host 127.0.0.1 --port "$ANVIL_PORT" --chain-id 31337 > /dev/null 2>&1 &
+      - name: Dựng chain demo (lifecycle Phase 1, proposal #1 Succeeded) và tạo frontend/.env.local
+        env:
+          ENV_OUT: frontend/.env.local
+        run: bash scripts/ci/prepare-chain.sh
+      - name: Build frontend với .env.local vừa tạo
+        working-directory: frontend
+        run: npx vite build
+      # 4 bộ browser test (tổng 61), mỗi bộ một bước để biết bộ nào fail.
+      - name: Playwright validation (34)
+        working-directory: frontend
+        run: npx playwright test -c playwright.validation.config.ts p3-fix-0 --workers=1
+      - name: Playwright reliability (12)
+        working-directory: frontend
+        run: npx playwright test -c playwright.reliability.config.ts --workers=1
+      - name: Playwright final UI (3)
+        working-directory: frontend
+        run: npx playwright test -c playwright.validation.config.ts p3-final-ui --workers=1
+      - name: Playwright E2E gốc (12)
+        working-directory: frontend
+        env:
+          GOV_RPC_URL: ${{ env.RPC_URL }}
+        run: npx playwright test --workers=1
+      - name: Upload kết quả khi fail
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-failure
+          path: |
+            frontend/test-results
+            frontend/playwright-report
+            docs/phase3-screenshots
+          retention-days: 5
+          if-no-files-found: ignore

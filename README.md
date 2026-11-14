@@ -176,3 +176,7 @@ Documents (mostly in Vietnamese):
 - Sepolia deploy with source verification on Etherscan
 - Continuous integration (CI)
 - Public hosting of the frontend
+
+## Author and license
+
+Author: Lê Tiến Mạnh. Released under the [MIT License](LICENSE).
