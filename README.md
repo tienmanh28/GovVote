@@ -77,8 +77,10 @@ Requirements: Foundry, Node.js 24+, git with submodules (`git submodule update -
 ```bash
 forge build
 forge test -vv
-forge snapshot --check --fuzz-seed 0x1   # gas report; same seed and Foundry version as CI
+forge snapshot --check --fuzz-seed 0x1 --threads 1   # gas report; match CI seed, threads and tool versions
 ```
+
+Parallel fuzzing makes gas measurements depend on both the seed and the thread count. Compare `.gas-snapshot` only with the same seed, thread count, Foundry 1.7.1 and solc 0.8.28. Regenerate it with `forge snapshot --fuzz-seed 0x1 --threads 1`. These pins apply only to snapshots; `forge test` continues to fuzz with random inputs.
 
 **2. Start Anvil** (in its own terminal; its startup output prints test keys, so it is discarded)
 

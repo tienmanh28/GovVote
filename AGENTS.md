@@ -17,7 +17,8 @@
 ## 3. Lệnh build / test / chạy
 Contract (ở gốc repo):
 - `forge build`, `forge build --sizes`, `forge test -vv`, `forge fmt --check`
-- `forge snapshot --check --fuzz-seed 0x1` (so với `.gas-snapshot`; phải cùng seed, cùng Foundry 1.7.1 như CI), `forge coverage --report summary`
+- `forge snapshot --check --fuzz-seed 0x1 --threads 1` (so với `.gas-snapshot`; phải cùng seed, số luồng, Foundry 1.7.1 và solc 0.8.28 như CI), `forge coverage --report summary`
+- Fuzz chạy song song nên gas phụ thuộc cả seed lẫn số luồng. Chỉ ghim seed và luồng cho bước snapshot; `forge test` vẫn fuzz ngẫu nhiên. Tạo lại baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`.
 
 Chain local:
 - `anvil` (mặc định: 127.0.0.1:8545, chainId 31337). Chain mất khi tắt Anvil.

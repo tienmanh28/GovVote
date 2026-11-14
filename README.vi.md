@@ -77,8 +77,10 @@ Cần có: Foundry, Node.js 24+, git kèm submodule (`git submodule update --ini
 ```bash
 forge build
 forge test -vv
-forge snapshot --check --fuzz-seed 0x1   # báo cáo gas; cùng seed và phiên bản Foundry như CI
+forge snapshot --check --fuzz-seed 0x1 --threads 1   # báo cáo gas; cùng seed, số luồng và phiên bản công cụ như CI
 ```
+
+Fuzz chạy song song nên gas phụ thuộc cả seed lẫn số luồng. Chỉ so sánh `.gas-snapshot` khi cùng seed, số luồng, Foundry 1.7.1 và solc 0.8.28. Tạo lại baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`. Chỉ ghim seed và luồng cho bước snapshot; `forge test` vẫn fuzz với đầu vào ngẫu nhiên.
 
 **2. Chạy Anvil** (ở terminal riêng; output khởi động có in key test nên được bỏ đi)
 

@@ -1,5 +1,17 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## P4-C1 — ghim số luồng cho gas snapshot, 14/11/2026, Codex
+
+- Codex tiếp nhận từ Claude Code sau khi Claude hết token. Checkpoint này là trạng thái hiện hành; các checkpoint bên dưới lưu lịch sử.
+- Bước 0: `HEAD = origin/main = 492d2683f21b467baf88c11d90d6c932a212d584`, nhánh `main`, working tree sạch; đã fetch. Remote public: https://github.com/tienmanh28/GovVote. `gh auth status` xác nhận tài khoản `tienmanh28` hoạt động, không in token thật.
+- PROGRESS cũ chưa ghi remote và hai lần CI đã chạy. [Actions lần 1, 0b5402e](https://github.com/tienmanh28/GovVote/actions/runs/43595979018) và [lần 2, 492d268](https://github.com/tienmanh28/GovVote/actions/runs/43596632803) đều FAIL ở snapshot của contracts; frontend/verify-cli PASS, e2e SKIPPED. Lần 1 chưa ghim seed; lần 2 ghim seed vẫn lệch số gas fuzz trên runner.
+- Nguyên nhân: fuzz chạy song song nên gas trung bình/trung vị phụ thuộc cả seed lẫn số luồng. Tạo baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`; kiểm bằng `forge snapshot --check --fuzz-seed 0x1 --threads 1`. Chỉ so sánh khi cùng seed, số luồng, Foundry **1.7.1** và solc **0.8.28**. Seed/luồng chỉ ghim cho snapshot; bước `forge test -vv` của CI vẫn fuzz ngẫu nhiên, giữ nguyên `foundry.toml` và test.
+- Đã tạo lại `.gas-snapshot` đúng **một lần**, exit 0, **22,85 giây**, **53/53 PASS**. Hai lần `--check` liên tiếp: exit 0, **21,81 giây** và **23,01 giây**, mỗi lần 53/53 PASS. Chỉ ba dòng fuzz gas thay đổi; SHA-256 baseline: `5bf92c0e8ae3cc45e6739b73bd05a7e6ff520ab1e96fde9148fcd5622fe21f07`.
+- Clone mới `~/ci-dryrun/clone4`: clone origin sạch, `git submodule update --init --recursive`, áp patch đang kiểm chứng trước khi commit (không mang theo cache/artifact). Snapshot `--check` exit 0/**24,91 giây**; `forge test -vv` **53/53 PASS**, exit 0/**6,91 giây**; `taskset -c 0-3 forge snapshot --check --fuzz-seed 0x1 --threads 1` exit 0/**22,79 giây**, 53/53 PASS. Log và thời gian bền: `~/ci-dryrun/logs/clone4-{snapshot,test,taskset}.{log,time}`.
+- `forge build`, `forge fmt --check`, `forge build --sizes`: exit 0; deployed size GovToken **6.846 bytes**, GovVote **4.603 bytes**. actionlint **1.7.12** kèm shellcheck: exit 0. `git diff --check`: exit 0. Đã đối chiếu đặc tả mục 4.3 và Phụ lục B; không đổi đặc tả, contract, test hay ứng dụng.
+- Đã sửa hướng dẫn snapshot trong AGENTS, README EN/VI, threat-model, ADR, PROGRESS và các khuyến nghị snapshot của báo cáo Phase 3; lệnh kiểm cũ trong bằng chứng lịch sử được ghi rõ là lịch sử. Không có file `docs/phase2c*` trong repo để sửa.
+- Chưa xác minh: Actions của bản sửa `--threads 1` và ruleset main. Kế tiếp: commit/push thường theo phê duyệt, theo dõi Actions tối đa khoảng 25 phút. Nếu contracts hoặc e2e FAIL thì chẩn đoán và dừng, không tự sửa tiếp. Chỉ khi cả bốn job xanh mới bật ruleset chỉ cấm force push/xóa nhánh và cập nhật checkpoint bằng commit docs riêng theo yêu cầu.
+
 ## P4-C1/C2 — CI GitHub Actions và LICENSE, 14/11/2026, Claude
 
 - HEAD sau CI: `603c97fad57c9d6aac96bf57f9e1255bea11cad0` (`ci: GitHub Actions (contracts, frontend, verify, e2e) và LICENSE MIT`). Commit docs chứa checkpoint này có hash riêng.
@@ -412,7 +424,7 @@ Phase 3, từng bước, theo bảng trạng thái trong `docs/phase3-frontend-r
 4. Phase 4 (chưa bắt đầu):
    - Deploy Sepolia bằng keystore (`cast wallet`), ví deployer riêng.
    - Verify source trên Etherscan.
-   - GitHub Actions CI: forge fmt/build/test, `forge snapshot --check`, frontend typecheck/test/build, E2E với Anvil.
+   - GitHub Actions CI: forge fmt/build/test, `forge snapshot --check --fuzz-seed 0x1 --threads 1`, frontend typecheck/test/build, E2E với Anvil. Cùng seed, số luồng, Foundry 1.7.1/solc 0.8.28; chỉ snapshot ghim seed/luồng, `forge test` vẫn fuzz ngẫu nhiên.
    - Viết lại `README.md` (bản mẫu hiện có ví dụ `--private-key`).
    - Dọn `.github/` (đang là template của `forge init`).
    - Deploy frontend lên Cloudflare Pages.
@@ -437,7 +449,7 @@ Phase 3, từng bước, theo bảng trạng thái trong `docs/phase3-frontend-r
 | `node --version` / `npm --version` | v24.19.0 / 11.17.0 |
 | `forge test` | 53 passed, 0 failed (4 suite: 4 + 39 + 3 fuzz + 7 invariant) |
 | `forge fmt --check` | exit 0 |
-| `forge snapshot --check` | exit 0 |
+| `forge snapshot --check` (lệnh lịch sử, trước khi ghim seed/luồng cho CI) | exit 0 |
 | `cd frontend && npm run typecheck` | exit 0 |
 | `cd frontend && npm test` | 9 file, 137 passed |
 | E2E Playwright | **Không chạy lại ở bước này.** Lần gần nhất (14/11, theo report): 12 passed |

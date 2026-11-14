@@ -272,7 +272,7 @@ frontend/
 2. Sepolia: thêm chain 11155111 vào cấu hình (hiện `parseEnv` chỉ chấp nhận 31337); link Etherscan cho tx hash và địa chỉ; verify source trên Etherscan.
 3. Ký deploy Sepolia bằng `cast wallet` (keystore) và ví deployer riêng (threat model).
 4. Deploy frontend tĩnh (đặc tả nhắc Cloudflare Pages); RPC công khai có giới hạn tốc độ, cân nhắc retry/fallback.
-5. CI: chạy `npm run typecheck`, `npm test`, `npm run build`, cài `playwright install-deps` trên runner rồi chạy E2E với Anvil; thêm `forge snapshot --check`.
+5. CI: chạy `npm run typecheck`, `npm test`, `npm run build`, cài `playwright install-deps` trên runner rồi chạy E2E với Anvil; thêm `forge snapshot --check --fuzz-seed 0x1 --threads 1`. Cập nhật 14/11/2026: fuzz song song làm gas phụ thuộc cả seed lẫn số luồng; snapshot phải cùng seed, số luồng, Foundry 1.7.1 và solc 0.8.28. Chỉ snapshot ghim seed/luồng, `forge test` vẫn fuzz ngẫu nhiên.
 6. Giảm kích thước bundle (tách chunk, nạp động phần ghi giao dịch).
 7. Đặt `retry` hợp lý cho lỗi revert khi đọc (không thử lại lỗi contract).
 8. Kiểm thử với MetaMask thật, gồm luồng `wallet_addEthereumChain` (4902) và trình duyệt trong app MetaMask trên điện thoại khi đã có RPC công khai.
@@ -685,6 +685,8 @@ Không có FAIL còn mở trong regression cuối. “PASS” không chứng min
 ### C. Contract Verification
 
 Chạy thật tại repo: `forge build`, `forge build --sizes`, `forge test -vv`, `forge fmt --check`, `forge snapshot --check`: **tất cả exit0**, **53/53 PASS**, 4suite (4token +39vote +3fuzz +7invariant). Snapshot kiểm lại đúng baseline; không sửa `.gas-snapshot`. Warning signature cache ở ngoài workspace không ghi được vẫn tồn tại, không làm lệnh fail. Không đo lại coverage ở nhiệm vụ này; không dùng kết quả này để tuyên bố coverage mới.
+
+Ghi chú 14/11/2026: dòng trên lưu lệnh lịch sử của Phase 3. Lệnh kiểm snapshot hiện hành là `forge snapshot --check --fuzz-seed 0x1 --threads 1`, cùng Foundry 1.7.1/solc 0.8.28; ghim seed thôi chưa đủ để tái lập gas khi số luồng fuzz khác nhau.
 
 ### D. Frontend Verification
 
