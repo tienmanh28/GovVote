@@ -1,0 +1,25 @@
+[WebServer] (node:72403) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:72452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 validation/p3-fix-03.spec.ts:77:1 › strict UI VERIFIED tại H, read-only không yêu cầu ví (453ms)
+  ✓   2 validation/p3-fix-03.spec.ts:101:1 › RPC_ERROR và Retry phục hồi (495ms)
+  ✓   3 validation/p3-fix-03.spec.ts:116:3 › UI missing ProposalCreated không VERIFIED (264ms)
+  ✓   4 validation/p3-fix-03.spec.ts:116:3 › UI missing votes không khớp storage không VERIFIED (272ms)
+  ✓   5 validation/p3-fix-03.spec.ts:116:3 › UI malformed event không VERIFIED (270ms)
+  ✓   6 validation/p3-fix-03.spec.ts:116:3 › UI reorg không VERIFIED (266ms)
+  ✓   7 validation/p3-fix-03.spec.ts:122:1 › Pending chưa chốt snapshot không VERIFIED (276ms)
+  ✓   8 validation/p3-fix-03.spec.ts:131:1 › progress trong khi quét; không badge VERIFIED sớm (347ms)
+  ✓   9 validation/p3-fix-03.spec.ts:141:1 › lần cũ hoàn tất sau lần mới không ghi đè verdict (731ms)
+  ✓  10 validation/p3-fix-03.spec.ts:153:1 › đổi route xóa verdict cũ (304ms)
+  ✓  11 validation/p3-fix-03.spec.ts:165:1 › đổi reference policy xóa verdict, chạy lại ở H mới (406ms)
+  ✓  12 validation/p3-fix-03.spec.ts:175:1 › RPC timeout hiển thị RPC_ERROR, retry hữu hạn (16.6s)
+  ✓  13 validation/p3-fix-03.spec.ts:182:1 › VERIFIED khi Defeated không bị gọi là thông qua (293ms)
+  ✓  14 validation/p3-fix-03.spec.ts:198:3 › verification responsive 375×812 (383ms)
+  ✓  15 validation/p3-fix-03.spec.ts:198:3 › verification responsive 768×1024 (401ms)
+  ✓  16 validation/p3-fix-03.spec.ts:198:3 › verification responsive 1280×800 (461ms)
+
+  16 passed (24.0s)

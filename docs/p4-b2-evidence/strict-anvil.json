@@ -1,0 +1,110 @@
+{
+  "input": {
+    "chainId": "31337",
+    "govVote": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "govToken": "0x5FbDB2315678afecb367f032d93f642f64180aa3",
+    "proposalId": "1",
+    "confirmations": "12",
+    "rpcSource": "http://127.0.0.1:18547",
+    "budget": {}
+  },
+  "context": {
+    "chainId": "31337",
+    "latest": "7229",
+    "head": "7217",
+    "hash": "0x0df7da6a040e6329586e72b4935f3e46685545b7cb6b3c34cdb9ae9cad9aad44",
+    "checkedAt": "2026-11-14T13:42:27.123Z",
+    "anchorStable": true,
+    "token": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "delay": "15",
+    "period": "7200",
+    "provenance": "LOCAL_DEPLOYMENT_EVIDENCE"
+  },
+  "evidence": {
+    "ranges": [
+      {
+        "from": "13",
+        "to": "7217"
+      }
+    ],
+    "proposal": {
+      "proposer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "title": "Demo proposal #1 (CI chain)",
+      "description": "Proposal demo tạo bởi scripts/ci/prepare-chain.sh theo lifecycle Phase 1.",
+      "createdBlock": "13",
+      "snapshotBlock": "28",
+      "deadlineBlock": "7228",
+      "forVotes": "600000000000000000000000",
+      "againstVotes": "250000000000000000000000"
+    },
+    "created": {
+      "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+      "blockHash": "0x8785a0fc3703bce06773dff30cd8a15465d7e56cebf05e5e08f4077f33eeef4b",
+      "transactionHash": "0x3954c8b22b925fcb110ffb81d5760326408592adf4c6f5767ba913d600e27a4a",
+      "blockNumber": "13",
+      "transactionIndex": "0",
+      "logIndex": "0",
+      "id": "1",
+      "proposer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "title": "Demo proposal #1 (CI chain)",
+      "snapshotBlock": "28",
+      "deadlineBlock": "7228"
+    },
+    "votes": [
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0x94fb596ff5b65c008f0086ea93c21daab19859cb6ed5d4055608ac334d4a125b",
+        "transactionHash": "0xe3323f110680a1a08ffb75b0d2e8c7f39ede8ce9af3555688d50f9d3ff84c181",
+        "blockNumber": "29",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "support": true,
+        "weight": "400000000000000000000000"
+      },
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0x5cf2861537e65076474fe4fefa9d323c43d4d82f975e9748f1cad2db1c886c56",
+        "transactionHash": "0x3d521bb67c8ab3bd768fb93978f282d9349eb854dd29e26a9e79822f2db7b1ac",
+        "blockNumber": "30",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "support": false,
+        "weight": "250000000000000000000000"
+      },
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0x7f1fc4e221890aec82d48f0a9bc6713e8e39db8bc37190363d2a8143185d292f",
+        "transactionHash": "0x34107c5215a3938bbea86d2dc9d1dfafeb3cb08cee92583e3b0d35828498d742",
+        "blockNumber": "31",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "support": true,
+        "weight": "200000000000000000000000"
+      }
+    ],
+    "contractState": "1",
+    "quorum": {
+      "pastTotalSupply": "1000000000000000000000000",
+      "quorumBps": "1000",
+      "contractQuorum": "100000000000000000000000"
+    }
+  },
+  "status": "VERIFIED",
+  "message": "VERIFIED — ON-CHAIN CONSISTENCY tại block tham chiếu; không phải chứng nhận audit.",
+  "requests": 18,
+  "processedLogs": 4,
+  "calculated": {
+    "forVotes": "600000000000000000000000",
+    "againstVotes": "250000000000000000000000",
+    "participation": "850000000000000000000000",
+    "quorum": "100000000000000000000000",
+    "expectedState": "1",
+    "uniqueLogs": 3
+  }
+}
