@@ -1,0 +1,38 @@
+{
+  "name": "govvote-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend GovVote v1.1 (Phase 3): React + wagmi v2 + viem, chỉ chạy trên Anvil local.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "vite build && playwright test",
+    "sync-abi": "node scripts/sync-abi.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "5.105.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "viem": "2.57.13",
+    "wagmi": "2.19.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}

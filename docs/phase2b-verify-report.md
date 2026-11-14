@@ -1,5 +1,71 @@
 # Phase 2B: script đối chiếu VoteCast với storage
 
+## P3-FIX-03B — strict verification (14/11/2026)
+
+**PASS_CANDIDATE, chờ Mạnh/ChatGPT nghiệm thu.** Phần báo cáo Phase 2B bên dưới là lịch sử của verifier tally. Manifest hash cũ không áp dụng cho entry point main.ts mới và không phải chứng nhận strict verifier.
+
+### Kiến trúc và chế độ CLI
+
+- Core thuần TypeScript: `shared/verification/core.ts`; runner và HTTP read-only dùng Web APIs chuẩn: `runner.ts`, `http.ts`. Core không import React/Node/viem.
+- CLI codec dùng viem 2.57.11 đã pin; browser codec dùng viem 2.57.13 đã pin. Cả hai dùng ABI generated trong frontend/src/abi, chỉ import data; CLI runtime không cần cài dependency frontend. Fixtures test của CLI dùng viem riêng của CLI.
+- Có GOV_PROPOSAL_ID: main.ts chạy strict verifier một proposal. Không có: chuyển sang legacy-main.ts và in rõ `LEGACY TALLY ONLY`; hành vi tally cũ giữ nguyên, không coi đó là đủ mục 4.5. Lỗi transport/config không echo dữ liệu có thể nhạy cảm.
+
+Từ scripts/verify (Node Linux trên PATH):
+
+```bash
+GOV_VOTE=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 \
+GOV_TOKEN=0x5FbDB2315678afecb367f032d93F642f64180aa3 \
+GOV_PROPOSAL_ID=1 GOV_CONFIRMATIONS=12 npm run verify
+```
+
+Địa chỉ chỉ đúng với deployment local hiện tại; kiểm tra lại khi chain thay đổi. Không yêu cầu private key.
+
+| Biến | Ý nghĩa/default |
+|---|---|
+| GOV_VOTE | GovVote bắt buộc |
+| GOV_TOKEN | Token expected tùy chọn; nếu có phải khớp GovVote.token() |
+| GOV_PROPOSAL_ID | ID dương uint256; có giá trị để chọn strict mode |
+| GOV_RPC_URL | http://127.0.0.1:8545; output chỉ origin, ẩn credentials/path/query |
+| GOV_CONFIRMATIONS | 12, số nguyên >=1; H=latest−C |
+| GOV_VERIFY_MAX_REQUESTS | 200, tính cả retry và kiểm context |
+| GOV_VERIFY_MAX_LOGS | 50000, gồm ProposalCreated và mọi bản sao log nhận được |
+| GOV_VERIFY_MAX_MS | 60000 |
+| GOV_VERIFY_RANGE | 10000 block, cấu hình 1..10000 |
+| GOV_VERIFY_RETRIES | 1 retry/request; cấu hình 0..3 |
+| GOV_VERIFY_TIMEOUT_MS | 8000/request; còn bị chặn bởi ngân sách thời gian chung |
+
+Ngân sách phải là số nguyên hữu hạn hợp lệ. Requests thực hiện tuần tự, retry nằm trong tổng maxRequests; timeout/cancel dùng AbortController. Không tạo toàn bộ mảng windows cho lịch sử dài. Quá ngân sách trả INCOMPLETE.
+
+| Exit strict | Verdict |
+|---|---|
+| 0 | VERIFIED |
+| 1 | MISMATCH |
+| 3 | INCOMPLETE |
+| 2 | RPC_ERROR hoặc INVALID_INPUT |
+
+Legacy giữ 0/1/2 như trước. IDLE/RUNNING chỉ là lifecycle UI, không phải kết quả CLI hoàn tất.
+
+### Điều kiện strict VERIFIED
+
+Đúng chain/address, có code GovVote/token; proposal tại H; ProposalCreated khớp proposer/title/mốc block/createdBlock/config delay-period và block hash; VoteCast đúng address/id/voting window, metadata hợp lệ, dedupe bản sao trước khi kiểm voter trùng. Quét đủ mọi range tới H; không default missing storage bằng 0. Tally tính bằng bigint, quorum ceil(supply lịch sử*bps/10000); expected state dùng tally từ event và đúng boundary Solidity; đối chiếu storage/quorum/state. Hash H phải giữ nguyên ở đầu/cuối lần chạy.
+
+Snapshot chưa hoàn tất => INCOMPLETE. Active sau snapshot có thể VERIFIED tại H nhưng kết quả biểu quyết chưa cuối cùng. RPC đọc lỗi => RPC_ERROR, không phải MISMATCH. Thiếu range/evidence hoặc malformed logs => không VERIFIED. Tally lệch do RPC trả thiếu log là MISMATCH quan sát được, chưa kết luận gian lận.
+
+### Bằng chứng
+
+- CLI tests: 17/17 PASS (9 legacy không đổi + 8 strict mới). Lệnh đã chạy: `node --import tsx --test --test-isolation=none test/verify.test.ts test/strict.test.ts`. tsx CLI ban đầu bị sandbox chặn IPC; loader Node và quyền cho fixture localhost dùng để chạy rõ từng case. Không sửa test legacy hoặc dependency.
+- Frontend Vitest: 127/127 PASS, gồm 60 test mới core/runner/route. Typecheck cả CLI/frontend exit 0.
+- HTTP fixture CLI kiểm thật entry point, output và exit 0/1/3/2; một lỗi ban đầu ở fixture echo response ID cố định đã sửa để echo đúng ID, không nới assertion.
+- Anvil read-only proposal #1: VERIFIED, latest 7261/H7249, 3 VoteCast, For 600000/Against250000 GOV, participation850000 GOV, quorum100000 GOV, expected/contract state Succeeded. 18 requests, 4 logs gồm ProposalCreated. Latest sau khi đọc vẫn7261. JSON đầy đủ: docs/phase3-verification-evidence.json.
+- Hash H: `0x5d47b51cfd5f8dc19b9d41a1d2555016ee3f01ff61c2236321131ffd12dce90d`.
+
+### Giới hạn
+
+Đây là ON-CHAIN CONSISTENCY trong phạm vi RPC và deployment local tin cậy, không phải source-verified trên Etherscan hoặc audit. Bytecode tồn tại + ABI/event evidence không phải chứng minh bytecode chính xác tương đương source. Không đối chiếu từng weight với getPastVotes (bước tùy chọn trong đặc tả); không thêm RPC thứ hai hoặc fallback. RPC sai cả logs/storage nhất quán có thể không bị phát hiện. Confirmations không bảo đảm finality tuyệt đối; không liên tục giám sát reorg sau khi verdict đã hiển thị. Giới hạn logs được kiểm sau khi nhận JSON; không có giới hạn streaming payload bytes. Vượt ngân sách không được gọi là VERIFIED.
+
+---
+
+
 ## Mục đích
 
 Script [scripts/verify/](../scripts/verify/) đối chiếu tổng phiếu tính từ event `VoteCast` trên chain với `forVotes` / `againstVotes` trong storage của GovVote. Cả hai nguồn được đọc **tại cùng một block**.

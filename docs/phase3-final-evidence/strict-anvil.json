@@ -1,0 +1,110 @@
+{
+  "input": {
+    "chainId": "31337",
+    "govVote": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "govToken": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "proposalId": "1",
+    "confirmations": "12",
+    "rpcSource": "http://127.0.0.1:8545",
+    "budget": {}
+  },
+  "context": {
+    "chainId": "31337",
+    "latest": "7261",
+    "head": "7249",
+    "hash": "0x5d47b51cfd5f8dc19b9d41a1d2555016ee3f01ff61c2236321131ffd12dce90d",
+    "checkedAt": "2026-11-13T21:15:10.551Z",
+    "anchorStable": true,
+    "token": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "delay": "15",
+    "period": "7200",
+    "provenance": "LOCAL_DEPLOYMENT_EVIDENCE"
+  },
+  "evidence": {
+    "ranges": [
+      {
+        "from": "11",
+        "to": "7249"
+      }
+    ],
+    "proposal": {
+      "proposer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "title": "Có nên tài trợ chủ đề Zero-Knowledge?",
+      "description": "Đề xuất demo: chạy lại lifecycle Phase 1 trên Anvil mới để làm dữ liệu cho frontend Phase 3.",
+      "createdBlock": "11",
+      "snapshotBlock": "26",
+      "deadlineBlock": "7226",
+      "forVotes": "600000000000000000000000",
+      "againstVotes": "250000000000000000000000"
+    },
+    "created": {
+      "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+      "blockHash": "0xc125fa9fe983035aabab32ecd926c28fdef3d8a3723e9d5d0c96db5062008757",
+      "transactionHash": "0x0209421b426eaddc3cfe7aa04d88361a68d2deff980bacf98a7a1f78861c989e",
+      "blockNumber": "11",
+      "transactionIndex": "0",
+      "logIndex": "0",
+      "id": "1",
+      "proposer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "title": "Có nên tài trợ chủ đề Zero-Knowledge?",
+      "snapshotBlock": "26",
+      "deadlineBlock": "7226"
+    },
+    "votes": [
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0x3cb4e646413ceb86059a0c08fd1c4e80e4471528a68db6f718f99ad89b96f98c",
+        "transactionHash": "0xd0793eb92347766822de62e95dbf07f1533e72f910f01c08ed7deef5d37f7732",
+        "blockNumber": "28",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "support": true,
+        "weight": "400000000000000000000000"
+      },
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0xa916c5de9a38b99de4d0982f376db4d66c45596fa51afb3c3d22e771dfadcc80",
+        "transactionHash": "0xe25e03addccca1c04d35f0ebfc602eec1d678b0d91680c00c1f52e1a249e95f4",
+        "blockNumber": "29",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "support": false,
+        "weight": "250000000000000000000000"
+      },
+      {
+        "address": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "blockHash": "0xe510ef697ffc9ce0e8be8fb3833563d12d13f196d93926e1a4e215374979b327",
+        "transactionHash": "0x157a184c487acdf7775133ed1c186ef6aca47c4faceb129aa31863682c91dc38",
+        "blockNumber": "30",
+        "transactionIndex": "0",
+        "logIndex": "0",
+        "id": "1",
+        "voter": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "support": true,
+        "weight": "200000000000000000000000"
+      }
+    ],
+    "contractState": "2",
+    "quorum": {
+      "pastTotalSupply": "1000000000000000000000000",
+      "quorumBps": "1000",
+      "contractQuorum": "100000000000000000000000"
+    }
+  },
+  "status": "VERIFIED",
+  "message": "VERIFIED — ON-CHAIN CONSISTENCY tại block tham chiếu; không phải chứng nhận audit.",
+  "requests": 18,
+  "processedLogs": 4,
+  "calculated": {
+    "forVotes": "600000000000000000000000",
+    "againstVotes": "250000000000000000000000",
+    "participation": "850000000000000000000000",
+    "quorum": "100000000000000000000000",
+    "expectedState": "2",
+    "uniqueLogs": 3
+  }
+}

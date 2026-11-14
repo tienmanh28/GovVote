@@ -1,0 +1,28 @@
+[WebServer] (node:219925) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:220000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:220047) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 validation/p3-fix-04.spec.ts:42:1 › primary ưu tiên, fallback không bị gọi khi primary tốt (283ms)
+  ✓   2 validation/p3-fix-04.spec.ts:43:1 › primary lỗi => fallback hợp lệ; phục hồi primary bằng retry (343ms)
+  ✓   3 validation/p3-fix-04.spec.ts:44:33 › không còn endpoint, fallback wrong chain=false (302ms)
+  ✓   4 validation/p3-fix-04.spec.ts:44:33 › không còn endpoint, fallback wrong chain=true (406ms)
+  ✓   5 validation/p3-fix-04.spec.ts:45:1 › verification fallback đọc lại context và evidence từ đầu ở nguồn mới (460ms)
+  ✓   6 validation/p3-fix-04.spec.ts:46:1 › freshness không tiến khi lỗi/đồng hồ chạy; retry cập nhật thành công (2.8s)
+  ✓   7 validation/p3-fix-04.spec.ts:47:1 › Pending getVotes dự kiến, đổi account, snapshot historical và sai chain (1.6s)
+  ✓   8 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 375 (351ms)
+  ✓   9 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 768 (358ms)
+  ✓  10 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 1280 (411ms)
+  ✓  11 validation/p3-fix-04.spec.ts:50:1 › endpoint cũ trả muộn không ghi đè fallback (2.6s)
+  ✓  12 validation/p3-fix-04.spec.ts:57:1 › cùng chain ID/contract nhưng khác lịch sử: từ chối fallback (1.6s)
+
+  12 passed (14.7s)

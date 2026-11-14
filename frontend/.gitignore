@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env.local
+# Kết quả chạy Playwright (ảnh lỗi, trace) — ảnh nghiệm thu lưu ở docs/phase3-screenshots/
+test-results/
+playwright-report/

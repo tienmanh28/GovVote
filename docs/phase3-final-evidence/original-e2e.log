@@ -1,0 +1,45 @@
+
+Running 12 tests using 1 worker
+
+  ✓   1 e2e/01-wallet-states.spec.ts:8:1 › máy tính không có window.ethereum: hướng dẫn cài MetaMask, vẫn xem được proposal (257ms)
+  ✓   2 e2e/01-wallet-states.spec.ts:14:1 › điện thoại không có window.ethereum: hướng dẫn mở trong trình duyệt của app MetaMask (249ms)
+  ✓   3 e2e/01-wallet-states.spec.ts:24:1 › sai chain: hiện cảnh báo, bấm nút thì gọi wallet_switchEthereumChain và cảnh báo biến mất (361ms)
+  ✓   4 e2e/01-wallet-states.spec.ts:38:1 › người dùng từ chối ký (4001): thông báo tiếng Việt, trạng thái ERROR (356ms)
+  ✓   5 e2e/01-wallet-states.spec.ts:49:1 › lỗi contract khi đọc: proposal không tồn tại → ProposalNotFound bằng tiếng Việt (1.0s)
+  ✓   6 e2e/01-wallet-states.spec.ts:54:1 › VITE_GOV_VOTE không có bytecode: hiện lỗi cấu hình thay vì dữ liệu rỗng (250ms)
+{"id":"2","delegateHash":"0x5165dd0380f7805662b947d6ac162873d812dc8327cb87783776a961289e4285","proposeHash":"0x943548f151cbdc51af9b01db533d1e74f99b75a3f248df8d2c4c827d79603b1f","aliceVoteHash":"0xd8353257169b7cd72b82938327e600f7e91a81193fdfd0c6f97be19d8b283db1","bobVoteHash":"0xbb40ff84b12b3e0e1cc3c3e8ceda5cb13857981e86edbd62aa4a9d0a8e7e1af0","snapshot":"7244"}
+latest / head  : 7260 / 7248 (chờ 12 block xác nhận)
+proposalCount  : 2 (tại head)
+VoteCast logs  : 5 (block 0..7248)
+ 1 | 600.000 |     250.000 |   600.000 |       250.000 |   OK
+ 2 | 400.000 |     250.000 |   400.000 |       250.000 |   OK
+VERIFIED
+  ✓   7 e2e/02-flow.spec.ts:12:1 › Alice delegate → tạo proposal → vote; tally khớp getProposal và scripts/verify (6.2s)
+  ✓   8 e2e/03-xss.spec.ts:5:1 › title <img src=x onerror=alert(1)> hiển thị nguyên văn, không chạy script (2.9s)
+{"file":"list-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"detail-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"create-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"wallet-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"detail-active-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+  ✓   9 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 375×812 (2.5s)
+{"file":"list-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"detail-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"create-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"wallet-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"detail-active-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+  ✓  10 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 768×1024 (2.4s)
+{"file":"list-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"detail-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"create-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"wallet-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"detail-active-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+  ✓  11 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 1280×800 (2.5s)
+{"file":"no-wallet-mobile-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"no-wallet-desktop-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"wrong-chain-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+  ✓  12 e2e/04-screenshots.spec.ts:76:1 › ảnh trạng thái ví: điện thoại không có ví, máy tính không có ví, sai chain (2.0s)
+
+  12 passed (23.3s)
+
+{"temp": "/tmp/govvote-final-542yy1b7", "existing8545Before": "0x1c5d", "existing8545After": "0x1c5d", "isolated8546ChainId": 31337, "e2e": "PASS"}
+Evidence logs at /tmp/govvote-final-542yy1b7

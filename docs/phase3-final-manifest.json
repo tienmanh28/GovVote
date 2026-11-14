@@ -1,0 +1,897 @@
+{
+  "task": "P3-FINAL-01",
+  "scope": "review only; no staging/commit authorization",
+  "branch": "main",
+  "head": "c9240a57bf6ba8bcb8152b41a0909d7a99dab188",
+  "counts": {
+    "untracked": 168,
+    "trackedModified": 3,
+    "staged": 0,
+    "groups": {
+      "A": 166,
+      "B": 3,
+      "C": 2
+    }
+  },
+  "groups": {
+    "A": [
+      {
+        "path": "docs/phase2b-verify-report.md",
+        "sha256": "88d09ca29fdddfda42a3f0b9dc0ca3a8649b6789be62e07802e2f931df7ee794",
+        "bytes": 13387
+      },
+      {
+        "path": "docs/phase3-final-evidence/build.log",
+        "sha256": "b8acaea29d02a24d56c1284c536dc96fa11050b8d458efd00a24319461478652",
+        "bytes": 819
+      },
+      {
+        "path": "docs/phase3-final-evidence/cli-audit.json",
+        "sha256": "a9756a4130fba7c6c08acefab74c9c98f55d478754cd8ff81d20114e175f31f8",
+        "bytes": 362
+      },
+      {
+        "path": "docs/phase3-final-evidence/frontend-audit.json",
+        "sha256": "0f27b79ae0396319759fb11551f1459caf574a06c350ddd94c0e9de97a1aeb23",
+        "bytes": 19831
+      },
+      {
+        "path": "docs/phase3-final-evidence/original-e2e-current.log",
+        "sha256": "85dc5f4d9cf6e1ed92b633d11935bba2ff13e3b04b4ea3777e5d8ef9e3c4f20a",
+        "bytes": 3891
+      },
+      {
+        "path": "docs/phase3-final-evidence/original-e2e.log",
+        "sha256": "bc5d5d9f232d5b2cae5a8d3cec7a007250069493ab060ed593fb578e78243fb4",
+        "bytes": 3891
+      },
+      {
+        "path": "docs/phase3-final-evidence/reliability.log",
+        "sha256": "9c9cb0f2206e57733e61ebb01a1e3332d6824e1ab465e7cc4607833006205f74",
+        "bytes": 2380
+      },
+      {
+        "path": "docs/phase3-final-evidence/runtime-audit.json",
+        "sha256": "d0ef15f74ecfd8e6ed122902d93d50e95e7fdea78ff724cc02de93d8adf65d29",
+        "bytes": 10447
+      },
+      {
+        "path": "docs/phase3-final-evidence/strict-anvil.json",
+        "sha256": "bb353a8d15e107ca91b51d58984d40ee073047959ffee0a12e4f5e75067bd7cf",
+        "bytes": 3955
+      },
+      {
+        "path": "docs/phase3-final-evidence/ui.log",
+        "sha256": "ff3e53f859f3fea2b1fb08b1c6adf58c6ab07d4093f6cc56c95daafcd4e9ecf9",
+        "bytes": 716
+      },
+      {
+        "path": "docs/phase3-final-evidence/validation.log",
+        "sha256": "138b7041f3fb8aa4cfc0cfe21690adcfd21a6ccd9c233eccf144393606228529",
+        "bytes": 3900
+      },
+      {
+        "path": "docs/phase3-final-manifest.json",
+        "sha256": null,
+        "bytes": null
+      },
+      {
+        "path": "docs/phase3-frontend-report.md",
+        "sha256": "3cfdb8d265c48304be729fb8f60cfe6fe720bc3911ae8b17b3986a4e3b7c62d3",
+        "bytes": 88426
+      },
+      {
+        "path": "docs/phase3-screenshots/create-1280x800.png",
+        "sha256": "2249b8b19f9febb22acac836deeb0e1d6af8766fbe757c8ac0523b4079e20b4e",
+        "bytes": 72683
+      },
+      {
+        "path": "docs/phase3-screenshots/create-375x812.png",
+        "sha256": "5bb823a5cb886ff84d68cc3377690a87ddb3f5d510428e1ae636a917db454090",
+        "bytes": 72310
+      },
+      {
+        "path": "docs/phase3-screenshots/create-768x1024.png",
+        "sha256": "2412bf97d7caad65790b8d5b56cc1daba50006997fef53d21095c8f9402a916b",
+        "bytes": 72503
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-1280x800.png",
+        "sha256": "28404e28d9c8e8be3cc0fbb725650fee5d5f1537bc5a1766cf2337ce88728181",
+        "bytes": 135377
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-375x812.png",
+        "sha256": "04900a8ec3e3591f97d57d2356578be89325bbbf9dc8af8447a1a94649526883",
+        "bytes": 142013
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-768x1024.png",
+        "sha256": "ee638521d50f82319650b2ea8ece490ea0ee62ad55ba44dcc79058c403e82cd3",
+        "bytes": 137903
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-active-1280x800.png",
+        "sha256": "23990006e5bff664b423d95f43da3f39056b18daf22ad912a43fe262402a6e56",
+        "bytes": 134918
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-active-375x812.png",
+        "sha256": "9752275bc161a80bf1f745c99c892c2f88ca70651697e0880d5e9144d6dcd8ef",
+        "bytes": 138115
+      },
+      {
+        "path": "docs/phase3-screenshots/detail-active-768x1024.png",
+        "sha256": "ed69c24f09b1e506d0b1c4684a8764a7e892bd4c40fffdded582ac77156594d7",
+        "bytes": 137249
+      },
+      {
+        "path": "docs/phase3-screenshots/list-1280x800.png",
+        "sha256": "b2056ac0b9fd4681ce599455468bc1a37a1f8a9ef3e48f269935beacb0188faf",
+        "bytes": 71788
+      },
+      {
+        "path": "docs/phase3-screenshots/list-375x812.png",
+        "sha256": "b1d77081f4ae542d1aa0e7c6d3e4b752bbf30d7e26a9f295632a3205514525a0",
+        "bytes": 78213
+      },
+      {
+        "path": "docs/phase3-screenshots/list-768x1024.png",
+        "sha256": "1f8f8784a48587e96aa509333c74ce0f7cacb98e87fb51dc747571c6dcc64822",
+        "bytes": 73839
+      },
+      {
+        "path": "docs/phase3-screenshots/no-wallet-desktop-1280x800.png",
+        "sha256": "67411988bfbe6532685bd7cee4a73142f047092bac6cf333e9008de3ed150b61",
+        "bytes": 80555
+      },
+      {
+        "path": "docs/phase3-screenshots/no-wallet-mobile-375x812.png",
+        "sha256": "f87bf6b0ad6262a083803335c3e78aaa7f1fc57e32e89798d10740fa66d2ff4e",
+        "bytes": 109434
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/create-1280x800.png",
+        "sha256": "ce178ac211e10345c450870a66f237becb6fabfd6b7347fe704db75ae2f710fd",
+        "bytes": 82470
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/create-375x812.png",
+        "sha256": "c8c5c718f40d2c4531a647d73e363c65ad73e9276942d12864392f5ea54b549e",
+        "bytes": 82584
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/create-768x1024.png",
+        "sha256": "13aac125d2f5703dc264534fda9b3928f331f6e11183e1971ba10c900c6852c9",
+        "bytes": 83246
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-1280x800.png",
+        "sha256": "61eca39f8936c591a02355fc8a851c5538d765cebc61c9fe07c047211a43a7f0",
+        "bytes": 139540
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-375x812.png",
+        "sha256": "bac5bc7e662f06974dfa00fffb1c002fbc56057316c7f4962597896dc5a527dd",
+        "bytes": 146554
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-768x1024.png",
+        "sha256": "62d6aea433f3dcd706c1c42fc8bd4f03210444b40895202f376dea822e92df72",
+        "bytes": 143577
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-1280x800.png",
+        "sha256": "07b1914cfe0b4956ab71bbd218e3353f6047e3002a6c2860ff264a71209804ae",
+        "bytes": 148494
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-375x812.png",
+        "sha256": "3b7a4ce2ea8b8efe80564edd9e54db33cf79d1856f1af69cc3fcf9025e840ae7",
+        "bytes": 152173
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-768x1024.png",
+        "sha256": "af07ad7e821ddb7b4c2af3f449f17328c73b93980890527cd26317b58618dca5",
+        "bytes": 152199
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/list-1280x800.png",
+        "sha256": "53254bc1a02a10e8a11c4af4da8a54ba3c33043f828a3046f9211a62a6cfa801",
+        "bytes": 115593
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/list-375x812.png",
+        "sha256": "76796ab5d77663a5379e56506a28bd66faf89406a16821c9fb428cf71d18f8f4",
+        "bytes": 122414
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/list-768x1024.png",
+        "sha256": "46427bd2c3caf517ddbb0885dca574479c4d8582dc5e5b558df45dae08668532",
+        "bytes": 118836
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/no-wallet-desktop-1280x800.png",
+        "sha256": "bbf4cf22dd6ba4619cbd868968dffc7c23268cdb2b56eb300c53c45b01b4c457",
+        "bytes": 124667
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/no-wallet-mobile-375x812.png",
+        "sha256": "8b9b7db7dde4b0c6e89c01d6eacc6ee9bf4ba2497e022e71e7fb8bef2a74ba60",
+        "bytes": 153936
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/wallet-1280x800.png",
+        "sha256": "46248f776546c8e213dfff9fdf1e9f2a3820f344da61583df559ee756055aa25",
+        "bytes": 105094
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/wallet-375x812.png",
+        "sha256": "200da10318b1ed9f3defc8dc45fbd9d055bde27f883de432b108d27861f66e9b",
+        "bytes": 105931
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/wallet-768x1024.png",
+        "sha256": "01955a208e250dd44e2b95434a0d3fdfe014662c6f590f44ba5a572112c36184",
+        "bytes": 107731
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original-current/wrong-chain-375x812.png",
+        "sha256": "f4476faddfc75e43853f8e7c229c608b84bf7f88564a9cf12a2efda132299536",
+        "bytes": 139369
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/create-1280x800.png",
+        "sha256": "569a8797eb311cc18a71e073cceafed2e5e69e929a82a6687834a09cedf934eb",
+        "bytes": 82319
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/create-375x812.png",
+        "sha256": "b54339c591530e1b9a9fc3125c3fb0aea0d44d158f510d6e57780e4404ab3733",
+        "bytes": 82442
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/create-768x1024.png",
+        "sha256": "fc9de9dc237fba63974f111259c53e39aaa0ebe32352550a22dbfa879162e3b0",
+        "bytes": 83318
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-1280x800.png",
+        "sha256": "406edbb52679cdf2a0ba78d6daa97d3f7f2d19ec41a544f8d2e1baaa7d0bb825",
+        "bytes": 139413
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-375x812.png",
+        "sha256": "6d147b92f32c253de6a600a348c33f1ed983d3adcdba897719ef358ce54a1d88",
+        "bytes": 146567
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-768x1024.png",
+        "sha256": "760eba098218111f9fa71925f5d7160a479951ec5161cecd054c43640d3d8a24",
+        "bytes": 143865
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-active-1280x800.png",
+        "sha256": "3af25d8a11f8fe62673a9d479370445cadcd1914a59e163fc8c0390b90d26646",
+        "bytes": 147927
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-active-375x812.png",
+        "sha256": "4f045d07fd155842133c1ca362a725bc8af0ba6edacaef1450b55299e619f0d8",
+        "bytes": 151320
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/detail-active-768x1024.png",
+        "sha256": "24c0acd2d62a8e7346b88f6992ba1627789b4c4fa73a99ef7e72d3c2096f1227",
+        "bytes": 151462
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/list-1280x800.png",
+        "sha256": "052a03d65c987975111d92b1cfd4af579441120ba69cd4657882c761b035f1d2",
+        "bytes": 115661
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/list-375x812.png",
+        "sha256": "bdcb78f7f97303e13a11fe127a91e01d4ea31552c1bca6e4749d3d3b86c488da",
+        "bytes": 122382
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/list-768x1024.png",
+        "sha256": "05dcdd81710e80a9f0618888202cbe1b1b8ca5d39f9d03c8937dbc726ea4356f",
+        "bytes": 118688
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/no-wallet-desktop-1280x800.png",
+        "sha256": "9a8e6c2c51abebd4943c21619070760073aefc460b51427469d81cae720dd439",
+        "bytes": 124711
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/no-wallet-mobile-375x812.png",
+        "sha256": "c77984000654c46c5571b686928694e2bfc03eb1bbd06dc297f87e83cfceb173",
+        "bytes": 154041
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/wallet-1280x800.png",
+        "sha256": "35e91f70c09c449262760935883ed50da0dec366c1729d0f8689f85b19bab7c2",
+        "bytes": 105081
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/wallet-375x812.png",
+        "sha256": "89d7b2da9dd2110f7db2e20ba0565bff74a3777ec59384ddba687c1471a155bb",
+        "bytes": 105739
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/wallet-768x1024.png",
+        "sha256": "d7ccf88fb0529cc30060fa2fe06372ce735a938948e85e9ca6055515d30ff3f9",
+        "bytes": 107449
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-original/wrong-chain-375x812.png",
+        "sha256": "985fc616e8c8afdcbe2cba35726b3e0312a94d24080a8458a23853f829edbbbe",
+        "bytes": 139639
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/reliability-1280.png",
+        "sha256": "651e2e905af187f5d07a198944b2d6b7c22c0a91da523c0fb84c916e5a7fb4d6",
+        "bytes": 155560
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/reliability-375.png",
+        "sha256": "b62521640cbd434c902d4b6113ce1733d4a4075d0e27990d26cc10e014087bb9",
+        "bytes": 160218
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/reliability-768.png",
+        "sha256": "c302ada7673f91d9624106c785b576ae4378265bd58856fb1536669877ee33d5",
+        "bytes": 157994
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-1280.png",
+        "sha256": "6056529b27faa366393d74016798e67e52567db1dd9402bbed0252dbc221751e",
+        "bytes": 47421
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-375.png",
+        "sha256": "c150d0a8d58873fc801cea075c0aebf7ff6996055de09d845613f5764eb01a53",
+        "bytes": 45921
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-768.png",
+        "sha256": "0f25ab6015c28e93912f92a361abc9c88766596dba3913b3785dc7519bbd47e3",
+        "bytes": 47609
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/verify-1280.png",
+        "sha256": "e976091c87f952dd8b208942ed9fb4464f3271939bed9d2828eedb8886076a22",
+        "bytes": 236436
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/verify-375.png",
+        "sha256": "3f694eaab36ef7b4ce7576c4a5fe4c3565513921a4edf74e1b6392edf2cc7ede",
+        "bytes": 237436
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/verify-768.png",
+        "sha256": "c8cd75e0067f9219cd37a00003b4e43fa88c03c2538a464b2adbf743ccaf8fb7",
+        "bytes": 234953
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-1280.png",
+        "sha256": "7345b8975ae72fb63eabb983cea585a28239ed1240ad7de5ffc3378456010c5d",
+        "bytes": 44240
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-375.png",
+        "sha256": "acf52d4c946d1af029ce073f723e12c6b4195bfde904a63a423b8eca62c83c85",
+        "bytes": 41260
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-768.png",
+        "sha256": "248f895aa48bbb9854765729103e06883d8be3d4149a56b7895f4dea3797d4ba",
+        "bytes": 45168
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-02-list-1280.png",
+        "sha256": "363de9e6ed34cfcab00759ebf19041b70a6f00cee49b0fdcadfd54bed060b72c",
+        "bytes": 207574
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-02-list-375.png",
+        "sha256": "0f6dcd816aac9da59fd487fffd01c4924cba1b83b6ad79a01f61e9c2634b3c28",
+        "bytes": 249656
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-02-list-768.png",
+        "sha256": "b99f407c127ad6bd10d8c2a740f482bdb9af62ddea215610c85f9cf15903ec55",
+        "bytes": 215041
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-03-anvil-live-1280.png",
+        "sha256": "9ab3b39928eb12785f1307bf444bc418efb0d93ece30cb3a9423fc776b4522e8",
+        "bytes": 242913
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-03-verify-1280.png",
+        "sha256": "a3c01dc25ff9ef7c81f249c249209ee213df09f48e1eb49fedcf87dc9c7b1755",
+        "bytes": 235321
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-03-verify-375.png",
+        "sha256": "0dc1c91cef80f55132fa40e7d7bbe1c9e214cdf82ab3d348917f03741782e003",
+        "bytes": 235320
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-03-verify-768.png",
+        "sha256": "96c12a3de698006fc6a70f605abeddb3527efd4a32c960c7e754ee3eec23a155",
+        "bytes": 233135
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-04-pending-1280.png",
+        "sha256": "06a2d1856807911e67cbf66c67fa4615600bd21ee8acdeab9eb5546d2199edf8",
+        "bytes": 155912
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-04-pending-375.png",
+        "sha256": "4048f82316dc59e0426232239cb879f0de1766f2d79ddd5277fc635e15e94522",
+        "bytes": 160173
+      },
+      {
+        "path": "docs/phase3-screenshots/p3-fix-04-pending-768.png",
+        "sha256": "5b89d3637be243c5dd806ab7c6bd85aa63e458b4133752472d1de05ad31657f4",
+        "bytes": 158197
+      },
+      {
+        "path": "docs/phase3-screenshots/wallet-1280x800.png",
+        "sha256": "e18788de8d979f9068cdd2e827800eaf09fd4cb73f68b1c5cf0497802eb5420b",
+        "bytes": 95551
+      },
+      {
+        "path": "docs/phase3-screenshots/wallet-375x812.png",
+        "sha256": "4443399530267ad3b0a89e93d965582c07115f57ffce261b480cc06b9624a726",
+        "bytes": 95523
+      },
+      {
+        "path": "docs/phase3-screenshots/wallet-768x1024.png",
+        "sha256": "f9fb7bbf405136fb88a3b9f055f56021bd54885c8751c7cc6633073e5e31ea0f",
+        "bytes": 96922
+      },
+      {
+        "path": "docs/phase3-screenshots/wrong-chain-375x812.png",
+        "sha256": "c7c2c5b5214658d35dee96284c0bcb9d0e2e171b754e516178065a3cf9a8062d",
+        "bytes": 95274
+      },
+      {
+        "path": "docs/phase3-verification-evidence.json",
+        "sha256": "9634508c5613d70d307b85f7f21bb87a9e6762f3b344bb7ad30cfdcc25c6c90a",
+        "bytes": 4086
+      },
+      {
+        "path": "frontend/.env.example",
+        "sha256": "f17770fedfc9a26525e57e486c8412e32ec4c8aaf318abdff52b626acf6d7b36",
+        "bytes": 884
+      },
+      {
+        "path": "frontend/.gitignore",
+        "sha256": "8970361af6e02b499ae5f888b57ebd0062faa20f8fd3cc36782188c4b95572f0",
+        "bytes": 174
+      },
+      {
+        "path": "frontend/e2e/01-wallet-states.spec.ts",
+        "sha256": "f0c44c4a98b049b96558870f4e21ea6cc80db4b83b00933b64b5ee50d1a1b2af",
+        "bytes": 4192
+      },
+      {
+        "path": "frontend/e2e/02-flow.spec.ts",
+        "sha256": "f2ffe96fb3b0900ee9b346b46e126ff475fdaa80f94ea8ad642edee3423f0336",
+        "bytes": 5070
+      },
+      {
+        "path": "frontend/e2e/03-xss.spec.ts",
+        "sha256": "bf3417a1c072ea9640bfc322d449b10c18fecfcfaf5868500d79ab8b81b2b00c",
+        "bytes": 2431
+      },
+      {
+        "path": "frontend/e2e/04-screenshots.spec.ts",
+        "sha256": "a81d8b1551a333f2849d906392416a41a172b250c35225bb78acce6ae7a0376f",
+        "bytes": 5285
+      },
+      {
+        "path": "frontend/e2e/helpers.ts",
+        "sha256": "5c6198d7807a7072062b18c40d6847f4faf079ee0be060339316a73c144fcfae",
+        "bytes": 6747
+      },
+      {
+        "path": "frontend/index.html",
+        "sha256": "6d8166a93c41a6586aa60d8aa0e107304eaeb74aa6f4fa3e07a5752ab681d551",
+        "bytes": 329
+      },
+      {
+        "path": "frontend/package-lock.json",
+        "sha256": "c72007f8d77ddbfffef81b69e2574d7beb0b0cb92c09664f1a34e468cc8e16f5",
+        "bytes": 322446
+      },
+      {
+        "path": "frontend/package.json",
+        "sha256": "730143333ccef1253259a8524e4753d18a582e9c85e11e0688f49efae10530dd",
+        "bytes": 1028
+      },
+      {
+        "path": "frontend/playwright.config.ts",
+        "sha256": "3fadedc8a33870d6fb4158bc30f00e8377e8603656f159c96b1f9bd8d634c622",
+        "bytes": 821
+      },
+      {
+        "path": "frontend/playwright.reliability.config.ts",
+        "sha256": "0a9658e55485c88a262ee2d7e0d576867fd50f87a07ddddb1d8eaf1f75f74893",
+        "bytes": 532
+      },
+      {
+        "path": "frontend/playwright.validation.config.ts",
+        "sha256": "841d09a9123fb8db2d2d0eaf138c21a5367038ddf606eee2b9eb692c572958fa",
+        "bytes": 742
+      },
+      {
+        "path": "frontend/scripts/sync-abi.mjs",
+        "sha256": "197b08852d853e183d69bb7ad0d564983017daa658e1e4af597741a653571ec9",
+        "bytes": 1403
+      },
+      {
+        "path": "frontend/src/App.tsx",
+        "sha256": "5e9c5f146ecdefaf3129cb288c54ae90ebff02ac3bddf4d481b955ee5e162d03",
+        "bytes": 3989
+      },
+      {
+        "path": "frontend/src/abi/govToken.ts",
+        "sha256": "d4698be8ecb9a53e678542fad3a70c436ea715209d2bb2df4426d13cd4c71581",
+        "bytes": 14944
+      },
+      {
+        "path": "frontend/src/abi/govVote.ts",
+        "sha256": "266a5d4278d925356f647a39acf80e0c010f49721e7cab500e91a21bf8bb9088",
+        "bytes": 10314
+      },
+      {
+        "path": "frontend/src/appContext.ts",
+        "sha256": "300615da0172f237bbc624b07903b71034e4f5d54d219bd66e17a8a8fc4ccd35",
+        "bytes": 859
+      },
+      {
+        "path": "frontend/src/components/BlockGuard.tsx",
+        "sha256": "5770b0c1b55a8b6ba1a3fed09f0ae522e6c10c85b81110fab77e250fd56225f2",
+        "bytes": 512
+      },
+      {
+        "path": "frontend/src/components/ConfigGuard.tsx",
+        "sha256": "c587002a3c8e0fbcc67eb982185b371d9acb6f4ed9bdf7d15901fe29ef75a836",
+        "bytes": 2990
+      },
+      {
+        "path": "frontend/src/components/ConnectBar.tsx",
+        "sha256": "37bddf22facd48970378244a6262904614e2af54f6478fa08eb6cf0a641dc829",
+        "bytes": 4901
+      },
+      {
+        "path": "frontend/src/components/QuorumProgress.tsx",
+        "sha256": "c1809d073b24194b05d6e2a7487bb8c8027325fc2a277bbefca5aded0fbaf772",
+        "bytes": 1187
+      },
+      {
+        "path": "frontend/src/components/ReadError.tsx",
+        "sha256": "12ecf85f8f3c3c4ecc325bcc5a1bfe103e827e6c518c00303b5e97fa6bca46db",
+        "bytes": 1335
+      },
+      {
+        "path": "frontend/src/components/ReliableApp.tsx",
+        "sha256": "6e066d7f2c1599fdd97d513285058f3696631d02b037623ccd321934662c34b9",
+        "bytes": 3128
+      },
+      {
+        "path": "frontend/src/components/ui.tsx",
+        "sha256": "9e070e7d9bd3cb7a51cbb296559110e527f62dfb8021ae82d34e1baba0c78189",
+        "bytes": 4224
+      },
+      {
+        "path": "frontend/src/config.ts",
+        "sha256": "cd684adb58611c8c8851bd234bc63474bb96412fc3ee307a0e08af97f560407b",
+        "bytes": 4137
+      },
+      {
+        "path": "frontend/src/errors.ts",
+        "sha256": "fa8c4ca946b56c34b5ef8dab2a084919aa0362fdf4e582be0b8c2f698ce7c990",
+        "bytes": 4895
+      },
+      {
+        "path": "frontend/src/index.css",
+        "sha256": "42070e0b45bb201b2b838a52aaaa6e965f964e0b542d97f1fe517fe59c4b75a8",
+        "bytes": 23
+      },
+      {
+        "path": "frontend/src/lib/bytes.ts",
+        "sha256": "1ccb5e39624327829ca787337767798a7a93451bf9075d121db55510ceb5e849",
+        "bytes": 1627
+      },
+      {
+        "path": "frontend/src/lib/endpoint.ts",
+        "sha256": "e9b5d3029bce8b85688273a04b5cf9a30cb60807d5db325a7dbff2a258190102",
+        "bytes": 3357
+      },
+      {
+        "path": "frontend/src/lib/format.ts",
+        "sha256": "614a8f5e11accc6e68b7e3b7fa67bb9830d88563921745204fc56cf6020956a2",
+        "bytes": 1685
+      },
+      {
+        "path": "frontend/src/lib/freshness.tsx",
+        "sha256": "b523219f9e368df9187ecea2b70b3e5552a3b383fe4133a11dd15dd3a279a986",
+        "bytes": 1921
+      },
+      {
+        "path": "frontend/src/lib/power.ts",
+        "sha256": "ee35b7a1113417bc934dc5abadb0842bd137d461aaa711070f0308ab76124e7f",
+        "bytes": 2670
+      },
+      {
+        "path": "frontend/src/lib/proposalList.ts",
+        "sha256": "a354cda31437405a2a0b5563220a4f5c146f6ef591ab58190f099b4e4b2ece3a",
+        "bytes": 1536
+      },
+      {
+        "path": "frontend/src/lib/route.ts",
+        "sha256": "0a3985cf7372454fc32c0de3d6a71f47f28127016870a6a5a95d68e3dc4ad160",
+        "bytes": 826
+      },
+      {
+        "path": "frontend/src/lib/session.ts",
+        "sha256": "8f1c308e2f1cabe7a2501c2aaf64cd6f618dfe283757094f0c31dcfe4a1d0600",
+        "bytes": 819
+      },
+      {
+        "path": "frontend/src/lib/txMachine.ts",
+        "sha256": "09a86f03c71f3bbf076525f15170031188445e71cb8812b4a353ffb315da5895",
+        "bytes": 2126
+      },
+      {
+        "path": "frontend/src/lib/useCurrentBlock.ts",
+        "sha256": "bc4738f37f6bab626d0c07f54a4477ae254fd5f44148a3715e19dd01a0f444cb",
+        "bytes": 649
+      },
+      {
+        "path": "frontend/src/lib/useTx.ts",
+        "sha256": "c25897771850da333b88fcefe910a59ef77d91cc80616c3ea09a6c76e71a28c6",
+        "bytes": 3719
+      },
+      {
+        "path": "frontend/src/lib/useVoteVerification.ts",
+        "sha256": "df719a99c388f83a07c32170053620695242a6c0302aa8cd75ec3c1ebcbb32a2",
+        "bytes": 2481
+      },
+      {
+        "path": "frontend/src/lib/verificationAdapter.ts",
+        "sha256": "664546e94d9b1991f0b8406e7711bb28ae1deb2b022d4400570dc59ee75dc17d",
+        "bytes": 1648
+      },
+      {
+        "path": "frontend/src/lib/verificationFallback.ts",
+        "sha256": "46e196ac4b9c88037b262e20cb1c9d31f8d5856d2aa8e9c37234488380bafafc",
+        "bytes": 1751
+      },
+      {
+        "path": "frontend/src/lib/walletEnv.ts",
+        "sha256": "ba173d6663a41d6656b8ee4e8bcccbd05c6973f0d0f7400127ab2bad37dcb6bf",
+        "bytes": 1272
+      },
+      {
+        "path": "frontend/src/main.tsx",
+        "sha256": "50a90999e3d415aef56548521d0e5f3c5a6f8e2d9564f653f336b129b4860e89",
+        "bytes": 1060
+      },
+      {
+        "path": "frontend/src/pages/CreateProposal.tsx",
+        "sha256": "d0f4c9bf165c5b9795ed4aad807cd5f759d372b0a865baeb15b2ab58d697a1f8",
+        "bytes": 8700
+      },
+      {
+        "path": "frontend/src/pages/ProposalDetail.tsx",
+        "sha256": "fa6449092a8bf617722691514c43d112cb0baaf080bac5ca2717b5880666c410",
+        "bytes": 10496
+      },
+      {
+        "path": "frontend/src/pages/ProposalList.tsx",
+        "sha256": "00f054df95a6a6f267fef095885a7c9c5196c49a4f1e72e45a4c79953d76b768",
+        "bytes": 9257
+      },
+      {
+        "path": "frontend/src/pages/VerifyProposal.tsx",
+        "sha256": "e2c717e7e3292cd356b2008bb24e8ebf966c869a7c0a93438408c2d4d83039eb",
+        "bytes": 6925
+      },
+      {
+        "path": "frontend/src/pages/WalletDashboard.tsx",
+        "sha256": "1733ba6149e5e968930d5690c6d1170af359e7b00e5fe8ccb8b6985b034e6924",
+        "bytes": 5176
+      },
+      {
+        "path": "frontend/tests/errors.test.ts",
+        "sha256": "fb51d3590f32a0d5f921e6814521369d39f30ad3186e47f8a5804a227015d31b",
+        "bytes": 4249
+      },
+      {
+        "path": "frontend/tests/lib.test.ts",
+        "sha256": "858e8d67c79c029b1cdfaf327fd4b38d9f668efec7ac43b7aca52222adcef328",
+        "bytes": 8046
+      },
+      {
+        "path": "frontend/tests/proposalList.test.ts",
+        "sha256": "0507c7cb0c56e111970fac4241d438717439987809a95c14e8a5b99e0ad0d667",
+        "bytes": 1653
+      },
+      {
+        "path": "frontend/tests/reliability.test.ts",
+        "sha256": "b60d49427c0fd207ac219244dfec983dbad0e7ce6023e0cc8f4408b7619392d3",
+        "bytes": 4014
+      },
+      {
+        "path": "frontend/tests/rpc.test.ts",
+        "sha256": "767464465c2494cf8e275f0fb8eae5940d0b22272f39f0607ea8c5e9e699dbb1",
+        "bytes": 4142
+      },
+      {
+        "path": "frontend/tests/session.test.ts",
+        "sha256": "0efd53ab2a5f5582af7c262e4a413d5992b6d796b0e86fe9f83d09f2ef3601fa",
+        "bytes": 1519
+      },
+      {
+        "path": "frontend/tests/transport.test.ts",
+        "sha256": "b805465ebe9460bb86eb9e15f508149b7255a1f140aeb7087aef800d9757bec8",
+        "bytes": 1583
+      },
+      {
+        "path": "frontend/tests/verificationCore.test.ts",
+        "sha256": "b40890a74dc7e67854d3ecc414b627c288236f4ae840fe8847679dbb71b1eea5",
+        "bytes": 6053
+      },
+      {
+        "path": "frontend/tests/verificationRpcFixture.ts",
+        "sha256": "d46c39f4d807d5c37b074954d868a585ec4cb44a8835f105cfaa39a202d77fd1",
+        "bytes": 3763
+      },
+      {
+        "path": "frontend/tests/verificationRunner.test.ts",
+        "sha256": "e4c0a237259bad75bc3b9e8c2b98f5ffdcf15d28fecbcecf086df0013f495a42",
+        "bytes": 5640
+      },
+      {
+        "path": "frontend/tsconfig.json",
+        "sha256": "28abea788255bb30ee643742e88ae7362dfe861dffa9133db845ba200d716910",
+        "bytes": 659
+      },
+      {
+        "path": "frontend/validation/fallback-server.mjs",
+        "sha256": "62563e04adc158d1f0c6d7e3f8c1f8c4243be9e228f42e11d9c3c2d1bd3b5825",
+        "bytes": 844
+      },
+      {
+        "path": "frontend/validation/p3-final-ui.spec.ts",
+        "sha256": "bb2ace9081f7ea5c4f285263c8cadb18358eb13e094759a6e915e3fe5c394023",
+        "bytes": 2787
+      },
+      {
+        "path": "frontend/validation/p3-fix-01.spec.ts",
+        "sha256": "a713261759567944d2cc8603fdd6b083bd4d636bc0ca8d1d9d5821b12b972b2e",
+        "bytes": 9187
+      },
+      {
+        "path": "frontend/validation/p3-fix-02.spec.ts",
+        "sha256": "59b3fa717bd83cea5d25dd537a635fcb03b543c00dd3d3e01516220388f99316",
+        "bytes": 7645
+      },
+      {
+        "path": "frontend/validation/p3-fix-03.spec.ts",
+        "sha256": "baf11d8944b6a1ecc7da7e531727aa23fc55d46c51e0ed42468156f4dbc7a334",
+        "bytes": 7312
+      },
+      {
+        "path": "frontend/validation/p3-fix-04.spec.ts",
+        "sha256": "5e3a25a48f301d9ab7d2f30b3ff6bab88ad660c01820a06739ef1c047309cd81",
+        "bytes": 10581
+      },
+      {
+        "path": "frontend/vite.config.ts",
+        "sha256": "07018fb49cc9e818677fc861578d6d02c671aff4230417d2cdd8981dda2e7703",
+        "bytes": 531
+      },
+      {
+        "path": "scripts/verify/src/adapter.ts",
+        "sha256": "b7972ba3f1f4b79558f9765277300645c37f4eff9ffa2b6fdffccc5a5b9af677",
+        "bytes": 1254
+      },
+      {
+        "path": "scripts/verify/src/legacy-main.ts",
+        "sha256": "1176e499f812ca2c6a63b6142cdd28d5ccb74843d6ab19d91acdf7aa64687996",
+        "bytes": 5604
+      },
+      {
+        "path": "scripts/verify/src/main.ts",
+        "sha256": "b9b4592278b8bbd3d88acecc9225d8c4df2124cf8845218fb58de934bdd55eb0",
+        "bytes": 2469
+      },
+      {
+        "path": "scripts/verify/test/rpcFixture.ts",
+        "sha256": "0cf4da3a0471bbd310042897d1bda4906a4f758c57a9caea6f125aec55871aac",
+        "bytes": 3802
+      },
+      {
+        "path": "scripts/verify/test/strict.test.ts",
+        "sha256": "595ad33e3cf835e1da533952a6631c52f61743f128890ecdc7c0169f787b2c15",
+        "bytes": 4250
+      },
+      {
+        "path": "shared/verification/core.ts",
+        "sha256": "0e3942bb06d37bf2f5a225b3b33e74e6a41fa43061e4cc1e46a81d204c8fc989",
+        "bytes": 11130
+      },
+      {
+        "path": "shared/verification/fixtures.ts",
+        "sha256": "068174349120c215a658d9040a6b8517f8a4a144ad5a8dab5482838ee2efa9ea",
+        "bytes": 1665
+      },
+      {
+        "path": "shared/verification/http.ts",
+        "sha256": "3f3da1de8e9a0a2123b39fa816f9120f0900ae234482689a2e891c0032c793d6",
+        "bytes": 1475
+      },
+      {
+        "path": "shared/verification/runner.ts",
+        "sha256": "171bc3026aecedb9df6aadc2be722845af9aa3dc0f7ccb8b0d32f47a40084c2b",
+        "bytes": 13631
+      }
+    ],
+    "B": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "a3870e8439e8640bc8a10562979159c1740637113a6c4aa5e04f06df0386a85a",
+        "bytes": 7424
+      },
+      {
+        "path": "CLAUDE.md",
+        "sha256": "76d1b3e3a90caac838099dacc89d67d10af3fb7e18d84b937981437ead7e7f53",
+        "bytes": 223
+      },
+      {
+        "path": "docs/PROGRESS.md",
+        "sha256": "ef66803a0f910b06696864892642130207f66a31bc901a60d6ef8fd021cdf4d8",
+        "bytes": 35652
+      }
+    ],
+    "C": [
+      {
+        "path": ".github/workflows/test.yml",
+        "sha256": "28e9bcfad13fad16e63ddac9fd35e31c9bcc9f4f8ccd6cb9314dfdfaa065bfb3",
+        "bytes": 635
+      },
+      {
+        "path": "README.md",
+        "sha256": "94e4e50a7aeb733fab3721b347c68e70a25bd40baa32d3beae54c7edda6846d7",
+        "bytes": 972
+      }
+    ]
+  },
+  "excludedD": [
+    ".env",
+    ".env.* except public .env.example",
+    "node_modules/",
+    "dist/",
+    "test-results/",
+    "playwright-report/",
+    "out/",
+    "cache/",
+    "broadcast/",
+    "/tmp fixture copies/logs",
+    "secrets"
+  ],
+  "notes": [
+    "A: Phase3 and strict CLI migration; B: AI workflow Owner decision; C: existing templates leave outside Phase3 commit",
+    "Manifest self hash/size null to avoid recursive hash; all other entries hash final bytes",
+    "No git add/commit/push/merge run; recheck scope if workspace changes"
+  ]
+}
