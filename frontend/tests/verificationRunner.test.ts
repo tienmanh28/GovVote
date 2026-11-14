@@ -16,9 +16,11 @@ test("runner full RPC evidence tại H và kiểm lại anchor", async () => {
   expect(m.control.headReads).toBe(2);
   expect(result.context?.head).toBe(100n);
   expect(result.evidence?.quorum?.pastTotalSupply).toBe(1000n);
-  expect(m.calls.filter((c) => c.method === "eth_call").every((c) => c.params[1] === "0x64")).toBe(
-    true,
-  );
+  // Yêu cầu mới mạnh hơn số block: cả bytecode và state phải cùng hash canonical của H.
+  const stateReads = m.calls.filter((c) => ["eth_call", "eth_getCode"].includes(c.method));
+  expect(stateReads.length).toBe(11);
+  for (const call of stateReads)
+    expect(call.params[1]).toEqual({ blockHash: hash(100), requireCanonical: true });
 });
 for (const [name, flag, status] of [
   ["RPC failure", "fail", "RPC_ERROR"],
@@ -148,7 +150,8 @@ test("proposal tồn tại latest nhưng chưa tồn tại H => INCOMPLETE", asy
     m.f.input,
     async (method, params, signal) => {
       if (method === "eth_call" && (params[0] as { data: string }).data === selector)
-        return `0x${(params[1] === "0x70" ? 1n : 0n).toString(16).padStart(64, "0")}`;
+        // Latest chỉ dùng chẩn đoán ID, phải ghim hash thay vì số block như fixture cũ.
+        return `0x${((params[1] as { blockHash: string }).blockHash === hash(112) ? 1n : 0n).toString(16).padStart(64, "0")}`;
       return m.request(method, params, signal);
     },
     verificationCodec,

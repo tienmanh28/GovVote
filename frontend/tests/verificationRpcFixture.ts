@@ -78,6 +78,15 @@ export function rpcFixture() {
             : hash(number),
       };
     }
+    // Fixture kiểm đúng selector; không cho test vô tình dùng lại số block.
+    if (method === "eth_getCode" || method === "eth_call") {
+      const selector = params[1] as { blockHash?: string; requireCanonical?: boolean };
+      if (
+        selector?.requireCanonical !== true ||
+        ![hash(f.context.head), hash(f.context.latest)].includes(selector.blockHash ?? "")
+      )
+        throw new Error("Fixture yêu cầu EIP-1898 với hash đã quan sát");
+    }
     if (method === "eth_getCode") return control.noCode ? "0x" : "0x6000";
     if (method === "eth_call") {
       const call = params[0] as { to: string; data: Hex };

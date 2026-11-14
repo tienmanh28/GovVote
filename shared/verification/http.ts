@@ -1,5 +1,5 @@
 // JSON-RPC chỉ đọc; AbortSignal của runner hủy HTTP khi timeout/cancel.
-import { VerificationProblem, type RpcRequest } from "./runner.ts";
+import { RpcResponseError, VerificationProblem, type RpcRequest } from "./runner.ts";
 const methods = new Set([
   "eth_chainId",
   "eth_getBlockByNumber",
@@ -46,7 +46,11 @@ export function createHttpRequest(url: string): RpcRequest {
         "MISSING_DATA",
         "JSON-RPC response sai request ID hoặc version.",
       );
-    if (body.error) throw new Error("RPC returned error");
+    if (body.error) {
+      // Chỉ giữ code số, không đưa message/URL nhạy cảm do RPC trả vào kết quả.
+      const code = (body.error as { code?: unknown }).code;
+      throw new RpcResponseError(typeof code === "number" ? code : undefined);
+    }
     if (!Object.hasOwn(body, "result"))
       throw new VerificationProblem("INCOMPLETE", "MISSING_DATA", "RPC thiếu trường result.");
     return body.result;
