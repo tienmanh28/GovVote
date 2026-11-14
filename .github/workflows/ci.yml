@@ -20,7 +20,7 @@ env:
 jobs:
   contracts:
     name: contracts (forge)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -46,7 +46,7 @@ jobs:
 
   frontend:
     name: frontend (typecheck, format, Vitest, build)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: frontend
@@ -77,7 +77,7 @@ jobs:
 
   verify-cli:
     name: verify-cli (scripts/verify)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: scripts/verify
@@ -101,7 +101,7 @@ jobs:
   e2e:
     name: e2e (Anvil + Playwright)
     needs: [contracts, frontend]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Anvil chỉ nghe trên loopback của runner.
       ANVIL_PORT: "8545"
