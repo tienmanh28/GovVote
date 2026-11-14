@@ -1,5 +1,15 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## P4-A2 — format TypeScript bằng Prettier, 14/11/2026, Claude
+
+- HEAD sau P4-A2: `b85364ed80a8fe6c615423d2e2ea2e95700d19f9` (`style: format TypeScript bằng Prettier (không đổi hành vi)`). Commit docs chứa checkpoint này có hash riêng.
+- Đã xong: Prettier **3.9.10** ghim chính xác (devDependency `frontend/`). Không dùng 3.10.1 vì mới phát hành 12/11/2026, chưa đủ 14 ngày theo AGENTS.md. `.prettierrc` (printWidth 100, tabWidth 2, nháy kép, có chấm phẩy) và `.prettierignore` ở gốc repo; mẫu ignore neo gốc (`/lib`, `/out`, `/cache`, `/broadcast`, `/docs`) để không loại nhầm `frontend/src/lib`; bỏ qua `frontend/src/abi` (file sinh bởi `sync-abi`).
+- Script `npm run format` / `format:check` (trong `frontend/`) nhắm `frontend/{src,e2e,tests,validation}`, `shared/`, `scripts/verify/{src,test}`. 61 file mã nguồn đổi; `format:check` xanh.
+- Bằng chứng: typecheck xanh; Vitest 137/137; CLI verify 17/17 (trước và sau như nhau); browser 61/61 PASS sau format (validation 34, reliability 12, final UI 3, E2E gốc 12) trên bản sao + Anvil cô lập 8546, Anvil 8545 không bị đụng (block 7261).
+- Bundle `dist/assets` **khác hash** so với trước format, Owner chấp nhận (hướng a): Prettier tách khoảng trắng JSX thành `{" "}` (cùng chữ hiển thị, khác số text node); Tailwind không còn sinh lớp thừa `.block!` (bắt nhầm từ `info.block!==` trong code dồn một dòng); `ccip-*.js` chỉ khác tên chunk import.
+- Ghi chú: `docs/phase3-final-manifest.json` mô tả byte TRƯỚC format (commit `1013cbf`); KHÔNG sửa manifest. 31 file còn dòng >100 ký tự đều là chuỗi/template literal (Prettier không cắt chuỗi), chấp nhận.
+- Kế tiếp: P4-A3 README, sau đó C1/C2 CI. Chỉ làm khi Owner giao.
+
 ## Owner xác nhận commit — checkpoint 14/11/2026
 
 - HEAD tại thời điểm cập nhật: `080a279d97414a361d7ee7e43c689e66dcad4b94` (commit A2; commit B chứa checkpoint này sẽ có hash riêng).
