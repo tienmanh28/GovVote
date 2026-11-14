@@ -1,0 +1,118 @@
+===== validation.log =====
+
+Running 34 tests using 1 worker
+
+  ✓   1 validation/p3-fix-01.spec.ts:82:1 › RPC error → tiếng Việt; retry sau phục hồi (1.2s)
+  ✓   2 validation/p3-fix-01.spec.ts:90:1 › RPC liên tục lỗi: retry hữu hạn, không spinner (5.5s)
+  ✓   3 validation/p3-fix-01.spec.ts:99:1 › RPC timeout: thoát loading, báo lỗi sau timeout và retry (17.1s)
+  ✓   4 validation/p3-fix-01.spec.ts:105:1 › bytecode rỗng: đúng nguyên nhân (219ms)
+  ✓   5 validation/p3-fix-01.spec.ts:109:1 › A → B → A: dữ liệu đúng account; disconnect xóa phiên (344ms)
+  ✓   6 validation/p3-fix-01.spec.ts:118:1 › đổi chain: khóa delegate (241ms)
+  ✓   7 validation/p3-fix-01.spec.ts:124:1 › query A hoàn tất sau B: không ghi đè dữ liệu B (577ms)
+  ✓   8 validation/p3-fix-01.spec.ts:132:67 › account khi simulate đang chờ: không gọi eth_sendTransaction (790ms)
+  ✓   9 validation/p3-fix-01.spec.ts:132:67 › chain khi simulate đang chờ: không gọi eth_sendTransaction (800ms)
+  ✓  10 validation/p3-fix-01.spec.ts:132:67 › disconnect khi simulate đang chờ: không gọi eth_sendTransaction (831ms)
+  ✓  11 validation/p3-fix-02.spec.ts:49:1 › rỗng và một proposal (1.5s)
+  ✓  12 validation/p3-fix-02.spec.ts:55:1 › phân trang trước RPC; filter canonical; quorum ngưỡng (1.3s)
+  ✓  13 validation/p3-fix-02.spec.ts:77:1 › RPC list failure và retry (1.1s)
+  ✓  14 validation/p3-fix-02.spec.ts:82:1 › dữ liệu block cũ hoàn tất muộn không ghi đè block mới (1.9s)
+  ✓  15 validation/p3-fix-02.spec.ts:89:65 › responsive 375×812 (471ms)
+  ✓  16 validation/p3-fix-02.spec.ts:89:65 › responsive 768×1024 (358ms)
+  ✓  17 validation/p3-fix-02.spec.ts:89:65 › responsive 1280×800 (357ms)
+  ✓  18 validation/p3-fix-02.spec.ts:96:2 › N rất lớn vẫn chỉ tải 10 proposal (244ms)
+  ✓  19 validation/p3-fix-03.spec.ts:30:1 › strict UI VERIFIED tại H, read-only không yêu cầu ví (389ms)
+  ✓  20 validation/p3-fix-03.spec.ts:37:1 › RPC_ERROR và Retry phục hồi (443ms)
+  ✓  21 validation/p3-fix-03.spec.ts:38:242 › UI missing ProposalCreated không VERIFIED (278ms)
+  ✓  22 validation/p3-fix-03.spec.ts:38:242 › UI missing votes không khớp storage không VERIFIED (274ms)
+  ✓  23 validation/p3-fix-03.spec.ts:38:242 › UI malformed event không VERIFIED (293ms)
+  ✓  24 validation/p3-fix-03.spec.ts:38:242 › UI reorg không VERIFIED (274ms)
+  ✓  25 validation/p3-fix-03.spec.ts:39:1 › Pending chưa chốt snapshot không VERIFIED (279ms)
+  ✓  26 validation/p3-fix-03.spec.ts:40:1 › progress trong khi quét; không badge VERIFIED sớm (327ms)
+  ✓  27 validation/p3-fix-03.spec.ts:41:1 › lần cũ hoàn tất sau lần mới không ghi đè verdict (732ms)
+  ✓  28 validation/p3-fix-03.spec.ts:42:1 › đổi route xóa verdict cũ (438ms)
+  ✓  29 validation/p3-fix-03.spec.ts:43:1 › đổi reference policy xóa verdict, chạy lại ở H mới (523ms)
+  ✓  30 validation/p3-fix-03.spec.ts:44:1 › RPC timeout hiển thị RPC_ERROR, retry hữu hạn (16.6s)
+  ✓  31 validation/p3-fix-03.spec.ts:45:1 › VERIFIED khi Defeated không bị gọi là thông qua (412ms)
+  ✓  32 validation/p3-fix-03.spec.ts:46:63 › verification responsive 375×812 (392ms)
+  ✓  33 validation/p3-fix-03.spec.ts:46:63 › verification responsive 768×1024 (392ms)
+  ✓  34 validation/p3-fix-03.spec.ts:46:63 › verification responsive 1280×800 (421ms)
+
+  34 passed (59.7s)
+
+===== reliability.log =====
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Running 12 tests using 1 worker
+
+  ✓   1 validation/p3-fix-04.spec.ts:42:1 › primary ưu tiên, fallback không bị gọi khi primary tốt (383ms)
+  ✓   2 validation/p3-fix-04.spec.ts:43:1 › primary lỗi => fallback hợp lệ; phục hồi primary bằng retry (348ms)
+  ✓   3 validation/p3-fix-04.spec.ts:44:33 › không còn endpoint, fallback wrong chain=false (370ms)
+  ✓   4 validation/p3-fix-04.spec.ts:44:33 › không còn endpoint, fallback wrong chain=true (291ms)
+  ✓   5 validation/p3-fix-04.spec.ts:45:1 › verification fallback đọc lại context và evidence từ đầu ở nguồn mới (412ms)
+  ✓   6 validation/p3-fix-04.spec.ts:46:1 › freshness không tiến khi lỗi/đồng hồ chạy; retry cập nhật thành công (2.8s)
+  ✓   7 validation/p3-fix-04.spec.ts:47:1 › Pending getVotes dự kiến, đổi account, snapshot historical và sai chain (1.6s)
+  ✓   8 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 375 (336ms)
+  ✓   9 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 768 (346ms)
+  ✓  10 validation/p3-fix-04.spec.ts:48:63 › reliability responsive 1280 (374ms)
+  ✓  11 validation/p3-fix-04.spec.ts:50:1 › endpoint cũ trả muộn không ghi đè fallback (2.6s)
+  ✓  12 validation/p3-fix-04.spec.ts:57:1 › cùng chain ID/contract nhưng khác lịch sử: từ chối fallback (1.6s)
+
+  12 passed (13.7s)
+
+===== finalui.log =====
+
+Running 3 tests using 1 worker
+
+  ✓  1 validation/p3-final-ui.spec.ts:6:71 › final RPC error và wrong chain responsive 375 (1.2s)
+  ✓  2 validation/p3-final-ui.spec.ts:6:71 › final RPC error và wrong chain responsive 768 (1.2s)
+  ✓  3 validation/p3-final-ui.spec.ts:6:71 › final RPC error và wrong chain responsive 1280 (1.2s)
+
+  3 passed (5.1s)
+
+===== e2e.log =====
+
+Running 12 tests using 1 worker
+
+  ✓   1 e2e/01-wallet-states.spec.ts:8:1 › máy tính không có window.ethereum: hướng dẫn cài MetaMask, vẫn xem được proposal (278ms)
+  ✓   2 e2e/01-wallet-states.spec.ts:14:1 › điện thoại không có window.ethereum: hướng dẫn mở trong trình duyệt của app MetaMask (252ms)
+  ✓   3 e2e/01-wallet-states.spec.ts:24:1 › sai chain: hiện cảnh báo, bấm nút thì gọi wallet_switchEthereumChain và cảnh báo biến mất (383ms)
+  ✓   4 e2e/01-wallet-states.spec.ts:38:1 › người dùng từ chối ký (4001): thông báo tiếng Việt, trạng thái ERROR (342ms)
+  ✓   5 e2e/01-wallet-states.spec.ts:49:1 › lỗi contract khi đọc: proposal không tồn tại → ProposalNotFound bằng tiếng Việt (999ms)
+  ✓   6 e2e/01-wallet-states.spec.ts:54:1 › VITE_GOV_VOTE không có bytecode: hiện lỗi cấu hình thay vì dữ liệu rỗng (274ms)
+{"id":"2","delegateHash":"0x5165dd0380f7805662b947d6ac162873d812dc8327cb87783776a961289e4285","proposeHash":"0x943548f151cbdc51af9b01db533d1e74f99b75a3f248df8d2c4c827d79603b1f","aliceVoteHash":"0xd8353257169b7cd72b82938327e600f7e91a81193fdfd0c6f97be19d8b283db1","bobVoteHash":"0xbb40ff84b12b3e0e1cc3c3e8ceda5cb13857981e86edbd62aa4a9d0a8e7e1af0","snapshot":"7243"}
+latest / head  : 7259 / 7247 (chờ 12 block xác nhận)
+proposalCount  : 2 (tại head)
+VoteCast logs  : 5 (block 0..7247)
+ 1 | 600.000 |     250.000 |   600.000 |       250.000 |   OK
+ 2 | 400.000 |     250.000 |   400.000 |       250.000 |   OK
+VERIFIED
+  ✓   7 e2e/02-flow.spec.ts:12:1 › Alice delegate → tạo proposal → vote; tally khớp getProposal và scripts/verify (6.2s)
+  ✓   8 e2e/03-xss.spec.ts:5:1 › title <img src=x onerror=alert(1)> hiển thị nguyên văn, không chạy script (2.8s)
+{"file":"list-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"detail-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"create-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"wallet-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"detail-active-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+  ✓   9 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 375×812 (2.5s)
+{"file":"list-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"detail-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"create-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"wallet-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+{"file":"detail-active-768x1024.png","scrollWidth":768,"innerWidth":768,"small":[]}
+  ✓  10 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 768×1024 (2.4s)
+{"file":"list-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"detail-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"create-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"wallet-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"detail-active-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+  ✓  11 e2e/04-screenshots.spec.ts:39:3 › ảnh và bố cục ở 1280×800 (2.5s)
+{"file":"no-wallet-mobile-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+{"file":"no-wallet-desktop-1280x800.png","scrollWidth":1280,"innerWidth":1280,"small":[]}
+{"file":"wrong-chain-375x812.png","scrollWidth":375,"innerWidth":375,"small":[]}
+  ✓  12 e2e/04-screenshots.spec.ts:76:1 › ảnh trạng thái ví: điện thoại không có ví, máy tính không có ví, sai chain (2.1s)
+
+  12 passed (23.4s)
