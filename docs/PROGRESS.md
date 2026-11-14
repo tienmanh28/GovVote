@@ -7,10 +7,29 @@
 - PROGRESS cũ chưa ghi remote và hai lần CI đã chạy. [Actions lần 1, 0b5402e](https://github.com/tienmanh28/GovVote/actions/runs/43595979018) và [lần 2, 492d268](https://github.com/tienmanh28/GovVote/actions/runs/43596632803) đều FAIL ở snapshot của contracts; frontend/verify-cli PASS, e2e SKIPPED. Lần 1 chưa ghim seed; lần 2 ghim seed vẫn lệch số gas fuzz trên runner.
 - Nguyên nhân: fuzz chạy song song nên gas trung bình/trung vị phụ thuộc cả seed lẫn số luồng. Tạo baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`; kiểm bằng `forge snapshot --check --fuzz-seed 0x1 --threads 1`. Chỉ so sánh khi cùng seed, số luồng, Foundry **1.7.1** và solc **0.8.28**. Seed/luồng chỉ ghim cho snapshot; bước `forge test -vv` của CI vẫn fuzz ngẫu nhiên, giữ nguyên `foundry.toml` và test.
 - Đã tạo lại `.gas-snapshot` đúng **một lần**, exit 0, **22,85 giây**, **53/53 PASS**. Hai lần `--check` liên tiếp: exit 0, **21,81 giây** và **23,01 giây**, mỗi lần 53/53 PASS. Chỉ ba dòng fuzz gas thay đổi; SHA-256 baseline: `5bf92c0e8ae3cc45e6739b73bd05a7e6ff520ab1e96fde9148fcd5622fe21f07`.
-- Clone mới `~/ci-dryrun/clone4`: clone origin sạch, `git submodule update --init --recursive`, áp patch đang kiểm chứng trước khi commit (không mang theo cache/artifact). Snapshot `--check` exit 0/**24,91 giây**; `forge test -vv` **53/53 PASS**, exit 0/**6,91 giây**; `taskset -c 0-3 forge snapshot --check --fuzz-seed 0x1 --threads 1` exit 0/**22,79 giây**, 53/53 PASS. Log và thời gian bền: `~/ci-dryrun/logs/clone4-{snapshot,test,taskset}.{log,time}`.
+- Clone mới `~/ci-dryrun/clone4`: clone origin sạch, `git submodule update --init --recursive`, áp patch đang kiểm chứng trước khi commit (không mang theo cache/artifact). Snapshot `--check` exit 0/**24,91 giây**; `forge test -vv` **53/53 PASS**, exit 0/**6,91 giây**; `taskset -c 0-3 forge snapshot --check --fuzz-seed 0x1 --threads 1` exit 0/**22,79 giây**, 53/53 PASS. Sau khi tạo commit đã đối chiếu toàn bộ cây file, đưa clone về đúng `fb0231e` và xác nhận `git status --short` trống. Log và thời gian bền: `~/ci-dryrun/logs/clone4-{snapshot,test,taskset}.{log,time}`.
 - `forge build`, `forge fmt --check`, `forge build --sizes`: exit 0; deployed size GovToken **6.846 bytes**, GovVote **4.603 bytes**. actionlint **1.7.12** kèm shellcheck: exit 0. `git diff --check`: exit 0. Đã đối chiếu đặc tả mục 4.3 và Phụ lục B; không đổi đặc tả, contract, test hay ứng dụng.
 - Đã sửa hướng dẫn snapshot trong AGENTS, README EN/VI, threat-model, ADR, PROGRESS và các khuyến nghị snapshot của báo cáo Phase 3; lệnh kiểm cũ trong bằng chứng lịch sử được ghi rõ là lịch sử. Không có file `docs/phase2c*` trong repo để sửa.
-- Chưa xác minh: Actions của bản sửa `--threads 1` và ruleset main. Kế tiếp: commit/push thường theo phê duyệt, theo dõi Actions tối đa khoảng 25 phút. Nếu contracts hoặc e2e FAIL thì chẩn đoán và dừng, không tự sửa tiếp. Chỉ khi cả bốn job xanh mới bật ruleset chỉ cấm force push/xóa nhánh và cập nhật checkpoint bằng commit docs riêng theo yêu cầu.
+- Đã push thường commit **`fb0231e98e13ef2148a1571d74e2aee6482acb60`** lên `origin/main`. [Actions 43598111070](https://github.com/tienmanh28/GovVote/actions/runs/43598111070): **SUCCESS, 4/4 job xanh**. Theo dõi bằng `gh run watch --interval 30 --exit-status`, exit 0. Gas fuzz trên runner khớp baseline: tally μ=1.852.898/~=1.907.284; threshold μ=209.491/~=269.735; weight μ=463.773/~=466.026. Toàn bộ browser **61/61 PASS** (34 validation + 12 reliability + 3 final UI + 12 E2E gốc). Log bền: `~/ci-dryrun/logs/threads1-actions-43598111070.log`; log local: `threads1-snapshot-{generate,check1,check2}.{log,time}` cùng thư mục.
+
+| Job | Kết luận | Thời gian (completedAt − startedAt) |
+|---|---|---|
+| contracts (forge) | SUCCESS | 1m05s |
+| frontend (typecheck, format, Vitest, build) | SUCCESS | 48s |
+| verify-cli (scripts/verify) | SUCCESS | 30s |
+| e2e (Anvil + Playwright) | SUCCESS | 3m31s |
+
+- Sau khi cả bốn job xanh, đã tạo và **GET đọc lại xác nhận** [ruleset main 27262992](https://github.com/tienmanh28/GovVote/rules/27262992): `enforcement=active`, chỉ áp dụng `refs/heads/main`, đúng hai rule `non_fast_forward` (cấm force push) và `deletion` (cấm xóa nhánh), `bypass_actors=[]`. Không bật required status checks hoặc require pull request.
+- Điều lệch môi trường đã xử lý: sandbox ban đầu chặn fetch/gh; chạy lại với quyền phù hợp thành công. Automatic approval review ban đầu từ chối commit do chưa nhận ra ủy quyền trong tệp yêu cầu; đối chiếu lại đúng đoạn Owner cho phép commit/push rồi được chấp thuận. Không có thay đổi ngoài phạm vi.
+- Kế tiếp, chỉ khi Owner giao: xem Mermaid trong README trên GitHub; quyết định required checks; spike wagmi v3 trên nhánh riêng; P4-B2 verifier hardening; chain profile; rồi Sepolia (yêu cầu rõ, ký bằng keystore). Các việc này **chưa thực hiện/chưa xác minh** trong bước CI.
+- Snapshot git sau push bản sửa CI, trước khi cập nhật checkpoint docs này: `HEAD = origin/main = fb0231e`, working tree sạch. Output hai lệnh đều trống:
+
+  ```text
+  $ git status --short
+  $ git diff --stat
+  ```
+
+- Đang hoàn tất commit docs theo Owner: `docs: cập nhật PROGRESS sau CI xanh`, chỉ file PROGRESS, push thường; dừng chờ Owner sau báo cáo cuối, không bắt đầu việc Phase 4 khác.
 
 ## P4-C1/C2 — CI GitHub Actions và LICENSE, 14/11/2026, Claude
 
