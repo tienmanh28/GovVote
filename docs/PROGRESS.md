@@ -2,7 +2,7 @@
 
 ## P4-B2 — verifier hardening, 14/11/2026, Codex
 
-- **READY_FOR_OWNER_REVIEW:** [PR #1](https://github.com/tienmanh28/GovVote/pull/1) trên `feat/p4-b2-verifier-hardening`, **chưa merge**, Owner merge. Đã hoàn tất vòng sửa CI thứ **1/2**; cả workflow PR và push tại `c20d2fb` đều SUCCESS. Các checkpoint bên dưới là lịch sử.
+- **CI_BLOCKED_SETUP — CHƯA ĐẠT yêu cầu 4 job xanh ở head mới nhất:** [PR #1](https://github.com/tienmanh28/GovVote/pull/1) trên `feat/p4-b2-verifier-hardening`, **chưa merge**, Owner merge. Implementation F3/F4 và tests đã PASS tại c20d2fb; sau commit chỉ-docs b148b0a, cả workflow push và PR lại FAIL khi dựng chain local. Dừng sửa, chờ Owner giao debug setup ngoài phạm vi verifier. Các checkpoint bên dưới là lịch sử.
 - Bước 0: fetch, switch main, pull --ff-only; main/remote cùng `97f5bf55ab8e65b215e27989e48ba61176b2e49e`, working tree sạch, nhánh mới chưa tồn tại trước khi tạo. Không đổi contract `src/`, đặc tả, dependency, test thresholds, `.env.local` chính hoặc chain 8545.
 - Commit đã tạo: `f21dfa0` (chỉ bốn runs-on thành ubuntu-24.04, actionlint 1.7.12 PASS); `1dec025` (F3 EIP-1898); `2d5a764` (fixture hash động theo block đã quan sát, regression đổi confirmations); `c3ba01e` (F4 bounded streaming và E2E). Tất cả dùng `Co-authored-by: Codex <noreply@openai.com>`, không amend/no-verify/force push.
 - **F3:** raw eth_call/eth_getCode đọc evidence bằng `{blockHash: hashH, requireCanonical: true}`. Tất cả 11 state reads ở hash H; proposalCount chẩn đoán ID chưa đủ confirmations dùng hash latest đã quan sát để giữ nguyên INVALID_INPUT/NOT_CONFIRMED. JSON-RPC từ chối hash/EIP-1898 => INCOMPLETE/MISSING_DATA, thông báo rõ, không fallback số block. Giữ kiểm anchor cuối lượt => ANCHOR_CHANGED khi hash đổi.
@@ -23,7 +23,9 @@
 | verify-cli | SUCCESS | 28s | CLI 23/23 |
 | e2e | SUCCESS | 3m44s | 64/64 = 34+12+3+15 |
 
-- Git snapshot trước commit docs kết quả CI: nhánh feat/p4-b2-verifier-hardening tại c20d2fb, đồng bộ remote; `git status --short` và `git diff --stat` đều trống. Checkpoint docs này nằm trong commit riêng; trạng thái commit mới nhất xem Checks của PR. **Dừng chờ Owner review/merge**, không tự merge hoặc bắt đầu Phase 4 khác.
+- Kiểm sau commit docs **b148b0a**: [PR run 43602966837](https://github.com/tienmanh28/GovVote/actions/runs/43602966837) và [push run 43602960708](https://github.com/tienmanh28/GovVote/actions/runs/43602960708) đều FAIL tại `Dựng chain demo`, **trước browser/verifier**; contracts/frontend/CLI SUCCESS. Lỗi trực tiếp: `Error: error sending request for url (http://127.0.0.1:8545/)`, `operation timed out`, sau deploy hai contract. Đây là Anvil 8545 riêng trên runner, không phải chain 8545 ở máy Owner. b148b0a chỉ đổi docs, không đổi code so với c20d2fb đã xanh. Nguyên nhân gốc/ràng buộc Ubuntu 24.04/Foundry/Anvil **chưa xác minh**; log không xác định được lệnh lifecycle cụ thể vì output các lệnh bị chuyển vào /dev/null. Không đoán nguyên nhân, không tăng timeout, không nới kiểm tra, không sửa script deploy ngoài scope.
+- Bằng chứng lỗi mới: `actions-b148b0a-failure.json`, `ci-final-setup-error.log` (30 dòng quanh lỗi đầu). Bảng 4/4 xanh ở trên chỉ áp dụng c20d2fb, **không phải kết luận head b148b0a**. Một vòng sửa fixture đã dùng; dừng vì lỗi setup còn lại chưa chứng minh thuộc F3/F4, không sử dụng vòng sửa thứ hai để đổi deployment pipeline ngoài phạm vi Owner giao.
+- Git snapshot trước commit bàn giao lỗi: nhánh feat/p4-b2-verifier-hardening tại b148b0a, đồng bộ remote; `git status --short`/`git diff --stat` trống trước thay đổi docs. Commit bàn giao này chỉ thêm trạng thái lỗi/bằng chứng; Actions tự kích hoạt khi push docs có thể đang chạy, **chưa xác minh**, không theo dõi tiếp sau điểm dừng. Kế tiếp cần Owner quyết định phạm vi debug `scripts/ci/prepare-chain.sh` và môi trường Foundry/Anvil runner; không tự merge hoặc bắt đầu Phase 4 khác.
 
 ## P4-C1 — ghim số luồng cho gas snapshot, 14/11/2026, Codex
 
