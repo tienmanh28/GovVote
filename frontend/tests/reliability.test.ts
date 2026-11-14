@@ -29,10 +29,8 @@ test("primary ưu tiên; fallback chỉ sau lỗi, cả hai lỗi không lặp",
   await expect(selectEndpoint(["primary"], cfg, undefined, probe)).rejects.toThrow(/Không còn/);
 });
 test("probe sai chain không đọc bytecode", async () => {
-  const fetcher = vi.fn(async () => ({
-    ok: true,
-    json: async () => ({ id: 1, jsonrpc: "2.0", result: "0x1" }),
-  }));
+  // Fixture có body stream thật để probe dùng cùng transport có giới hạn byte.
+  const fetcher = vi.fn(async () => Response.json({ id: 1, jsonrpc: "2.0", result: "0x1" }));
   vi.stubGlobal("fetch", fetcher);
   try {
     await expect(probeEndpoint(cfg.rpcUrl, cfg)).rejects.toThrow(/chain/);

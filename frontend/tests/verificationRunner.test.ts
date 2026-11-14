@@ -125,7 +125,8 @@ test("exit policy strict", () => {
 test("HTTP adapter read-only và không chấp nhận missing result", async () => {
   vi.stubGlobal(
     "fetch",
-    vi.fn(async () => ({ ok: true, json: async () => ({ jsonrpc: "2.0", id: 1 }) })),
+    // Response thật có stream; vẫn kiểm nguyên lỗi thiếu result như trước.
+    vi.fn(async () => Response.json({ jsonrpc: "2.0", id: 1 })),
   );
   const request = createHttpRequest("http://local.test");
   await expect(request("eth_sendTransaction", [])).rejects.toThrow(/read-only/);
