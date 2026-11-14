@@ -9,13 +9,23 @@ export function proposalWindow(count: bigint, requestedPage: bigint) {
   return { page, pages, ids: Array.from({ length }, (_, i) => top - BigInt(i)) };
 }
 export function matchesStatus(state: number, filter: StatusFilter): boolean {
-  return filter === "all" || (filter === "pending" && state === 0) || (filter === "active" && state === 1) || (filter === "closed" && (state === 2 || state === 3));
+  return (
+    filter === "all" ||
+    (filter === "pending" && state === 0) ||
+    (filter === "active" && state === 1) ||
+    (filter === "closed" && (state === 2 || state === 3))
+  );
 }
 // Mẫu số do quorumVotes(id) trả về, đã lấy tổng cung lịch sử và làm tròn trong contract.
 // Phần trăm làm tròn xuống, không báo đạt khi participation còn thiếu 1 wei.
 export function quorumProgress(forVotes: bigint, againstVotes: bigint, quorum: bigint) {
   if (quorum <= 0n) throw new Error("Quorum không hợp lệ.");
   const participation = forVotes + againstVotes;
-  const bps = participation * 10_000n / quorum;
-  return { participation, met: participation >= quorum, percent: `${bps / 100n},${(bps % 100n).toString().padStart(2, "0")}%`, bar: Number(bps > 10_000n ? 10_000n : bps) / 100 };
+  const bps = (participation * 10_000n) / quorum;
+  return {
+    participation,
+    met: participation >= quorum,
+    percent: `${bps / 100n},${(bps % 100n).toString().padStart(2, "0")}%`,
+    bar: Number(bps > 10_000n ? 10_000n : bps) / 100,
+  };
 }

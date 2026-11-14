@@ -18,10 +18,16 @@ if (!parsed.ok) {
             <li key={e}>{e}</li>
           ))}
         </ul>
-        <p className="mt-3 text-sm">Sao chép frontend/.env.example thành .env.local, điền địa chỉ rồi build lại.</p>
+        <p className="mt-3 text-sm">
+          Sao chép frontend/.env.example thành .env.local, điền địa chỉ rồi build lại.
+        </p>
       </main>
     </StrictMode>,
   );
 } else {
-  root.render(<StrictMode><ReliableApp config={parsed.config} /></StrictMode>);
+  root.render(
+    <StrictMode>
+      <ReliableApp config={parsed.config} />
+    </StrictMode>,
+  );
 }

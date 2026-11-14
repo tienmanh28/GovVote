@@ -6,7 +6,14 @@
 //   GOV_VOTE     Địa chỉ GovVote. BẮT BUỘC, không có mặc định.
 //
 // Mã thoát (exit code): 0 = VERIFIED, 1 = MISMATCH, 2 = lỗi cấu hình hoặc lỗi chạy.
-import { createPublicClient, formatUnits, http, isAddress, type Address, type PublicClient } from "viem";
+import {
+  createPublicClient,
+  formatUnits,
+  http,
+  isAddress,
+  type Address,
+  type PublicClient,
+} from "viem";
 import { govVoteAbi } from "./abi.ts";
 import { fetchVoteLogs } from "./fetch.ts";
 import { aggregateVotes, compareWithChain, type CompareResult, type Tally } from "./verify.ts";
@@ -27,7 +34,8 @@ class ConfigError extends Error {}
 function readConfig(): { rpcUrl: string; gov: Address } {
   const rpcUrl = process.env.GOV_RPC_URL ?? "http://127.0.0.1:8545";
   const gov = process.env.GOV_VOTE;
-  if (gov === undefined || gov === "") throw new ConfigError("Thiếu biến môi trường GOV_VOTE (địa chỉ GovVote)");
+  if (gov === undefined || gov === "")
+    throw new ConfigError("Thiếu biến môi trường GOV_VOTE (địa chỉ GovVote)");
   if (!isAddress(gov)) throw new ConfigError(`GOV_VOTE không phải địa chỉ hợp lệ: ${gov}`);
   return { rpcUrl, gov };
 }
@@ -67,14 +75,16 @@ async function main(): Promise<number> {
 
   const latest = await client.getBlockNumber();
   const head = latest - CONFIRMATIONS;
-  if (head < 1n) throw new ConfigError(`Chain mới có ${latest} block, chưa đủ ${CONFIRMATIONS} block xác nhận`);
+  if (head < 1n)
+    throw new ConfigError(`Chain mới có ${latest} block, chưa đủ ${CONFIRMATIONS} block xác nhận`);
 
   // Vì sao mọi phép đọc đều ở CÙNG block `head`:
   // storage là ảnh chụp tại một block; log là lịch sử tới block đó. Nếu đọc storage ở `latest` nhưng log
   // chỉ tới `head`, phiếu trong (head, latest] có trong storage mà không có trong log, nên báo MISMATCH giả.
   // Ngược lại thì bỏ sót lệch thật. Vì vậy proposalCount, getProposal và getLogs đều chốt ở `head`.
   const code = await client.getCode({ address: govAddress, blockNumber: head });
-  if (code === undefined || code === "0x") throw new ConfigError(`Không có bytecode tại ${govAddress} ở block ${head}`);
+  if (code === undefined || code === "0x")
+    throw new ConfigError(`Không có bytecode tại ${govAddress} ở block ${head}`);
 
   const count = await client.readContract({
     address: govAddress,
@@ -118,7 +128,11 @@ main().then(
   },
   (err: unknown) => {
     // Không in error transport/raw input: chúng có thể chứa credentials của RPC URL.
-    console.error(err instanceof ConfigError ? "Lỗi cấu hình legacy: kiểm tra GOV_VOTE và chain Anvil." : "RPC legacy lỗi; không thể đối chiếu tally.");
+    console.error(
+      err instanceof ConfigError
+        ? "Lỗi cấu hình legacy: kiểm tra GOV_VOTE và chain Anvil."
+        : "RPC legacy lỗi; không thể đối chiếu tally.",
+    );
     process.exitCode = 2;
   },
 );

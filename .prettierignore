@@ -1,0 +1,12 @@
+dist
+node_modules
+/out
+/lib
+/cache
+/broadcast
+*.lock
+package-lock.json
+/docs
+test-results
+playwright-report
+frontend/src/abi

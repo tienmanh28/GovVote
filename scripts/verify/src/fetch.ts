@@ -25,7 +25,11 @@ export const LOG_WINDOW = 10_000n;
  *
  * Hàm thuần, xuất ra để test được.
  */
-export function blockWindows(fromBlock: bigint, toBlock: bigint, size: bigint = LOG_WINDOW): Array<[bigint, bigint]> {
+export function blockWindows(
+  fromBlock: bigint,
+  toBlock: bigint,
+  size: bigint = LOG_WINDOW,
+): Array<[bigint, bigint]> {
   if (size < 1n) throw new Error("size phải >= 1");
   if (fromBlock > toBlock) {
     throw new Error(`from > to: khoảng block không hợp lệ [${fromBlock}, ${toBlock}]`);
@@ -79,7 +83,11 @@ export async function fetchVoteLogs(
   }
 
   logs.sort((a, b) =>
-    a.blockNumber !== b.blockNumber ? (a.blockNumber < b.blockNumber ? -1 : 1) : a.logIndex - b.logIndex,
+    a.blockNumber !== b.blockNumber
+      ? a.blockNumber < b.blockNumber
+        ? -1
+        : 1
+      : a.logIndex - b.logIndex,
   );
   return logs;
 }

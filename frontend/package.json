@@ -14,7 +14,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:e2e": "vite build && playwright test",
-    "sync-abi": "node scripts/sync-abi.mjs"
+    "sync-abi": "node scripts/sync-abi.mjs",
+    "format": "prettier --ignore-path ../.prettierignore --write \"src/**/*.{ts,tsx,mjs}\" \"e2e/**/*.{ts,tsx,mjs}\" \"tests/**/*.{ts,tsx,mjs}\" \"validation/**/*.{ts,tsx,mjs}\" \"../shared/**/*.{ts,tsx,mjs}\" \"../scripts/verify/src/**/*.ts\" \"../scripts/verify/test/**/*.ts\"",
+    "format:check": "prettier --ignore-path ../.prettierignore --check \"src/**/*.{ts,tsx,mjs}\" \"e2e/**/*.{ts,tsx,mjs}\" \"tests/**/*.{ts,tsx,mjs}\" \"validation/**/*.{ts,tsx,mjs}\" \"../shared/**/*.{ts,tsx,mjs}\" \"../scripts/verify/src/**/*.ts\" \"../scripts/verify/test/**/*.ts\""
   },
   "dependencies": {
     "@tanstack/react-query": "5.105.0",
@@ -30,6 +32,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "prettier": "3.9.10",
     "tailwindcss": "4.3.3",
     "typescript": "7.0.2",
     "vite": "8.3.5",

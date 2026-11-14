@@ -36,6 +36,14 @@ export function checkProposalInput(
         ? `Tiêu đề dài ${titleBytes} byte, tối đa ${maxTitle} byte UTF-8.`
         : null;
   const descriptionError =
-    descriptionBytes > maxDescription ? `Mô tả dài ${descriptionBytes} byte, tối đa ${maxDescription} byte UTF-8.` : null;
-  return { titleBytes, descriptionBytes, titleError, descriptionError, ok: !titleError && !descriptionError };
+    descriptionBytes > maxDescription
+      ? `Mô tả dài ${descriptionBytes} byte, tối đa ${maxDescription} byte UTF-8.`
+      : null;
+  return {
+    titleBytes,
+    descriptionBytes,
+    titleError,
+    descriptionError,
+    ok: !titleError && !descriptionError,
+  };
 }

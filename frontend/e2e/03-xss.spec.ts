@@ -2,7 +2,9 @@
 import { expect, test } from "@playwright/test";
 import { ACCOUNTS, connect, installFakeWallet, readProposal } from "./helpers.ts";
 
-test("title <img src=x onerror=alert(1)> hiển thị nguyên văn, không chạy script", async ({ page }) => {
+test("title <img src=x onerror=alert(1)> hiển thị nguyên văn, không chạy script", async ({
+  page,
+}) => {
   const title = "<img src=x onerror=alert(1)>";
   const description = "<script>alert(2)</script><b>không in đậm</b>";
   const dialogs: string[] = [];
@@ -28,7 +30,9 @@ test("title <img src=x onerror=alert(1)> hiển thị nguyên văn, không chạ
   await expect(page.getByTestId("proposal-title")).toHaveText(title);
   await expect(page.getByTestId("proposal-description")).toHaveText(description);
   await expect(page.locator("[data-testid=proposal-title] img")).toHaveCount(0);
-  await expect(page.locator("[data-testid=proposal-description] script, [data-testid=proposal-description] b")).toHaveCount(0);
+  await expect(
+    page.locator("[data-testid=proposal-description] script, [data-testid=proposal-description] b"),
+  ).toHaveCount(0);
 
   // Trang danh sách cũng hiện nguyên văn.
   await page.goto("/#/");

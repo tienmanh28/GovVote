@@ -16,5 +16,11 @@ export function useWallet() {
   const cfg = useAppConfig();
   const { address, isConnected, chainId } = useAccount();
   const wrongChain = isConnected && chainId !== cfg.chainId;
-  return { address, isConnected, chainId, wrongChain, canWrite: isConnected && !wrongChain && !!address };
+  return {
+    address,
+    isConnected,
+    chainId,
+    wrongChain,
+    canWrite: isConnected && !wrongChain && !!address,
+  };
 }

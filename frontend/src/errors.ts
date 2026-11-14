@@ -28,7 +28,10 @@ const asBigInt = (v: unknown): bigint => (typeof v === "bigint" ? v : BigInt(Str
 const asText = (v: unknown): string => String(v ?? "");
 
 /** Bản dịch theo tên lỗi; tham số lấy đúng thứ tự khai báo trong GovVote.sol. */
-export const GOV_VOTE_ERROR_MESSAGES: Record<GovVoteErrorName, (args: readonly unknown[]) => string> = {
+export const GOV_VOTE_ERROR_MESSAGES: Record<
+  GovVoteErrorName,
+  (args: readonly unknown[]) => string
+> = {
   ProposalNotFound: ([id]) => `Không tìm thấy proposal #${asText(id)}.`,
   EmptyTitle: () => "Tiêu đề không được để trống.",
   TitleTooLong: ([len]) => `Tiêu đề dài ${asText(len)} byte, vượt giới hạn 100 byte UTF-8.`,
@@ -53,19 +56,25 @@ function isGovVoteErrorName(name: string): name is GovVoteErrorName {
 }
 
 /** Bản dịch cho một lỗi GovVote đã giải mã; undefined nếu tên không thuộc GovVote. */
-export function translateGovError(errorName: string, args: readonly unknown[] = []): string | undefined {
+export function translateGovError(
+  errorName: string,
+  args: readonly unknown[] = [],
+): string | undefined {
   return isGovVoteErrorName(errorName) ? GOV_VOTE_ERROR_MESSAGES[errorName](args) : undefined;
 }
 
 function hasCode4001(e: unknown): boolean {
-  return typeof e === "object" && e !== null && "code" in e && (e as { code: unknown }).code === 4001;
+  return (
+    typeof e === "object" && e !== null && "code" in e && (e as { code: unknown }).code === 4001
+  );
 }
 
 /** Thông báo tiếng Việt cho mọi lỗi phát sinh khi đọc hoặc ghi contract. */
 export function toUserMessage(err: unknown): string {
   // (a) Từ chối ký: viem gói thành UserRejectedRequestError; provider thô có thể ném object { code: 4001 }.
   if (err instanceof BaseError) {
-    if (err.walk((e) => e instanceof UserRejectedRequestError || hasCode4001(e))) return USER_REJECTED_MESSAGE;
+    if (err.walk((e) => e instanceof UserRejectedRequestError || hasCode4001(e)))
+      return USER_REJECTED_MESSAGE;
   } else if (hasCode4001(err)) {
     return USER_REJECTED_MESSAGE;
   }
@@ -81,7 +90,9 @@ export function toUserMessage(err: unknown): string {
       return `Contract revert: ${errorName}(${args.map((a) => String(a)).join(", ")})`;
     }
     // (c) Lỗi viem khác: shortMessage là thông báo gốc ngắn gọn.
-    return err.details ? `${err.shortMessage || "Lỗi RPC"} — ${err.details}` : err.shortMessage || err.message;
+    return err.details
+      ? `${err.shortMessage || "Lỗi RPC"} — ${err.details}`
+      : err.shortMessage || err.message;
   }
 
   // (c) Lỗi không nhận ra: thông báo gốc.

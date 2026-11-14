@@ -22,27 +22,48 @@ export function useTx() {
   const scope = useMemo(() => createSessionScope(() => getAccount(config)), [config]);
   const busy = useRef(false);
   useEffect(() => {
-    const stop = watchAccount(config, { onChange(next, prev) {
-      if (sessionKey(next) !== sessionKey(prev)) {
-        scope.invalidate(); busy.current = false; dispatch({ type: "RESET" });
-      }
-    } });
-    return () => { scope.invalidate(); stop(); };
+    const stop = watchAccount(config, {
+      onChange(next, prev) {
+        if (sessionKey(next) !== sessionKey(prev)) {
+          scope.invalidate();
+          busy.current = false;
+          dispatch({ type: "RESET" });
+        }
+      },
+    });
+    return () => {
+      scope.invalidate();
+      stop();
+    };
   }, [config, scope]);
   const [state, dispatch] = useReducer(txReducer, TX_IDLE);
 
   const run = useCallback(
-    async (send: (assertCurrent: () => void) => Promise<Hex>, onSuccess?: (receipt: TransactionReceipt) => void) => {
+    async (
+      send: (assertCurrent: () => void) => Promise<Hex>,
+      onSuccess?: (receipt: TransactionReceipt) => void,
+    ) => {
       if (busy.current) return;
       busy.current = true;
       const checkScope = scope.capture();
       const assertCurrent = () => {
         checkScope();
         const live = getAccount(config);
-        if (!wallet.canWrite || live.chainId !== cfg.chainId || sessionKey(live) !== sessionKey(wallet))
+        if (
+          !wallet.canWrite ||
+          live.chainId !== cfg.chainId ||
+          sessionKey(live) !== sessionKey(wallet)
+        )
           throw new Error("Ví hoặc mạng đã thay đổi. Vui lòng kiểm tra dữ liệu và thử lại.");
       };
-      const active = () => { try { assertCurrent(); return true; } catch { return false; } };
+      const active = () => {
+        try {
+          assertCurrent();
+          return true;
+        } catch {
+          return false;
+        }
+      };
       dispatch({ type: "START" });
       let hash: Hex;
       try {

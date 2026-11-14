@@ -10,7 +10,11 @@ export function isMobileDevice(userAgent: string, maxTouchPoints: number): boole
   return /Macintosh/i.test(userAgent) && maxTouchPoints > 1;
 }
 
-export function classifyWalletEnv(hasEthereum: boolean, userAgent: string, maxTouchPoints: number): WalletEnv {
+export function classifyWalletEnv(
+  hasEthereum: boolean,
+  userAgent: string,
+  maxTouchPoints: number,
+): WalletEnv {
   if (hasEthereum) return "ready";
   return isMobileDevice(userAgent, maxTouchPoints) ? "mobile-no-wallet" : "desktop-no-wallet";
 }

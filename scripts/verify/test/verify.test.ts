@@ -16,7 +16,14 @@ function txHash(n: number): `0x${string}` {
   return `0x${n.toString(16).padStart(64, "0")}`;
 }
 
-function vote(tx: number, logIndex: number, blockNumber: bigint, id: bigint, support: boolean, weight: bigint): VoteLog {
+function vote(
+  tx: number,
+  logIndex: number,
+  blockNumber: bigint,
+  id: bigint,
+  support: boolean,
+  weight: bigint,
+): VoteLog {
   return { transactionHash: txHash(tx), logIndex, blockNumber, id, support, weight };
 }
 
@@ -71,7 +78,10 @@ test("(b) exact duplicate (same txHash, logIndex, content) => VERIFIED, counted 
   const logs = baseLogs();
   logs.push({ ...logs[0]! });
   // Thêm bản trùng có hash viết HOA: vẫn là cùng một log, vì khóa được chuẩn hóa chữ thường.
-  logs.push({ ...logs[0]!, transactionHash: logs[0]!.transactionHash.toUpperCase().replace("0X", "0x") as `0x${string}` });
+  logs.push({
+    ...logs[0]!,
+    transactionHash: logs[0]!.transactionHash.toUpperCase().replace("0X", "0x") as `0x${string}`,
+  });
 
   const agg = aggregateVotes(logs, HEAD);
   assert.equal(agg.get(1n)?.for, 600_000n * GOV, "phiếu trùng bị cộng hai lần");
@@ -195,7 +205,8 @@ test("(i) blockWindows boundaries: contiguous, no gaps, no overlap", () => {
       const [s, e] = w[i]!;
       assert.ok(s <= e, `cửa sổ rỗng [${s}, ${e}]`);
       assert.ok(e - s + 1n <= LOG_WINDOW, `cửa sổ quá ${LOG_WINDOW} block`);
-      if (i > 0) assert.equal(s, w[i - 1]![1] + 1n, `hở hoặc chồng lấn giữa cửa sổ ${i - 1} và ${i}`);
+      if (i > 0)
+        assert.equal(s, w[i - 1]![1] + 1n, `hở hoặc chồng lấn giữa cửa sổ ${i - 1} và ${i}`);
     }
     // Tổng số block phủ đúng bằng độ dài đoạn => không hở, không chồng.
     const covered = w.reduce((sum, [s, e]) => sum + (e - s + 1n), 0n);

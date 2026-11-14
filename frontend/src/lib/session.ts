@@ -6,7 +6,9 @@ export function sessionKey(w: WalletIdentity): string {
 export function createSessionScope(read: () => WalletIdentity) {
   let generation = 0;
   return {
-    invalidate() { generation++; },
+    invalidate() {
+      generation++;
+    },
     capture() {
       const start = generation;
       const identity = sessionKey(read());

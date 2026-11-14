@@ -40,7 +40,12 @@ export async function mine(blocks: number): Promise<void> {
 export const publicClient = createPublicClient({ transport: http(RPC_URL) });
 
 export async function readProposal(id: bigint) {
-  return publicClient.readContract({ address: GOV_VOTE, abi: govVoteAbi, functionName: "getProposal", args: [id] });
+  return publicClient.readContract({
+    address: GOV_VOTE,
+    abi: govVoteAbi,
+    functionName: "getProposal",
+    args: [id],
+  });
 }
 
 type FakeWalletOptions = { account: Address; chainId?: number };
@@ -50,26 +55,34 @@ type FakeWalletOptions = { account: Address; chainId?: number };
  * Trạng thái "đã kết nối" lưu ở localStorage để wagmi tự kết nối lại sau khi tải lại trang.
  * Điều khiển từ test qua window.__fakeWallet: setChain(hex), rejectNextSend(), calls (danh sách method đã gọi).
  */
-export async function installFakeWallet(page: Page, { account, chainId = 31337 }: FakeWalletOptions): Promise<void> {
+export async function installFakeWallet(
+  page: Page,
+  { account, chainId = 31337 }: FakeWalletOptions,
+): Promise<void> {
   await page.exposeFunction("__anvilRpc", async (method: string, params: unknown[]) => {
     const res = await fetch(RPC_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
     });
-    return (await res.json()) as { result?: unknown; error?: { code: number; message: string; data?: unknown } };
+    return (await res.json()) as {
+      result?: unknown;
+      error?: { code: number; message: string; data?: unknown };
+    };
   });
 
   await page.addInitScript(
     ({ account, chainIdHex }) => {
       type Listener = (arg: unknown) => void;
       const listeners: Record<string, Listener[]> = {};
-      const emit = (event: string, arg: unknown) => (listeners[event] ?? []).forEach((fn) => fn(arg));
+      const emit = (event: string, arg: unknown) =>
+        (listeners[event] ?? []).forEach((fn) => fn(arg));
       const KEY = "__fakeWalletConnected";
       let chainId = chainIdHex;
       let rejectNext = false;
       const calls: string[] = [];
-      const err = (code: number, message: string, data?: unknown) => Object.assign(new Error(message), { code, data });
+      const err = (code: number, message: string, data?: unknown) =>
+        Object.assign(new Error(message), { code, data });
       const connected = () => window.localStorage.getItem(KEY) === "1";
 
       const provider = {
@@ -108,7 +121,15 @@ export async function installFakeWallet(page: Page, { account, chainId = 31337 }
             throw err(4001, "User rejected the request.");
           }
           if (method.startsWith("eth_")) {
-            const w = window as unknown as { __anvilRpc: (m: string, p: unknown[]) => Promise<{ result?: unknown; error?: { code: number; message: string; data?: unknown } }> };
+            const w = window as unknown as {
+              __anvilRpc: (
+                m: string,
+                p: unknown[],
+              ) => Promise<{
+                result?: unknown;
+                error?: { code: number; message: string; data?: unknown };
+              }>;
+            };
             const r = await w.__anvilRpc(method, params ?? []);
             if (r.error) throw err(r.error.code, r.error.message, r.error.data);
             return r.result;

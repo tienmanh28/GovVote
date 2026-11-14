@@ -5,11 +5,23 @@ import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { formatGov } from "../src/lib/format.ts";
-import { ACCOUNTS, GOV_TOKEN, GOV_VOTE, connect, installFakeWallet, mine, publicClient, readProposal } from "./helpers.ts";
+import {
+  ACCOUNTS,
+  GOV_TOKEN,
+  GOV_VOTE,
+  connect,
+  installFakeWallet,
+  mine,
+  publicClient,
+  readProposal,
+} from "./helpers.ts";
 
 const GOV = 10n ** 18n;
 
-test("Alice delegate → tạo proposal → vote; tally khớp getProposal và scripts/verify", async ({ page, browser }) => {
+test("Alice delegate → tạo proposal → vote; tally khớp getProposal và scripts/verify", async ({
+  page,
+  browser,
+}) => {
   test.setTimeout(240_000);
   await installFakeWallet(page, { account: ACCOUNTS.alice });
 
@@ -25,12 +37,15 @@ test("Alice delegate → tạo proposal → vote; tally khớp getProposal và s
 
   // 2. Alice tạo proposal qua form.
   const title = "E2E Phase 3: tài trợ workshop ZK cho cộng đồng";
-  const description = "Proposal tạo từ Playwright qua ví giả chuyển tiếp tới Anvil.\nDòng thứ hai có dấu: ệ ơ ư đ.";
+  const description =
+    "Proposal tạo từ Playwright qua ví giả chuyển tiếp tới Anvil.\nDòng thứ hai có dấu: ệ ơ ư đ.";
   await page.goto("/#/create");
   await expect(page.getByTestId("current-votes")).toHaveText(formatGov(400_000n * GOV));
   await page.getByLabel(/Tiêu đề/).fill(title);
   await page.getByLabel(/Mô tả/).fill(description);
-  await expect(page.getByTestId("title-bytes")).toHaveText(`${new TextEncoder().encode(title).length}/100 byte`);
+  await expect(page.getByTestId("title-bytes")).toHaveText(
+    `${new TextEncoder().encode(title).length}/100 byte`,
+  );
   await page.getByRole("button", { name: "Gửi proposal" }).click();
   await expect(page.getByTestId("tx-status")).toHaveAttribute("data-status", "SUCCESS");
   const proposeHash = await page.getByTestId("tx-hash").textContent();
@@ -52,7 +67,9 @@ test("Alice delegate → tạo proposal → vote; tally khớp getProposal và s
   await expect(page.getByTestId("tx-status")).toHaveAttribute("data-status", "SUCCESS");
   const aliceVoteHash = await page.getByTestId("tx-hash").textContent();
   await expect(page.getByTestId("has-voted")).toHaveText("Rồi");
-  await expect(page.getByTestId("vote-blocked-reason")).toHaveText("Ví này đã bỏ phiếu cho proposal này.");
+  await expect(page.getByTestId("vote-blocked-reason")).toHaveText(
+    "Ví này đã bỏ phiếu cho proposal này.",
+  );
 
   // 5. Bob vote Against trong một context trình duyệt khác (ví giả của Bob).
   const bobCtx = await browser.newContext();
@@ -80,10 +97,27 @@ test("Alice delegate → tạo proposal → vote; tally khớp getProposal và s
     encoding: "utf8",
   });
   expect(out).toContain("VERIFIED");
-  expect(out).toMatch(new RegExp(`^\\s*${id} \\|\\s+400\\.000 \\|\\s+250\\.000 \\|\\s+400\\.000 \\|\\s+250\\.000 \\|\\s+OK$`, "m"));
+  expect(out).toMatch(
+    new RegExp(
+      `^\\s*${id} \\|\\s+400\\.000 \\|\\s+250\\.000 \\|\\s+400\\.000 \\|\\s+250\\.000 \\|\\s+OK$`,
+      "m",
+    ),
+  );
 
   console.log(
-    JSON.stringify({ id: id.toString(), delegateHash, proposeHash, aliceVoteHash, bobVoteHash, snapshot: created.snapshotBlock.toString() }),
+    JSON.stringify({
+      id: id.toString(),
+      delegateHash,
+      proposeHash,
+      aliceVoteHash,
+      bobVoteHash,
+      snapshot: created.snapshotBlock.toString(),
+    }),
   );
-  console.log(out.split("\n").filter((l) => /latest|proposalCount|VoteCast|\| +OK|LỆCH|VERIFIED|MISMATCH/.test(l)).join("\n"));
+  console.log(
+    out
+      .split("\n")
+      .filter((l) => /latest|proposalCount|VoteCast|\| +OK|LỆCH|VERIFIED|MISMATCH/.test(l))
+      .join("\n"),
+  );
 });

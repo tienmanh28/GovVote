@@ -31,12 +31,15 @@ export function txReducer(state: TxState, event: TxEvent): TxState {
         ? { status: "AWAITING_SIGNATURE" }
         : state;
     case "SIGNED":
-      return state.status === "AWAITING_SIGNATURE" ? { status: "PENDING", hash: event.hash } : state;
+      return state.status === "AWAITING_SIGNATURE"
+        ? { status: "PENDING", hash: event.hash }
+        : state;
     case "CONFIRMED":
       return state.status === "PENDING" ? { status: "SUCCESS", hash: state.hash } : state;
     case "FAILED":
       if (state.status === "AWAITING_SIGNATURE") return { status: "ERROR", message: event.message };
-      if (state.status === "PENDING") return { status: "ERROR", message: event.message, hash: state.hash };
+      if (state.status === "PENDING")
+        return { status: "ERROR", message: event.message, hash: state.hash };
       return state;
     case "RESET":
       return TX_IDLE;

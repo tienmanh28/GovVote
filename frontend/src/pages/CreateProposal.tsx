@@ -33,10 +33,23 @@ export function CreateProposal() {
   const { state: tx, run } = useTx();
 
   const gov = { address: cfg.govVote, abi: govVoteAbi } as const;
-  const threshold = useReadContract({ chainId: cfg.chainId, ...gov, functionName: "proposalThreshold" });
-  const maxTitle = useReadContract({ chainId: cfg.chainId, ...gov, functionName: "MAX_TITLE_BYTES" });
-  const maxDesc = useReadContract({ chainId: cfg.chainId, ...gov, functionName: "MAX_DESCRIPTION_BYTES" });
-  const votes = useReadContract({ chainId: cfg.chainId,
+  const threshold = useReadContract({
+    chainId: cfg.chainId,
+    ...gov,
+    functionName: "proposalThreshold",
+  });
+  const maxTitle = useReadContract({
+    chainId: cfg.chainId,
+    ...gov,
+    functionName: "MAX_TITLE_BYTES",
+  });
+  const maxDesc = useReadContract({
+    chainId: cfg.chainId,
+    ...gov,
+    functionName: "MAX_DESCRIPTION_BYTES",
+  });
+  const votes = useReadContract({
+    chainId: cfg.chainId,
     address: cfg.govToken,
     abi: govTokenAbi,
     functionName: "getVotes",
@@ -45,19 +58,32 @@ export function CreateProposal() {
     query: { enabled: !!address && block !== undefined },
   });
 
-  const reads = [threshold,maxTitle,maxDesc,...(address?[votes]:[])];
-  const freshness=useFreshness(reads,`${cfg.rpcUrl}:${address??""}`,block);
-  const stamp=<DataFreshness info={freshness} />;
-  if (reads.some((q) => q.error)) return <>{stamp}<ReadError queries={reads} /></>;
+  const reads = [threshold, maxTitle, maxDesc, ...(address ? [votes] : [])];
+  const freshness = useFreshness(reads, `${cfg.rpcUrl}:${address ?? ""}`, block);
+  const stamp = <DataFreshness info={freshness} />;
+  if (reads.some((q) => q.error))
+    return (
+      <>
+        {stamp}
+        <ReadError queries={reads} />
+      </>
+    );
 
   const limitsReady = maxTitle.data !== undefined && maxDesc.data !== undefined;
-  const check = checkProposalInput(title, description, Number(maxTitle.data ?? 0n), Number(maxDesc.data ?? 0n));
-  const enoughPower = votes.data !== undefined && threshold.data !== undefined && votes.data >= threshold.data;
+  const check = checkProposalInput(
+    title,
+    description,
+    Number(maxTitle.data ?? 0n),
+    Number(maxDesc.data ?? 0n),
+  );
+  const enoughPower =
+    votes.data !== undefined && threshold.data !== undefined && votes.data >= threshold.data;
 
   let blockReason: string | null = null;
   if (!isConnected) blockReason = "Kết nối ví để tạo proposal.";
   else if (!canWrite) blockReason = "Ví đang ở sai mạng, hãy chuyển sang Anvil (31337).";
-  else if (votes.data === undefined || threshold.data === undefined) blockReason = "Đang tải voting power…";
+  else if (votes.data === undefined || threshold.data === undefined)
+    blockReason = "Đang tải voting power…";
   else if (!enoughPower)
     blockReason = `Voting power hiện tại (block ${block?.toString()}) là ${formatGov(votes.data)}, cần tối thiểu ${formatGov(threshold.data)}.`;
   else if (!limitsReady) blockReason = "Đang tải giới hạn độ dài…";
@@ -90,7 +116,10 @@ export function CreateProposal() {
     );
 
   const counter = (bytes: number, max: bigint | undefined, testId: string) => (
-    <span className={`text-xs ${max !== undefined && bytes > Number(max) ? "font-semibold text-rose-700" : "text-slate-500"}`} data-testid={testId}>
+    <span
+      className={`text-xs ${max !== undefined && bytes > Number(max) ? "font-semibold text-rose-700" : "text-slate-500"}`}
+      data-testid={testId}
+    >
       {bytes}/{max?.toString() ?? "…"} byte
     </span>
   );
@@ -100,10 +129,16 @@ export function CreateProposal() {
       {stamp}
       <h1 className="text-xl font-bold sm:text-2xl">Tạo proposal</h1>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Stat label="Ngưỡng tạo proposal" value={threshold.data !== undefined ? formatGov(threshold.data) : "…"} hint="Đọc từ proposalThreshold() của contract." />
+        <Stat
+          label="Ngưỡng tạo proposal"
+          value={threshold.data !== undefined ? formatGov(threshold.data) : "…"}
+          hint="Đọc từ proposalThreshold() của contract."
+        />
         <Stat
           label={`Voting power hiện tại của ví (block ${block?.toString() ?? "…"})`}
-          value={address ? (votes.data !== undefined ? formatGov(votes.data) : "…") : "Chưa kết nối ví"}
+          value={
+            address ? (votes.data !== undefined ? formatGov(votes.data) : "…") : "Chưa kết nối ví"
+          }
           hint="getVotes(ví): giá trị contract sẽ dùng khi giao dịch vào block kế tiếp. Không phải số dư."
           testId="current-votes"
         />
@@ -130,7 +165,9 @@ export function CreateProposal() {
               onChange={(e) => setTitle(e.target.value)}
               autoComplete="off"
             />
-            {title.length > 0 && check.titleError && <p className="mt-1 text-sm text-rose-700">{check.titleError}</p>}
+            {title.length > 0 && check.titleError && (
+              <p className="mt-1 text-sm text-rose-700">{check.titleError}</p>
+            )}
           </div>
           <div>
             <div className="flex items-baseline justify-between gap-2">
@@ -146,11 +183,13 @@ export function CreateProposal() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            {check.descriptionError && <p className="mt-1 text-sm text-rose-700">{check.descriptionError}</p>}
+            {check.descriptionError && (
+              <p className="mt-1 text-sm text-rose-700">{check.descriptionError}</p>
+            )}
           </div>
           <p className="text-xs text-slate-500">
-            Byte được đếm bằng TextEncoder, giống cách contract đếm. Chữ có dấu tiếng Việt chiếm 2–3 byte mỗi ký tự, emoji
-            chiếm 4 byte trở lên.
+            Byte được đếm bằng TextEncoder, giống cách contract đếm. Chữ có dấu tiếng Việt chiếm 2–3
+            byte mỗi ký tự, emoji chiếm 4 byte trở lên.
           </p>
           <Button type="submit" className="w-full sm:w-auto" disabled={!!blockReason || isBusy(tx)}>
             Gửi proposal
@@ -165,7 +204,11 @@ export function CreateProposal() {
           <TxStatusView state={tx} />
           {tx.status === "SUCCESS" && createdId !== null && (
             <Notice title="Đã tạo proposal">
-              <a className="font-semibold underline" href={`#/proposal/${createdId}`} data-testid="created-link">
+              <a
+                className="font-semibold underline"
+                href={`#/proposal/${createdId}`}
+                data-testid="created-link"
+              >
                 Xem proposal #{createdId.toString()}
               </a>
             </Notice>

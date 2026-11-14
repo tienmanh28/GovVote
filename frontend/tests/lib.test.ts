@@ -41,7 +41,9 @@ describe("bộ đếm byte UTF-8", () => {
     const r = checkProposalInput(viet, "", 100, 1000);
     expect(r.titleBytes).toBe(102);
     expect(r.ok).toBe(false);
-    expect(checkProposalInput("x", "👍".repeat(251), 100, 1000).descriptionError).toMatch(/1004 byte/);
+    expect(checkProposalInput("x", "👍".repeat(251), 100, 1000).descriptionError).toMatch(
+      /1004 byte/,
+    );
   });
 });
 
@@ -59,7 +61,9 @@ describe("tách số dư và voting power", () => {
     expect(s.receivedFromOthers).toBe(0n);
   });
   test("so sánh địa chỉ không phân biệt hoa thường", () => {
-    expect(summarizeVotingPower(ALICE, 1n, 1n, ALICE.toLowerCase() as `0x${string}`).delegation).toBe("self");
+    expect(
+      summarizeVotingPower(ALICE, 1n, 1n, ALICE.toLowerCase() as `0x${string}`).delegation,
+    ).toBe("self");
   });
   test("tự delegate và nhận thêm từ người khác", () => {
     const s = summarizeVotingPower(ALICE, 100n * GOV, 350n * GOV, ALICE);
@@ -102,8 +106,15 @@ describe("máy trạng thái giao dịch", () => {
     expect(isBusy(s)).toBe(false);
   });
   test("lỗi khi chờ ký (không có hash) và khi chờ receipt (giữ hash)", () => {
-    expect(txReducer({ status: "AWAITING_SIGNATURE" }, { type: "FAILED", message: "x" })).toEqual({ status: "ERROR", message: "x" });
-    expect(txReducer({ status: "PENDING", hash }, { type: "FAILED", message: "y" })).toEqual({ status: "ERROR", message: "y", hash });
+    expect(txReducer({ status: "AWAITING_SIGNATURE" }, { type: "FAILED", message: "x" })).toEqual({
+      status: "ERROR",
+      message: "x",
+    });
+    expect(txReducer({ status: "PENDING", hash }, { type: "FAILED", message: "y" })).toEqual({
+      status: "ERROR",
+      message: "y",
+      hash,
+    });
   });
   test("sự kiện sai thứ tự bị bỏ qua", () => {
     expect(txReducer(TX_IDLE, { type: "CONFIRMED" })).toBe(TX_IDLE);
@@ -112,15 +123,21 @@ describe("máy trạng thái giao dịch", () => {
     expect(txReducer(pending, { type: "START" })).toBe(pending);
   });
   test("gửi lại sau SUCCESS hoặc ERROR; RESET về IDLE", () => {
-    expect(txReducer({ status: "SUCCESS", hash }, { type: "START" }).status).toBe("AWAITING_SIGNATURE");
-    expect(txReducer({ status: "ERROR", message: "z" }, { type: "START" }).status).toBe("AWAITING_SIGNATURE");
+    expect(txReducer({ status: "SUCCESS", hash }, { type: "START" }).status).toBe(
+      "AWAITING_SIGNATURE",
+    );
+    expect(txReducer({ status: "ERROR", message: "z" }, { type: "START" }).status).toBe(
+      "AWAITING_SIGNATURE",
+    );
     expect(txReducer({ status: "PENDING", hash }, { type: "RESET" })).toBe(TX_IDLE);
   });
 });
 
 describe("môi trường ví", () => {
-  const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148";
-  const IPAD_DESKTOP_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15";
+  const IPHONE =
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148";
+  const IPAD_DESKTOP_UA =
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15";
   const LINUX = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36";
   test("có window.ethereum thì sẵn sàng, kể cả trên điện thoại (trình duyệt trong app MetaMask)", () => {
     expect(classifyWalletEnv(true, IPHONE, 5)).toBe("ready");
@@ -147,7 +164,12 @@ describe("cấu hình env", () => {
     expect(r.ok && r.config.govVote).toBe("0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512");
   });
   test("thiếu địa chỉ, sai địa chỉ, sai chain đều báo lỗi", () => {
-    const r = parseEnv({ ...ok, VITE_GOV_VOTE: "", VITE_GOV_TOKEN: "0x123", VITE_CHAIN_ID: "11155111" });
+    const r = parseEnv({
+      ...ok,
+      VITE_GOV_VOTE: "",
+      VITE_GOV_TOKEN: "0x123",
+      VITE_CHAIN_ID: "11155111",
+    });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors).toHaveLength(3);
   });

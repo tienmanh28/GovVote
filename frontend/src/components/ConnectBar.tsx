@@ -19,7 +19,8 @@ export function ConnectBar() {
   const { switchChain, isPending: switching, error: switchError } = useSwitchChain();
 
   const env = classifyWalletEnv(
-    typeof window !== "undefined" && typeof (window as { ethereum?: unknown }).ethereum !== "undefined",
+    typeof window !== "undefined" &&
+      typeof (window as { ethereum?: unknown }).ethereum !== "undefined",
     navigator.userAgent,
     navigator.maxTouchPoints ?? 0,
   );
@@ -29,7 +30,10 @@ export function ConnectBar() {
     return (
       <div data-testid="wallet-mobile-guide">
         <Notice tone="warn" title="Trình duyệt này không có ví">
-          <p>Trên điện thoại và máy tính bảng, trình duyệt thường (Safari, Chrome) không kết nối được MetaMask.</p>
+          <p>
+            Trên điện thoại và máy tính bảng, trình duyệt thường (Safari, Chrome) không kết nối được
+            MetaMask.
+          </p>
           <ol className="mt-2 list-decimal space-y-1 pl-5">
             <li>Cài và mở ứng dụng MetaMask.</li>
             <li>Vào mục Trình duyệt (Browser) bên trong ứng dụng MetaMask.</li>
@@ -41,7 +45,9 @@ export function ConnectBar() {
               {link}
             </a>
           </p>
-          <p className="mt-2 text-xs">Bạn vẫn xem được proposal mà không cần ví. Cần ví để delegate, tạo proposal và bỏ phiếu.</p>
+          <p className="mt-2 text-xs">
+            Bạn vẫn xem được proposal mà không cần ví. Cần ví để delegate, tạo proposal và bỏ phiếu.
+          </p>
         </Notice>
       </div>
     );
@@ -53,7 +59,12 @@ export function ConnectBar() {
         <Notice tone="warn" title="Chưa phát hiện MetaMask">
           <p>
             Cài tiện ích MetaMask cho trình duyệt tại{" "}
-            <a className="font-semibold underline" href="https://metamask.io/download/" target="_blank" rel="noreferrer">
+            <a
+              className="font-semibold underline"
+              href="https://metamask.io/download/"
+              target="_blank"
+              rel="noreferrer"
+            >
               metamask.io/download
             </a>{" "}
             rồi tải lại trang. Bạn vẫn xem được proposal mà không cần ví.
@@ -67,7 +78,10 @@ export function ConnectBar() {
     const connector = connectors[0];
     return (
       <div className="flex flex-wrap items-center gap-3" data-testid="wallet-disconnected">
-        <Button disabled={!connector || connecting} onClick={() => connector && connect({ connector, chainId: cfg.chainId })}>
+        <Button
+          disabled={!connector || connecting}
+          onClick={() => connector && connect({ connector, chainId: cfg.chainId })}
+        >
           {connecting ? "Đang kết nối…" : "Kết nối MetaMask"}
         </Button>
         {connectError && <Notice tone="error">{toUserMessage(connectError)}</Notice>}
@@ -78,7 +92,11 @@ export function ConnectBar() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-lg bg-white px-3 py-2 font-mono text-sm ring-1 ring-slate-200" data-testid="wallet-address" title={address}>
+        <span
+          className="rounded-lg bg-white px-3 py-2 font-mono text-sm ring-1 ring-slate-200"
+          data-testid="wallet-address"
+          title={address}
+        >
           {address ? shortAddress(address) : ""}
         </span>
         <Button variant="secondary" onClick={() => disconnect()}>
@@ -89,10 +107,14 @@ export function ConnectBar() {
         <div data-testid="wrong-chain">
           <Notice tone="error" title="Ví đang ở sai mạng">
             <p>
-              Ví đang ở chainId {String(chainId)}, trang này cần Anvil local (chainId {cfg.chainId}). Đọc dữ liệu vẫn được,
-              nhưng không gửi giao dịch được cho tới khi chuyển mạng.
+              Ví đang ở chainId {String(chainId)}, trang này cần Anvil local (chainId {cfg.chainId}
+              ). Đọc dữ liệu vẫn được, nhưng không gửi giao dịch được cho tới khi chuyển mạng.
             </p>
-            <Button className="mt-2" disabled={switching} onClick={() => switchChain({ chainId: cfg.chainId })}>
+            <Button
+              className="mt-2"
+              disabled={switching}
+              onClick={() => switchChain({ chainId: cfg.chainId })}
+            >
               {switching ? "Đang chuyển…" : "Chuyển sang mạng Anvil (31337)"}
             </Button>
             {switchError && <p className="mt-2">{toUserMessage(switchError)}</p>}

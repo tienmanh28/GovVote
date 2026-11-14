@@ -9,7 +9,9 @@ export function Button({
   variant = "primary",
   className = "",
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "for" | "against" }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "primary" | "secondary" | "for" | "against";
+}) {
   const tones = {
     primary: "bg-slate-900 text-white hover:bg-slate-700",
     secondary: "bg-white text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100",
@@ -26,17 +28,34 @@ export function Button({
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5 ${className}`}>{children}</section>;
+  return (
+    <section
+      className={`rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5 ${className}`}
+    >
+      {children}
+    </section>
+  );
 }
 
-export function Notice({ tone = "info", title, children }: { tone?: "info" | "warn" | "error"; title?: string; children: ReactNode }) {
+export function Notice({
+  tone = "info",
+  title,
+  children,
+}: {
+  tone?: "info" | "warn" | "error";
+  title?: string;
+  children: ReactNode;
+}) {
   const tones = {
     info: "bg-sky-50 text-sky-950 ring-sky-200",
     warn: "bg-amber-50 text-amber-950 ring-amber-200",
     error: "bg-rose-50 text-rose-950 ring-rose-200",
   } as const;
   return (
-    <div role={tone === "error" ? "alert" : "status"} className={`rounded-lg p-3 text-sm ring-1 wrap-anywhere ${tones[tone]}`}>
+    <div
+      role={tone === "error" ? "alert" : "status"}
+      className={`rounded-lg p-3 text-sm ring-1 wrap-anywhere ${tones[tone]}`}
+    >
       {title && <p className="font-semibold">{title}</p>}
       <div className={title ? "mt-1" : ""}>{children}</div>
     </div>
@@ -47,14 +66,27 @@ export function StateBadge({ state }: { state: number }) {
   const s = STATE_LABELS[state];
   if (!s) return <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs">?</span>;
   return (
-    <span className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-semibold lg:whitespace-nowrap ${s.tone}`} title={s.name}>
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-semibold lg:whitespace-nowrap ${s.tone}`}
+      title={s.name}
+    >
       {s.vi} ({s.name})
     </span>
   );
 }
 
 /** Một con số có nhãn và lời giải thích ngắn. */
-export function Stat({ label, value, hint, testId }: { label: string; value: ReactNode; hint?: ReactNode; testId?: string }) {
+export function Stat({
+  label,
+  value,
+  hint,
+  testId,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  testId?: string;
+}) {
   return (
     <div className="min-w-0 rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200">
       <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>

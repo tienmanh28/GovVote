@@ -18,9 +18,18 @@ export type VotingPowerSummary = {
   notes: string[];
 };
 
-export function summarizeVotingPower(account: Address, balance: bigint, votes: bigint, delegatee: Address): VotingPowerSummary {
+export function summarizeVotingPower(
+  account: Address,
+  balance: bigint,
+  votes: bigint,
+  delegatee: Address,
+): VotingPowerSummary {
   const delegation: Delegation =
-    delegatee.toLowerCase() === zeroAddress ? "none" : delegatee.toLowerCase() === account.toLowerCase() ? "self" : "other";
+    delegatee.toLowerCase() === zeroAddress
+      ? "none"
+      : delegatee.toLowerCase() === account.toLowerCase()
+        ? "self"
+        : "other";
   // Khi tự delegate, số dư của chính ví nằm trong votes; phần còn lại là của người khác giao cho.
   const own = delegation === "self" ? balance : 0n;
   const receivedFromOthers = votes > own ? votes - own : 0n;
@@ -31,17 +40,28 @@ export function summarizeVotingPower(account: Address, balance: bigint, votes: b
       `Ví giữ ${formatGov(balance)} nhưng CHƯA delegate, nên số GOV này chưa tạo voting power. Hãy delegate cho chính mình (hoặc cho người khác) để phiếu được tính từ các proposal có snapshot sau thời điểm đó.`,
     );
   } else if (delegation === "self") {
-    notes.push(`Ví đã tự delegate: ${formatGov(balance)} số dư của ví được tính vào voting power của chính ví.`);
+    notes.push(
+      `Ví đã tự delegate: ${formatGov(balance)} số dư của ví được tính vào voting power của chính ví.`,
+    );
   } else {
     notes.push(
       `Ví đã ủy quyền cho ${shortAddress(delegatee)}: số dư ${formatGov(balance)} vẫn thuộc về ví, nhưng quyền biểu quyết của số dư đó nằm ở người được ủy quyền.`,
     );
   }
   if (receivedFromOthers > 0n) {
-    notes.push(`Ví đang nhận ${formatGov(receivedFromOthers)} voting power do ví khác delegate cho.`);
+    notes.push(
+      `Ví đang nhận ${formatGov(receivedFromOthers)} voting power do ví khác delegate cho.`,
+    );
   }
   notes.push(
     "Voting power dùng để bỏ phiếu cho một proposal là giá trị tại block snapshot của proposal đó, không phải giá trị hiện tại.",
   );
-  return { balance, votes, delegatee: delegation === "none" ? null : delegatee, delegation, receivedFromOthers, notes };
+  return {
+    balance,
+    votes,
+    delegatee: delegation === "none" ? null : delegatee,
+    delegation,
+    receivedFromOthers,
+    notes,
+  };
 }

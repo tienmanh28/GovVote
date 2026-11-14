@@ -44,7 +44,8 @@ function BlockInfo() {
   const block = useCurrentBlock();
   return (
     <p className="text-xs text-slate-600" data-testid="current-block">
-      Block hiện tại: <span className="font-semibold">{block?.toString() ?? "…"}</span> (số block, không phải thời gian thực)
+      Block hiện tại: <span className="font-semibold">{block?.toString() ?? "…"}</span> (số block,
+      không phải thời gian thực)
     </p>
   );
 }
@@ -92,7 +93,15 @@ export function App() {
         </div>
       </header>
       <main className="mx-auto max-w-5xl px-4 py-6">
-        {route.name === "verify" ? page : <ConfigGuard><BlockGuard><div key={sessionKey(wallet)}>{page}</div></BlockGuard></ConfigGuard>}
+        {route.name === "verify" ? (
+          page
+        ) : (
+          <ConfigGuard>
+            <BlockGuard>
+              <div key={sessionKey(wallet)}>{page}</div>
+            </BlockGuard>
+          </ConfigGuard>
+        )}
       </main>
       <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-slate-500">
         GovVote v1.1 · Anvil local (chainId 31337) · DAO Voting DApp, không tự thực thi kết quả.

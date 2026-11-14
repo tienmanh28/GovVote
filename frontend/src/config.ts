@@ -22,13 +22,32 @@ export type ParsedEnv = { ok: true; config: AppConfig } | { ok: false; errors: s
 export function parseEnv(env: Record<string, string | undefined>): ParsedEnv {
   const errors: string[] = [];
   const rpcUrl = env.VITE_RPC_URL?.trim() || "http://127.0.0.1:8545";
-  const validUrl=(url:string)=>{try{const u=new URL(url);return ["http:","https:"].includes(u.protocol)&&!u.username&&!u.password&&!u.hash;}catch{return false;}};
-  const fallbackRpcUrls=[...new Set((env.VITE_RPC_FALLBACK_URLS??"").split(",").map((s)=>s.trim()).filter(Boolean))].filter((url)=>url!==rpcUrl);
-  if(!validUrl(rpcUrl))errors.push("VITE_RPC_URL phải là HTTP(S) URL công khai hợp lệ.");
-  if(fallbackRpcUrls.length>2||fallbackRpcUrls.some((url)=>!validUrl(url)))errors.push("VITE_RPC_FALLBACK_URLS chỉ nhận tối đa hai HTTP(S) URL hợp lệ, không credentials.");
+  const validUrl = (url: string) => {
+    try {
+      const u = new URL(url);
+      return ["http:", "https:"].includes(u.protocol) && !u.username && !u.password && !u.hash;
+    } catch {
+      return false;
+    }
+  };
+  const fallbackRpcUrls = [
+    ...new Set(
+      (env.VITE_RPC_FALLBACK_URLS ?? "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    ),
+  ].filter((url) => url !== rpcUrl);
+  if (!validUrl(rpcUrl)) errors.push("VITE_RPC_URL phải là HTTP(S) URL công khai hợp lệ.");
+  if (fallbackRpcUrls.length > 2 || fallbackRpcUrls.some((url) => !validUrl(url)))
+    errors.push(
+      "VITE_RPC_FALLBACK_URLS chỉ nhận tối đa hai HTTP(S) URL hợp lệ, không credentials.",
+    );
   const chainId = Number(env.VITE_CHAIN_ID ?? SUPPORTED_CHAIN_ID);
   if (chainId !== SUPPORTED_CHAIN_ID) {
-    errors.push(`VITE_CHAIN_ID = ${String(env.VITE_CHAIN_ID)}: Phase 3 chỉ hỗ trợ Anvil (${SUPPORTED_CHAIN_ID}).`);
+    errors.push(
+      `VITE_CHAIN_ID = ${String(env.VITE_CHAIN_ID)}: Phase 3 chỉ hỗ trợ Anvil (${SUPPORTED_CHAIN_ID}).`,
+    );
   }
   const addr = (key: "VITE_GOV_VOTE" | "VITE_GOV_TOKEN"): Address | null => {
     const v = env[key]?.trim();
@@ -45,7 +64,16 @@ export function parseEnv(env: Record<string, string | undefined>): ParsedEnv {
   const govVote = addr("VITE_GOV_VOTE");
   const govToken = addr("VITE_GOV_TOKEN");
   if (errors.length > 0 || !govVote || !govToken) return { ok: false, errors };
-  return { ok: true, config: { rpcUrl, chainId, govVote, govToken, ...(fallbackRpcUrls.length?{fallbackRpcUrls}:{}) } };
+  return {
+    ok: true,
+    config: {
+      rpcUrl,
+      chainId,
+      govVote,
+      govToken,
+      ...(fallbackRpcUrls.length ? { fallbackRpcUrls } : {}),
+    },
+  };
 }
 
 export function makeChain(cfg: AppConfig) {
@@ -60,17 +88,19 @@ export function makeChain(cfg: AppConfig) {
 
 export function makeWagmiConfig(cfg: AppConfig, onFailure?: () => void) {
   const chain = makeChain(cfg);
-  const transport:Transport=(parameters)=>{
-    const original=http(cfg.rpcUrl,{timeout:8000,retryCount:0})(parameters);
-    const request:typeof original.request=async(args,options)=>{
-      try{return await original.request(args,options);}catch(error){
+  const transport: Transport = (parameters) => {
+    const original = http(cfg.rpcUrl, { timeout: 8000, retryCount: 0 })(parameters);
+    const request: typeof original.request = async (args, options) => {
+      try {
+        return await original.request(args, options);
+      } catch (error) {
         // Contract revert không phải lý do tự chuyển nguồn đọc.
-        const e=error as {code?:number;message?:string};
-        if(e.code!==3&&!/revert/i.test(e.message??""))onFailure?.();
+        const e = error as { code?: number; message?: string };
+        if (e.code !== 3 && !/revert/i.test(e.message ?? "")) onFailure?.();
         throw error;
       }
     };
-    return {...original,request};
+    return { ...original, request };
   };
   return createConfig({
     chains: [chain],
