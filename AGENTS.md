@@ -17,7 +17,7 @@
 ## 3. Lệnh build / test / chạy
 Contract (ở gốc repo):
 - `forge build`, `forge build --sizes`, `forge test -vv`, `forge fmt --check`
-- `forge snapshot --check` (so với `.gas-snapshot`), `forge coverage --report summary`
+- `forge snapshot --check --fuzz-seed 0x1` (so với `.gas-snapshot`; phải cùng seed, cùng Foundry 1.7.1 như CI), `forge coverage --report summary`
 
 Chain local:
 - `anvil` (mặc định: 127.0.0.1:8545, chainId 31337). Chain mất khi tắt Anvil.

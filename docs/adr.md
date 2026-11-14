@@ -122,4 +122,4 @@ GovVote không có owner và cấu hình là immutable. Vì vậy, thay đổi b
 
 ---
 
-**Ghi chú kiểm chứng:** `forge test` không cố định seed fuzz, còn `forge snapshot` cố định seed. Vì vậy `.gas-snapshot` chỉ ổn định trên tập đầu vào của seed đó.
+**Ghi chú kiểm chứng:** cả `forge test` lẫn `forge snapshot` đều KHÔNG cố định seed fuzz mặc định (sửa lại 14/11/2026 sau khi gas fuzz lệch giữa máy local và runner GitHub). `.gas-snapshot` được tạo và kiểm bằng `--fuzz-seed 0x1`; số gas chỉ so sánh được khi dùng cùng seed và cùng phiên bản Foundry/solc, và chỉ phản ánh tập đầu vào của seed đó.

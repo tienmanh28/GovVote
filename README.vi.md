@@ -77,6 +77,7 @@ Cần có: Foundry, Node.js 24+, git kèm submodule (`git submodule update --ini
 ```bash
 forge build
 forge test -vv
+forge snapshot --check --fuzz-seed 0x1   # báo cáo gas; cùng seed và phiên bản Foundry như CI
 ```
 
 **2. Chạy Anvil** (ở terminal riêng; output khởi động có in key test nên được bỏ đi)

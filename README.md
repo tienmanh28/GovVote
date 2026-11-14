@@ -77,6 +77,7 @@ Requirements: Foundry, Node.js 24+, git with submodules (`git submodule update -
 ```bash
 forge build
 forge test -vv
+forge snapshot --check --fuzz-seed 0x1   # gas report; same seed and Foundry version as CI
 ```
 
 **2. Start Anvil** (in its own terminal; its startup output prints test keys, so it is discarded)

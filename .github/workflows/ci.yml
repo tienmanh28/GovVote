@@ -38,8 +38,11 @@ jobs:
         run: forge build --sizes
       - name: forge test (fuzz/invariant theo foundry.toml)
         run: forge test -vv
-      - name: forge snapshot --check (so với .gas-snapshot)
-        run: forge snapshot --check
+      # Ghim seed CHỈ cho snapshot: gas của fuzz test (μ, ~) phụ thuộc đầu vào ngẫu nhiên, nên không ghim
+      # seed thì số đo lệch giữa máy. .gas-snapshot được tạo bằng cùng seed và cùng Foundry v1.7.1.
+      # Bước forge test ở trên vẫn fuzz ngẫu nhiên (không seed).
+      - name: forge snapshot --check --fuzz-seed 0x1 (so với .gas-snapshot)
+        run: forge snapshot --check --fuzz-seed 0x1
 
   frontend:
     name: frontend (typecheck, format, Vitest, build)
