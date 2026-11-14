@@ -54,3 +54,13 @@ test("EIP-1898 vẫn kiểm anchor đổi hash cuối lượt => ANCHOR_CHANGED"
   expect(r.status).toBe("INCOMPLETE");
   expect(r.reason).toBe("ANCHOR_CHANGED");
 });
+test("đổi confirmations chọn hash H mới mà vẫn VERIFIED", async () => {
+  // Regression cho fixture động và policy H; không cố định vào H=100 của dữ liệu mẫu.
+  const m = httpFixture();
+  m.f.input.confirmations = 13n;
+  const r = await runVerification(m.f.input, m.request, verificationCodec);
+  expect(r.status).toBe("VERIFIED");
+  expect(r.context?.head).toBe(99n);
+  for (const c of m.calls.filter((c) => ["eth_call", "eth_getCode"].includes(c.method)))
+    expect(c.params[1]).toEqual({ blockHash: r.context!.hash, requireCanonical: true });
+});
