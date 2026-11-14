@@ -1,0 +1,30 @@
+2026-11-14T13:53:57.8910207Z   ✘   7 validation/p3-fix-04.spec.ts:259:1 › Pending getVotes dự kiến, đổi account, snapshot historical và sai chain (1.0m)
+2026-11-14T13:54:58.5315197Z   ✘   8 validation/p3-fix-04.spec.ts:285:3 › reliability responsive 375 (1.0m)
+2026-11-14T13:55:59.1664345Z   ✘   9 validation/p3-fix-04.spec.ts:285:3 › reliability responsive 768 (1.0m)
+2026-11-14T13:56:59.8205376Z   ✘  10 validation/p3-fix-04.spec.ts:285:3 › reliability responsive 1280 (1.0m)
+2026-11-14T13:57:25.5755391Z   ✘  11 validation/p3-fix-04.spec.ts:304:1 › endpoint cũ trả muộn không ghi đè fallback (25.1s)
+2026-11-14T13:57:51.3293364Z   ✘  12 validation/p3-fix-04.spec.ts:319:1 › cùng chain ID/contract nhưng khác lịch sử: từ chối fallback (25.1s)
+2026-11-14T13:57:51.3470780Z
+2026-11-14T13:57:51.3475216Z
+2026-11-14T13:57:51.3482981Z   1) validation/p3-fix-04.spec.ts:198:1 › primary ưu tiên, fallback không bị gọi khi primary tốt ───
+2026-11-14T13:57:51.3483533Z
+2026-11-14T13:57:51.3483756Z     Error: expect(locator).toContainText(expected) failed
+2026-11-14T13:57:51.3484093Z
+2026-11-14T13:57:51.3484267Z     Locator: getByTestId('proposal-count')
+2026-11-14T13:57:51.3484653Z     Expected substring: "2 proposal"
+2026-11-14T13:57:51.3484947Z     Timeout: 25000ms
+2026-11-14T13:57:51.3485247Z     Error: element(s) not found
+2026-11-14T13:57:51.3485431Z
+2026-11-14T13:57:51.3485535Z     Call log:
+2026-11-14T13:57:51.3485964Z       - Expect "toContainText" getByTestId('proposal-count') with timeout 25000ms
+2026-11-14T13:57:51.3486528Z       - waiting for getByTestId('proposal-count')
+2026-11-14T13:57:51.3486754Z
+2026-11-14T13:57:51.3486763Z
+2026-11-14T13:57:51.3486913Z       199 |   const c = await setup(page);
+2026-11-14T13:57:51.3487275Z       200 |   await page.goto("/#/");
+2026-11-14T13:57:51.3487819Z     > 201 |   await expect(page.getByTestId("proposal-count")).toContainText("2 proposal");
+2026-11-14T13:57:51.3488356Z           |                                                    ^
+2026-11-14T13:57:51.3489327Z       202 |   expect(c.calls.some((x) => x.source === "fallback.invalid")).toBe(false);
+2026-11-14T13:57:51.3489754Z       203 | });
+2026-11-14T13:57:51.3490399Z       204 | test("primary lỗi => fallback hợp lệ; phục hồi primary bằng retry", async ({ page }) => {
+2026-11-14T13:57:51.3491073Z         at /home/runner/work/GovVote/GovVote/frontend/validation/p3-fix-04.spec.ts:201:52
