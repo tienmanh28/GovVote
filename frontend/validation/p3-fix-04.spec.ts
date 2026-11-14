@@ -7,7 +7,8 @@ import { rpcFixture } from "../tests/verificationRpcFixture.ts";
 const env = loadEnv("production", process.cwd(), "VITE_"),
   GOV = 10n ** 18n;
 async function setup(page: Page) {
-  const m = rpcFixture();
+  // Bộ này kiểm cả UI thường (block number) lẫn verifier strict (hash được kiểm như cũ).
+  const m = rpcFixture({ allowUnpinnedReads: true });
   m.f.input.govVote = env.VITE_GOV_VOTE!;
   m.f.input.govToken = env.VITE_GOV_TOKEN!;
   m.f.context.token = env.VITE_GOV_TOKEN!;

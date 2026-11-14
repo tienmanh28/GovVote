@@ -1,0 +1,30 @@
+2026-11-14T13:47:56.2601687Z env:
+2026-11-14T13:47:56.2601891Z   FOUNDRY_VERSION: v1.7.1
+2026-11-14T13:47:56.2602148Z   NODE_VERSION: 24.19.0
+2026-11-14T13:47:56.2602365Z   ANVIL_PORT: 8545
+2026-11-14T13:47:56.2602596Z   RPC_URL: http://127.0.0.1:8545
+2026-11-14T13:47:56.2602864Z   ENV_OUT: frontend/.env.local
+2026-11-14T13:47:56.2603108Z ##[endgroup]
+2026-11-14T13:47:56.8266564Z [prepare-chain] Anvil sẵn sàng tại http://127.0.0.1:8545 (chain 31337), block 0
+2026-11-14T13:47:59.2726838Z [prepare-chain] GovToken 0x5fbdb2315678afecb367f032d93f642f64180aa3
+2026-11-14T13:47:59.2727858Z [prepare-chain] GovVote  0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+2026-11-14T13:48:45.7716829Z Error: error sending request for url (http://127.0.0.1:8545/)
+2026-11-14T13:48:45.7717397Z
+2026-11-14T13:48:45.7717540Z Context:
+2026-11-14T13:48:45.7717899Z - operation timed out
+2026-11-14T13:48:45.7763392Z ##[error]Process completed with exit code 1.
+﻿2026-11-14T13:48:45.7893718Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-14T13:48:45.7894406Z with:
+2026-11-14T13:48:45.7894705Z   name: e2e-failure
+2026-11-14T13:48:45.7895297Z   path: frontend/test-results
+frontend/playwright-report
+docs/phase3-screenshots
+
+2026-11-14T13:48:45.7895991Z   retention-days: 5
+2026-11-14T13:48:45.7896336Z   if-no-files-found: ignore
+2026-11-14T13:48:45.7896721Z   compression-level: 6
+2026-11-14T13:48:45.7897076Z   overwrite: false
+2026-11-14T13:48:45.7897416Z   include-hidden-files: false
+2026-11-14T13:48:45.7897797Z   archive: true
+2026-11-14T13:48:45.7898105Z env:
+2026-11-14T13:48:45.7898393Z   FOUNDRY_VERSION: v1.7.1

@@ -50,7 +50,7 @@ export function rawEvent(kind: "ProposalCreated" | "VoteCast", e: ProposalEviden
     data,
   };
 }
-export function rpcFixture() {
+export function rpcFixture(options: { allowUnpinnedReads?: boolean } = {}) {
   const f = fixture();
   const calls: { method: string; params: unknown[] }[] = [];
   // Cho phép đổi confirmations: chỉ nhận hash đã thực sự trả qua block RPC.
@@ -80,7 +80,11 @@ export function rpcFixture() {
       return { number: `0x${number.toString(16)}`, hash: blockHash };
     }
     // Fixture kiểm đúng selector; không cho test vô tình dùng lại số block.
-    if (method === "eth_getCode" || method === "eth_call") {
+    if (
+      (method === "eth_getCode" || method === "eth_call") &&
+      // UI thường vẫn đọc theo số block; chỉ fixture reliability kết hợp UI/strict mới opt-in.
+      !(options.allowUnpinnedReads && typeof params[1] === "string")
+    ) {
       const selector = params[1] as { blockHash?: string; requireCanonical?: boolean };
       if (selector?.requireCanonical !== true || !observedHashes.has(selector.blockHash ?? ""))
         throw new Error("Fixture yêu cầu EIP-1898 với hash đã quan sát");
