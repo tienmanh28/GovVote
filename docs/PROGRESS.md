@@ -1,5 +1,14 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## P4-A3 — README (EN + VI), 14/11/2026, Claude
+
+- HEAD sau P4-A3: `f3650ad8754efde0805c4d7383555c5e5a6bf14e` (`docs: viết lại README (EN + VI)`). Commit docs chứa checkpoint này có hash riêng.
+- Đã xong: `README.md` (tiếng Anh) thay README mẫu của Foundry; `README.vi.md` (tiếng Việt), cùng cấu trúc, link qua lại. Số liệu lấy từ PROGRESS, threat-model, phase2a/2b/3 report, foundry.toml/foundry.lock, package.json.
+- Kiểm: 12/12 link tương đối mỗi file tồn tại; lệnh Quick start đối chiếu với script package.json, tên contract script Foundry và `--help` của forge/cast/anvil; quét không có `--private-key`, chuỗi 0x 64-hex, "audited"/"production-ready".
+- Chưa xác minh: Mermaid chưa render thử (máy không có `mmdc`), chỉ kiểm cú pháp bằng mắt; cần xem trên GitHub sau khi push.
+- Chờ Owner quyết: LICENSE (repo chưa có) và tên tác giả trong README (chưa ghi).
+- Kế tiếp: C1/C2 CI (`.github/` đang untracked, chưa đụng). Chỉ làm khi Owner giao.
+
 ## P4-A2 — format TypeScript bằng Prettier, 14/11/2026, Claude
 
 - HEAD sau P4-A2: `b85364ed80a8fe6c615423d2e2ea2e95700d19f9` (`style: format TypeScript bằng Prettier (không đổi hành vi)`). Commit docs chứa checkpoint này có hash riêng.
