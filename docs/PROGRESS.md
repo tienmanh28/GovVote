@@ -1,5 +1,18 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## P4-C1/C2 — CI GitHub Actions và LICENSE, 14/11/2026, Claude
+
+- HEAD sau CI: `603c97fad57c9d6aac96bf57f9e1255bea11cad0` (`ci: GitHub Actions (contracts, frontend, verify, e2e) và LICENSE MIT`). Commit docs chứa checkpoint này có hash riêng.
+- Trạng thái: CI **chuẩn bị xong nhưng CHƯA chạy trên GitHub** (repo chưa có remote). Chỉ có chạy thử cục bộ trong clone sạch `~/ci-dryrun`.
+- `.github/workflows/ci.yml`: job contracts (fmt, build --sizes, test, snapshot --check), frontend (typecheck, format:check, Vitest, build, npm audit chỉ cảnh báo), verify-cli (typecheck, test), e2e (needs contracts + frontend; Anvil loopback, `scripts/ci/prepare-chain.sh`, 4 bộ Playwright tách bước, upload artifact khi fail, retention 5 ngày). Action ghim SHA: checkout v7.0.1 `3d3c42e5`, setup-node v7.1.0 `949feb24`, upload-artifact v7.0.2 `cf430e03`, foundry-toolchain v1.9.2 `dba66c27`. Foundry v1.7.1, Node 24.19.0. Không secret, không RPC công khai, không deploy.
+- `scripts/ci/prepare-chain.sh`: dựng chain theo lifecycle Phase 1 (deploy, seed, 4 ví delegate, mine 2, propose, vote 3 phiếu, qua deadline), kiểm proposal #1 Succeeded For 600.000 / Against 250.000 GOV; ký bằng `--unlocked`. Dùng chung CI và local (`RPC_URL`, `ENV_OUT`).
+- Bằng chứng chạy thử: contracts, frontend, verify-cli PASS (lần trước, file không đổi); e2e validation 34/34, reliability 12/12, final UI 3/3, E2E gốc 12/12 = **61/61** trên Anvil 8547. actionlint 1.7.12 + shellcheck 0.11.0 sạch. RAM available thấp nhất 3.604 MiB.
+- Lần chạy e2e đầu fail 5/12 vì chain chỉ delegate Bob/Charlie/David; đã thay bằng script lifecycle đầy đủ theo quyết định Owner, không sửa test hay app.
+- LICENSE MIT (2026, Lê Tiến Mạnh); dòng tác giả + license ở cuối 2 README.
+- Môi trường: WSL từng restart giữa lúc chạy thử CI (do tắt máy khi đang chạy, theo Owner); mất scratchpad và Anvil 8545. Log bền đặt ở `~/ci-dryrun/logs`. Máy không có `.wslconfig` (giới hạn RAM/CPU mặc định của WSL).
+- Backlog frontend (để sau, chưa sửa): cổng "tạo proposal" dùng `getVotes(me)` (hiện tại) nhưng contract kiểm voting power ở `block.number - 1`, nên ngay sau delegate có thể bị revert khi mô phỏng. Đề xuất: phản chiếu đúng luật contract (`getPastVotes(me, block - 1)`) hoặc nhắc "đợi 1 block sau khi delegate".
+- Kế tiếp cho Owner: tạo repo GitHub, push, xem Actions chạy thật (đặc biệt `forge snapshot --check` trên runner và thời gian job e2e).
+
 ## P4-A3 — README (EN + VI), 14/11/2026, Claude
 
 - HEAD sau P4-A3: `f3650ad8754efde0805c4d7383555c5e5a6bf14e` (`docs: viết lại README (EN + VI)`). Commit docs chứa checkpoint này có hash riêng.
