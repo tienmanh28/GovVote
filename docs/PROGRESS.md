@@ -166,9 +166,14 @@
 - Hosting: Cloudflare Pages. RPC Sepolia chọn ở P4-E1; không chọn hoặc tương tác Sepolia trong phiên này.
 - Attribution Codex bằng một dòng chữ trong thân commit, không tạo trailer Codex. Riêng chỉ thị cụ thể cho A2/B yêu cầu Co-Authored-By theo model; dùng GPT-6 trong trailer, dòng Codex nằm ở thân commit.
 
+### PR-B / backlog polish — checkpoint 15/11/2026, Codex
+
+- Nhánh `chore/p4-backlog-polish`, từ main `1e8b944`, độc lập PR-A; PR-A #3 đang CI, chỉ mở PR-B sau khi PR-A xanh. Không sửa src/script/test cũ hoặc dependency trong repo.
+- **B1 đã được sửa sẵn trên main:** `frontend/e2e/01-wallet-states.spec.ts:86` lấy origin từ RPC_URL; helper đọc VITE_RPC_URL, mặc định127.0.0.1:8545. Không sửa lại test; proof riêng cổng8549 sẽ lưu ở docs/p4-backlog-evidence/. Backlog cũ bên dưới đã lạc hậu.
+
 ### Backlog đã ghi nhận, chưa triển khai
 
-- `frontend/e2e/01-wallet-states.spec.ts:57`: hardcode cổng8545; nên đọc từ biến môi trường. Regression trên bản sao xử lý cổng8546, repository chính giữ nguyên.
+- B1 đã giải quyết trước PR-B: E2E01 dùng RPC_URL theo VITE_RPC_URL (default8545); không còn hardcode origin. Xem checkpoint PR-B và bằng chứng8549.
 - **F1:** TS nén ở core.ts, runner.ts và validation spec; có dòng dài400–886ký tự; format riêng bằng Prettier ghim chính xác.
 - **F2:** chain ID31337 hardcode; thiết kế chain profile.
 - **F3:** eth_call chưa ghim bằng `{blockHash}`.
