@@ -1,0 +1,22 @@
+{
+  "GovToken": {
+    "bytecode": {
+      "bytes": 9652,
+      "sha256": "6c3c1dce03159dd2d8e99cbd9136ff770efea93970c599059a90dde09275d216"
+    },
+    "deployedBytecode": {
+      "bytes": 6846,
+      "sha256": "e3ff7c41f20fe998767cc1e988738ccd5ff4dfca205e0479efccc7eb3265fa88"
+    }
+  },
+  "GovVote": {
+    "bytecode": {
+      "bytes": 5061,
+      "sha256": "715376a877b72a5131729ba020a1b3567a399893788285e2451b92da01cf35ff"
+    },
+    "deployedBytecode": {
+      "bytes": 4603,
+      "sha256": "3ac623da2215b9b21c12bbb05a810a14b22998fe949e263c61cb5c09bbc95a18"
+    }
+  }
+}

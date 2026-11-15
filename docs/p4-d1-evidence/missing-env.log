@@ -1,0 +1,28 @@
+No files changed, compilation skipped
+2026-11-15T09:56:43.046570Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for lib/forge-std/src/StdAssertions.sol
+2026-11-15T09:56:43.047254Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for lib/forge-std/src/StdError.sol
+2026-11-15T09:56:43.047442Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for lib/forge-std/src/StdInvariant.sol
+2026-11-15T09:56:43.048205Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for lib/forge-std/src/StdToml.sol
+2026-11-15T09:56:43.048559Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for lib/forge-std/src/Test.sol
+2026-11-15T09:56:43.052989Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/GovVoteFuzz.t.sol
+2026-11-15T09:56:43.053149Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/GovVoteInvariant.t.sol
+2026-11-15T09:56:43.053684Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for script/SeedDemo.s.sol
+2026-11-15T09:56:43.053832Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/DeployScript.t.sol
+2026-11-15T09:56:43.054390Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/GovToken.t.sol
+2026-11-15T09:56:43.054560Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/GovVote.t.sol
+2026-11-15T09:56:43.054687Z  WARN foundry_evm_traces::debug::sources: failed to parse contract definitions for test/mocks/MockVotes.sol
+Error: Failed to decode return value: 0x9cef3b7a
+2026-11-15T09:56:43.067642Z  WARN evm::traces::external: etherscan config not found
+Traces:
+  [4074353] → new Deploy@0x9f7cF1d1F558E57ef88a59ac3D47214eF25B6A06
+    └─ ← [Return] 20238 bytes of code
+
+  [2976] Deploy::run()
+    ├─ [0] VM::envUint("EXPECTED_CHAIN_ID") [staticcall]
+    │   └─ ← [Revert] vm.envUint: environment variable "EXPECTED_CHAIN_ID" not found
+    └─ ← [Revert] ExpectedChainIdRequired()
+
+
+Gas used: 24040
+2026-11-15T09:56:43.070345Z  WARN evm::traces: failed to flush signature cache err=failed to create file "/home/tienm/.foundry/cache/signatures": Read-only file system (os error 30)
+Error: script failed: ExpectedChainIdRequired()

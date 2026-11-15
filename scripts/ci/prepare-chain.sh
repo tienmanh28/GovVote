@@ -79,10 +79,11 @@ chain_id="$(cast chain-id --rpc-url "$RPC_URL")"
 log "Anvil sẵn sàng tại $RPC_URL (chain 31337), block $(head_block)"
 end_step
 
-# 2. Deploy GovToken + GovVote.
+# 2. Ghim chain dự định độc lập với RPC để guard chặn cấu hình sai, không suy ra từ endpoint.
+# Deploy GovToken + GovVote.
 begin_step "forge script Deploy"
 step_log="$CHAIN_DIAGNOSTICS_DIR/forge-deploy.log"
-TOKEN_RECIPIENT="$DEPLOYER" PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 \
+EXPECTED_CHAIN_ID=31337 TOKEN_RECIPIENT="$DEPLOYER" PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 \
 VOTING_DELAY_BLOCKS="$VOTING_DELAY_BLOCKS" VOTING_PERIOD_BLOCKS="$VOTING_PERIOD_BLOCKS" \
   forge script script/Deploy.s.sol:Deploy --rpc-url "$RPC_URL" \
   --broadcast --unlocked --sender "$DEPLOYER" > "$step_log" 2>&1
@@ -105,7 +106,7 @@ end_step
 begin_step "forge script SeedDemo"
 step_log="$CHAIN_DIAGNOSTICS_DIR/forge-seed.log"
 # Output chuẩn vẫn giữ receipt/lỗi; trace EVM -vvvv dài không cần cho chẩn đoán timeout RPC.
-GOV_TOKEN="$GOV_TOKEN" DEMO_ALICE="$ALICE" DEMO_BOB="$BOB" DEMO_CHARLIE="$CHARLIE" DEMO_DAVID="$DAVID" \
+EXPECTED_CHAIN_ID=31337 GOV_TOKEN="$GOV_TOKEN" DEMO_ALICE="$ALICE" DEMO_BOB="$BOB" DEMO_CHARLIE="$CHARLIE" DEMO_DAVID="$DAVID" \
   forge script script/SeedDemo.s.sol:SeedDemo --rpc-url "$RPC_URL" \
   --broadcast --unlocked --sender "$DEPLOYER" > "$step_log" 2>&1
 end_step

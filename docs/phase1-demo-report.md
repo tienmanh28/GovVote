@@ -1,5 +1,7 @@
 # GovVote v1.1: Báo cáo demo Phase 1 (Anvil local)
 
+> D1 cập nhật lệnh chạy lại local với EXPECTED_CHAIN_ID=31337; receipt/kết quả lịch sử dưới đây giữ nguyên. SeedDemo hiện chỉ local; lỗi mạng mới là LocalDemoOnly(actual).
+
 > **Phạm vi của báo cáo này**
 > - Chạy trên **Anvil local (chain 31337)**. **Chưa phải testnet**, chưa có giao dịch nào trên Sepolia.
 > - **Chưa verify source** trên Etherscan (không áp dụng cho Anvil).
@@ -94,13 +96,13 @@ nên **không có private key** trong lệnh, file hay log. Output khởi độn
 anvil --port 8545 > /dev/null 2>&1
 
 # 2. Deploy
-TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
+EXPECTED_CHAIN_ID=31337 TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
 PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 VOTING_DELAY_BLOCKS=15 VOTING_PERIOD_BLOCKS=7200 \
   forge script script/Deploy.s.sol:Deploy --rpc-url http://127.0.0.1:8545 \
   --broadcast --unlocked --sender 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 
 # 3. Seed
-GOV_TOKEN=0x0165878A594ca255338adfa4d48449f69242Eb8F \
+EXPECTED_CHAIN_ID=31337 GOV_TOKEN=0x0165878A594ca255338adfa4d48449f69242Eb8F \
 DEMO_ALICE=0x70997970C51812dc3A010C7d01b50e0d17dc79C8 \
 DEMO_BOB=0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC \
 DEMO_CHARLIE=0x90F79bf6EB2c4f870365E785982E1f101E93b906 \
