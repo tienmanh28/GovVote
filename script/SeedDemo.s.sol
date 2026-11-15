@@ -22,7 +22,6 @@ import {GovToken} from "../src/GovToken.sol";
 ///   DEMO_DAVID    Ví nhận 150.000 GOV.
 contract SeedDemo is Script {
     uint256 internal constant ANVIL_CHAIN_ID = 31_337;
-    uint256 internal constant SEPOLIA_CHAIN_ID = 11_155_111;
 
     uint256 internal constant ALICE_AMOUNT = 400_000 ether;
     uint256 internal constant BOB_AMOUNT = 250_000 ether;
@@ -30,8 +29,8 @@ contract SeedDemo is Script {
     uint256 internal constant DAVID_AMOUNT = 150_000 ether;
     uint256 internal constant SEED_TOTAL = ALICE_AMOUNT + BOB_AMOUNT + CHARLIE_AMOUNT + DAVID_AMOUNT; // 1.000.000
 
-    /// @notice Chain không phải Anvil (31337) hoặc Sepolia (11155111).
-    error WrongNetwork(uint256 chainId);
+    /// @notice SeedDemo chỉ dùng local; Sepolia phải chuyển từng giao dịch có Owner kiểm địa chỉ.
+    error LocalDemoOnly(uint256 actual);
     /// @notice GOV_TOKEN không có bytecode trên chain này (sai địa chỉ hoặc sai mạng).
     error TokenNotDeployed(address token);
     /// @notice Ví demo không hợp lệ: address(0), trùng ví demo khác, hoặc trùng người gửi.
@@ -44,9 +43,9 @@ contract SeedDemo is Script {
     error BalanceMismatch(address account, uint256 expected, uint256 actual);
 
     function run() external {
-        // ---- 1. Chặn mạng ngoài danh sách cho phép (trước khi đọc bất cứ thứ gì khác) ----
-        if (block.chainid != ANVIL_CHAIN_ID && block.chainid != SEPOLIA_CHAIN_ID) {
-            revert WrongNetwork(block.chainid);
+        // ---- 1. Không seed tự động trên public testnet; chặn trước env, đọc token và broadcast. ----
+        if (block.chainid != ANVIL_CHAIN_ID) {
+            revert LocalDemoOnly(block.chainid);
         }
 
         // ---- 2. Đọc cấu hình ----
