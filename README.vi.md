@@ -19,7 +19,7 @@ CLI và frontend dùng chung [shared/chains.ts](shared/chains.ts). Mainnet (1) v
 | Anvil, 31337 (mặc định) | 12 | không có | `LOCAL_DEPLOYMENT_EVIDENCE` |
 | Sepolia, 11155111 | 64 | [Sepolia Etherscan](https://sepolia.etherscan.io) | `PUBLIC_TESTNET_DEPLOYMENT_EVIDENCE` |
 
-64 là chính sách khoảng lùi thận trọng hơn trên public testnet, không bảo đảm finality (tính cuối cùng). Hai nhãn chỉ mô tả việc đối chiếu bytecode, token liên kết và event/storage qua RPC; không chứng nhận nguồn gốc, audit hoặc source verification trên Etherscan. Xem [threat model](docs/threat-model.md).
+64 là chính sách khoảng lùi thận trọng hơn trên public testnet, không bảo đảm finality (tính cuối cùng). Verify Sepolia có thể trễ khoảng 13 phút (64 × 12 giây = 768 giây, chỉ ước tính). Hai nhãn chỉ mô tả việc đối chiếu bytecode, token liên kết và event/storage qua RPC; không chứng nhận nguồn gốc, audit hoặc source verification trên Etherscan. Xem [threat model](docs/threat-model.md).
 
 Chọn `VITE_CHAIN_ID` cho frontend, `GOV_CHAIN_ID` cho cả hai chế độ CLI; mặc định đều là 31337. Sepolia bắt buộc có `VITE_RPC_URL` / `GOV_RPC_URL` tường minh và địa chỉ contract đúng; không tự chọn endpoint RPC công khai. Strict CLI cho phép `GOV_CONFIRMATIONS` ghi đè mặc định; legacy tally dùng mặc định của profile. Link explorer chỉ hiện khi profile có explorer. Script deploy vẫn chỉ dùng local ở bước này; đây là chuẩn bị cấu hình, **CHƯA deploy Sepolia, CHƯA audit**.
 
@@ -37,15 +37,20 @@ Danh sách proposal (đề xuất) trên điện thoại (375×812), máy tính 
 
 ```mermaid
 flowchart LR
-  subgraph chain["EVM chain (Anvil, 31337)"]
-    GT["GovToken<br/>ERC20 + ERC20Votes<br/>tổng cung cố định, không owner"]
+  Voter(("Voter")) --> FE["frontend<br/>React + wagmi + viem"]
+  FE -->|"yêu cầu ký"| Wallet["MetaMask<br/>injected provider"]
+  FE -->|"read-only"| ReadRPC["RPC đọc được cấu hình<br/>primary / fallback"]
+  Wallet -->|"signed transactions"| WalletRPC["RPC mạng của MetaMask"]
+  subgraph chain["EVM profiles: Anvil 31337 / Sepolia 11155111<br/>CHƯA deploy Sepolia"]
+    GT["GovToken<br/>cung cố định, không owner"]
     GV["GovVote<br/>propose / castVote / state"]
-    GV -- "getPastVotes / getPastTotalSupply" --> GT
+    GV -->|"past votes / supply"| GT
   end
-  User(("Người bỏ phiếu")) -- "delegate" --> GT
-  User -- "propose / castVote" --> GV
-  FE["frontend<br/>React + wagmi + viem"] -- "đọc + giao dịch qua ví" --> chain
-  CLI["scripts/verify<br/>(chỉ đọc)"] -- "log VoteCast so với storage" --> chain
+  ReadRPC --> GT
+  ReadRPC --> GV
+  WalletRPC --> GT
+  WalletRPC --> GV
+  CLI["scripts/verify<br/>read-only"] --> ReadRPC
 ```
 
 Frontend đọc trạng thái contract và gửi giao dịch của người dùng qua injected wallet (ví nhúng sẵn trong trình duyệt, như MetaMask). CLI verify chỉ đọc: nó tính lại từng tally (tổng phiếu) từ event `VoteCast` rồi so với storage (dữ liệu lưu trong contract) tại cùng một block.
