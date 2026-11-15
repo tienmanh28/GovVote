@@ -1,6 +1,7 @@
 // Chặn hiển thị khi cấu hình sai, thay vì cho trang hiện dữ liệu rỗng gây hiểu nhầm.
 // Kiểm tra theo thứ tự: RPC trả đúng chainId → VITE_GOV_VOTE có bytecode → VITE_GOV_TOKEN có bytecode
 // → GovVote.token() trỏ đúng VITE_GOV_TOKEN.
+import { chainProfile, chainError, DEFAULT_CHAIN_PROFILE } from "../../../shared/chains.ts";
 import { ReadError } from "./ReadError.tsx";
 import type { ReactNode } from "react";
 import { useBytecode, usePublicClient, useReadContract } from "wagmi";
@@ -11,6 +12,20 @@ import { Notice, Spinner } from "./ui.tsx";
 
 export function ConfigGuard({ children }: { children: ReactNode }) {
   const cfg = useAppConfig();
+  // Chặn cấu hình bị tạo ngoài parseEnv trước khi mount bất kỳ hook RPC nào.
+  if (!chainProfile(cfg.chainId))
+    return (
+      <div data-testid="config-error">
+        <Notice tone="error" title="Lỗi cấu hình">
+          {chainError(cfg.chainId)}
+        </Notice>
+      </div>
+    );
+  return <SupportedConfigGuard>{children}</SupportedConfigGuard>;
+}
+function SupportedConfigGuard({ children }: { children: ReactNode }) {
+  const cfg = useAppConfig();
+  const profile = chainProfile(cfg.chainId)!;
   const client = usePublicClient({ chainId: cfg.chainId });
   const rpcChain = useQuery({
     queryKey: ["rpc-chain-id", cfg.rpcUrl],
@@ -60,7 +75,10 @@ export function ConfigGuard({ children }: { children: ReactNode }) {
       <p>
         Không có bytecode tại VITE_GOV_VOTE ={" "}
         <span className="font-mono break-all">{cfg.govVote}</span> trên chain {cfg.chainId}. Kiểm
-        tra .env.local, hoặc deploy lại nếu Anvil đã được khởi động lại.
+        tra .env.local
+        {profile === DEFAULT_CHAIN_PROFILE
+          ? `, hoặc deploy lại nếu ${profile.name} đã được khởi động lại.`
+          : `, địa chỉ phải thuộc deployment ${profile.name} đã kiểm tra.`}
       </p>,
     );
   }

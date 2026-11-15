@@ -1,13 +1,16 @@
+// Nhãn và chính sách mạng lấy từ profile chung để không gắn nhãn local cho testnet.
+import { requireChainProfile, DEFAULT_CHAIN_PROFILE } from "../../../shared/chains.ts";
 // Verification không cần ví; không có thao tác ký hoặc gửi giao dịch.
 import { useState } from "react";
 import { useAppConfig } from "../appContext.ts";
-import { Button, Card, Notice, Stat } from "../components/ui.tsx";
+import { Button, Card, Notice, Stat, ExplorerValue } from "../components/ui.tsx";
 import { formatGov, stateLabel } from "../lib/format.ts";
 import { useVoteVerification } from "../lib/useVoteVerification.ts";
 import { rpcSource } from "../../../shared/verification/http.ts";
 export function VerifyProposal({ id }: { id: bigint }) {
   const cfg = useAppConfig();
-  const [confirmations, setConfirmations] = useState("12");
+  const profile = requireChainProfile(cfg.chainId);
+  const [confirmations, setConfirmations] = useState(String(profile.confirmations));
   const { result, progress, run } = useVoteVerification(id, confirmations);
   const status = result?.status ?? "IDLE",
     context = result?.context,
@@ -27,16 +30,16 @@ export function VerifyProposal({ id }: { id: bigint }) {
       </a>
       <Notice>
         Kiểm chứng tính nhất quán tại một block. VERIFIED không đồng nghĩa proposal được thông qua,
-        contract đã audit hoặc source đã verify trên Etherscan. Chỉ dùng Anvil local; không cần kết
-        nối ví.
+        contract đã audit hoặc source đã verify trên Etherscan.{" "}
+        {profile === DEFAULT_CHAIN_PROFILE
+          ? `Chỉ dùng ${profile.displayName}`
+          : `Mạng ${profile.displayName}`}
+        ; không cần kết nối ví.
       </Notice>
       <Card>
         <div className="grid gap-3 sm:grid-cols-2">
           <Stat label="Chain ID" value={cfg.chainId.toString()} />
-          <Stat
-            label="GovVote"
-            value={<span className="break-all font-mono">{cfg.govVote}</span>}
-          />
+          <Stat label="GovVote" value={<ExplorerValue kind="address" value={cfg.govVote} />} />
           <Stat
             label="Nguồn RPC (ẩn credentials/path)"
             value={result?.input.rpcSource ?? rpcSource(cfg.primaryRpcUrl ?? cfg.rpcUrl)}
@@ -53,9 +56,11 @@ export function VerifyProposal({ id }: { id: bigint }) {
         </div>
         <p className="mt-3 text-sm break-all">Hash H: {context?.hash ?? "Chưa có dữ liệu"}</p>
         <p className="mt-2 text-xs">
-          Deployment evidence local: kiểm bytecode, token liên kết và ProposalCreated đối chiếu
-          storage. Không phải chứng nhận nguồn contract công khai. Weight từng voter chưa đối chiếu
-          getPastVotes.
+          {profile === DEFAULT_CHAIN_PROFILE
+            ? "Deployment evidence local"
+            : "Deployment evidence public testnet"}
+          : kiểm bytecode, token liên kết và ProposalCreated đối chiếu storage. Không phải chứng
+          nhận nguồn contract công khai. Weight từng voter chưa đối chiếu getPastVotes.
         </p>
       </Card>
       <Card>
@@ -70,8 +75,8 @@ export function VerifyProposal({ id }: { id: bigint }) {
           onChange={(e) => setConfirmations(e.target.value)}
         />
         <p className="mt-2 text-xs">
-          H = latest − confirmations; mặc định 12, tối thiểu 1. Đây là chính sách xác nhận, không
-          bảo đảm finality tuyệt đối.
+          H = latest − confirmations; mặc định {String(profile.confirmations)}, tối thiểu 1. Đây là
+          chính sách xác nhận, không bảo đảm finality tuyệt đối.
         </p>
         <div className="mt-3 flex flex-wrap gap-3">
           <Button onClick={() => void run()}>{status === "RUNNING" ? "Chạy lại" : "Verify"}</Button>
@@ -159,9 +164,11 @@ export function VerifyProposal({ id }: { id: bigint }) {
       <Card>
         <h2 className="font-semibold">Tự kiểm bằng CLI</h2>
         <p className="mt-2 text-sm">
-          Từ scripts/verify, chạy với RPC local và địa chỉ deployment đã kiểm tra:
+          Từ scripts/verify, chạy với{" "}
+          {profile === DEFAULT_CHAIN_PROFILE ? "RPC local" : `RPC của ${profile.displayName}`} và
+          địa chỉ deployment đã kiểm tra:
         </p>
-        <pre className="mt-2 whitespace-pre-wrap break-all text-xs">{`GOV_VOTE=${cfg.govVote} GOV_TOKEN=${cfg.govToken} GOV_PROPOSAL_ID=${id} GOV_CONFIRMATIONS=${/^\d+$/.test(confirmations) ? BigInt(confirmations) : 12n} npm run verify`}</pre>
+        <pre className="mt-2 whitespace-pre-wrap break-all text-xs">{`${profile === DEFAULT_CHAIN_PROFILE ? "" : `GOV_CHAIN_ID=${profile.chainId} GOV_RPC_URL=<RPC_URL> `}GOV_VOTE=${cfg.govVote} GOV_TOKEN=${cfg.govToken} GOV_PROPOSAL_ID=${id} GOV_CONFIRMATIONS=${/^\d+$/.test(confirmations) ? BigInt(confirmations) : profile.confirmations} npm run verify`}</pre>
         <p className="mt-2 text-xs">
           Cả event và storage cùng tin vào một RPC; dữ liệu sai nhất quán có thể không bị phát hiện.
           Ngân sách mặc định: 200 requests, 50.000 logs, 60 giây, ranges tối đa 10.000 block, một

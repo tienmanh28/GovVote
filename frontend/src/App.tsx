@@ -1,9 +1,11 @@
+// Nhãn và chính sách mạng lấy từ profile chung để không gắn nhãn local cho testnet.
+import { requireChainProfile } from "../../shared/chains.ts";
 // Khung ứng dụng: header (điều hướng, block hiện tại, ví) và routing theo hash (#/...).
 // Routing theo hash để chạy được trên mọi static hosting mà không cần cấu hình server, và không thêm thư viện router.
 import { useEffect, useState } from "react";
 import { ConfigGuard } from "./components/ConfigGuard.tsx";
 import { ConnectBar } from "./components/ConnectBar.tsx";
-import { useWallet } from "./appContext.ts";
+import { useWallet, useAppConfig } from "./appContext.ts";
 import { sessionKey } from "./lib/session.ts";
 import { BlockGuard } from "./components/BlockGuard.tsx";
 import { Notice } from "./components/ui.tsx";
@@ -51,6 +53,7 @@ function BlockInfo() {
 }
 
 export function App() {
+  const profile = requireChainProfile(useAppConfig().chainId);
   const wallet = useWallet();
   const route = useRoute();
   const page =
@@ -104,7 +107,8 @@ export function App() {
         )}
       </main>
       <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-slate-500">
-        GovVote v1.1 · Anvil local (chainId 31337) · DAO Voting DApp, không tự thực thi kết quả.
+        GovVote v1.1 · {profile.displayName} (chainId {profile.chainId}) · DAO Voting DApp, không tự
+        thực thi kết quả.
       </footer>
     </div>
   );

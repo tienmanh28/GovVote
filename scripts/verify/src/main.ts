@@ -5,13 +5,15 @@ import { createHttpRequest, rpcSource } from "../../../shared/verification/http.
 import { runVerification, verificationExit } from "../../../shared/verification/runner.ts";
 import { addressValid } from "../../../shared/verification/core.ts";
 import type { VerificationInput, VerificationBudget } from "../../../shared/verification/core.ts";
+import { readChainConfig, ChainConfigError } from "./chain.ts";
+import { DEFAULT_CHAIN_PROFILE } from "../../../shared/chains.ts";
 async function main() {
+  const { profile, rpcUrl: url } = readChainConfig(process.env);
   if (!process.env.GOV_PROPOSAL_ID) {
     console.log("LEGACY TALLY ONLY — không phải strict verification mục 4.5.");
     await import("./legacy-main.ts");
     return;
   }
-  const url = process.env.GOV_RPC_URL ?? "http://127.0.0.1:8545";
   const decimal = (value: string) => (/^\d+$/.test(value) ? BigInt(value) : -1n);
   const budget: Partial<VerificationBudget> = {};
   const fields = {
@@ -26,17 +28,20 @@ async function main() {
   if (process.env.GOV_VERIFY_RANGE !== undefined)
     budget.rangeSize = decimal(process.env.GOV_VERIFY_RANGE);
   const input: VerificationInput = {
-    chainId: 31337n,
+    chainId: BigInt(profile.chainId),
     govVote: process.env.GOV_VOTE ?? "",
     govToken: process.env.GOV_TOKEN,
     proposalId: decimal(process.env.GOV_PROPOSAL_ID),
-    confirmations: decimal(process.env.GOV_CONFIRMATIONS ?? "12"),
+    confirmations: decimal(process.env.GOV_CONFIRMATIONS ?? String(profile.confirmations)),
     rpcSource: rpcSource(url),
     budget,
   };
   const result = await runVerification(input, createHttpRequest(url), verificationCodec);
   // URL origin đã loại credentials/path/query; không in thông báo lỗi transport có thể chứa URL bí mật.
-  console.log("STRICT VERIFICATION — LOCAL ANVIL; không Etherscan source-verified");
+  // Giữ nguyên banner local; public testnet không được gắn nhãn local.
+  console.log(
+    `STRICT VERIFICATION — ${profile === DEFAULT_CHAIN_PROFILE ? `LOCAL ${profile.name.toUpperCase()}` : profile.displayName}; không Etherscan source-verified`,
+  );
   const printable = {
     ...result,
     input: {
@@ -59,7 +64,9 @@ async function main() {
   );
   process.exitCode = verificationExit(result.status);
 }
-main().catch(() => {
-  console.error("Không thể hoàn tất CLI verification.");
+main().catch((error: unknown) => {
+  console.error(
+    error instanceof ChainConfigError ? error.message : "Không thể hoàn tất CLI verification.",
+  );
   process.exitCode = 2;
 });

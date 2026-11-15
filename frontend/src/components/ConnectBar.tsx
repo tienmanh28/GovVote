@@ -1,3 +1,5 @@
+// Nhãn và chính sách mạng lấy từ profile chung để không gắn nhãn local cho testnet.
+import { requireChainProfile } from "../../../shared/chains.ts";
 // Thanh trạng thái ví: 4 trường hợp được hiển thị rõ ràng.
 //   a. Điện thoại/máy tính bảng không có window.ethereum → hướng dẫn mở trang trong trình duyệt của app MetaMask.
 //   b. Máy tính không có window.ethereum → hướng dẫn cài MetaMask.
@@ -13,6 +15,7 @@ import { Button, Notice } from "./ui.tsx";
 
 export function ConnectBar() {
   const cfg = useAppConfig();
+  const profile = requireChainProfile(cfg.chainId);
   const { address, isConnected, chainId, wrongChain } = useWallet();
   const { connectors, connect, isPending: connecting, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
@@ -107,7 +110,8 @@ export function ConnectBar() {
         <div data-testid="wrong-chain">
           <Notice tone="error" title="Ví đang ở sai mạng">
             <p>
-              Ví đang ở chainId {String(chainId)}, trang này cần Anvil local (chainId {cfg.chainId}
+              Ví đang ở chainId {String(chainId)}, trang này cần {profile.displayName} (chainId{" "}
+              {cfg.chainId}
               ). Đọc dữ liệu vẫn được, nhưng không gửi giao dịch được cho tới khi chuyển mạng.
             </p>
             <Button
@@ -115,7 +119,7 @@ export function ConnectBar() {
               disabled={switching}
               onClick={() => switchChain({ chainId: cfg.chainId })}
             >
-              {switching ? "Đang chuyển…" : "Chuyển sang mạng Anvil (31337)"}
+              {switching ? "Đang chuyển…" : `Chuyển sang mạng ${profile.name} (${profile.chainId})`}
             </Button>
             {switchError && <p className="mt-2">{toUserMessage(switchError)}</p>}
           </Notice>

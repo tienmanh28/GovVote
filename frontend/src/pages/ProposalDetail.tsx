@@ -1,3 +1,5 @@
+// Nhãn và chính sách mạng lấy từ profile chung để không gắn nhãn local cho testnet.
+import { requireChainProfile, DEFAULT_CHAIN_PROFILE } from "../../../shared/chains.ts";
 import { useFreshness, DataFreshness } from "../lib/freshness.tsx";
 import { ReadError } from "../components/ReadError.tsx";
 // Chi tiết proposal: getProposal, state, quorumVotes (chỉ khi đã qua snapshot), và với ví đang kết nối:
@@ -27,6 +29,7 @@ const BPS = 10_000n;
 
 export function ProposalDetail({ id }: { id: bigint }) {
   const cfg = useAppConfig();
+  const profile = requireChainProfile(cfg.chainId);
   const wagmiConfig = useConfig();
   const { address, canWrite, isConnected, wrongChain } = useWallet();
   const block = useCurrentBlock();
@@ -147,7 +150,8 @@ export function ProposalDetail({ id }: { id: bigint }) {
   // Lý do khóa nút vote, theo đúng thứ tự kiểm tra của castVote.
   let blockReason: string | null = null;
   if (!isConnected) blockReason = "Kết nối ví để bỏ phiếu.";
-  else if (wrongChain) blockReason = "Ví đang ở sai mạng, hãy chuyển sang Anvil (31337).";
+  else if (wrongChain)
+    blockReason = `Ví đang ở sai mạng, hãy chuyển sang ${profile.name} (${profile.chainId}).`;
   else if (s !== 1)
     blockReason = "Chỉ bỏ phiếu được khi proposal ở trạng thái Đang bỏ phiếu (Active).";
   else if (hasVoted.data) blockReason = "Ví này đã bỏ phiếu cho proposal này.";
@@ -252,8 +256,10 @@ export function ProposalDetail({ id }: { id: bigint }) {
             `Còn ${(p.snapshotBlock + 1n - block).toString()} block nữa mới bắt đầu nhận phiếu. `}
           {s === 1 && `Còn ${(p.deadlineBlock - block).toString()} block tới deadline. `}
           Đây là số block, không phải thời gian thực. Nếu mạng tạo block 12 giây/lần thì 1 block ≈
-          12 giây, nhưng chỉ là ước tính; trên Anvil, block chỉ tăng khi có giao dịch hoặc lệnh
-          anvil_mine.
+          12 giây, nhưng chỉ là ước tính;{" "}
+          {profile === DEFAULT_CHAIN_PROFILE
+            ? `trên ${profile.name}, block chỉ tăng khi có giao dịch hoặc lệnh anvil_mine.`
+            : `trên ${profile.displayName}, thời gian thực tế phụ thuộc mạng.`}
         </p>
       </Card>
 
