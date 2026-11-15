@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-15",
+  "baseline": {
+    "wagmi": "2.19.5",
+    "connectors": [
+      "6.2.0"
+    ],
+    "audit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 11,
+      "high": 16,
+      "critical": 0,
+      "total": 27
+    }
+  },
+  "spike": {
+    "wagmi": "3.7.9",
+    "core": "3.6.7",
+    "connectors": [
+      "8.2.2"
+    ],
+    "audit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "typecheck": "PASS, no source edits",
+    "vitest": 173,
+    "build": "PASS",
+    "published": "2026-10-21; stable >=14days",
+    "temporaryDirectory": "/tmp/govvote-wagmi-spike-gnzams_z/frontend"
+  },
+  "standaloneConnectorsAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "repoDependenciesChanged": false,
+  "notVerified": [
+    "Live wallet/MetaMask and public RPC",
+    "Full browser suite on wagmi v3",
+    "All optional connectors and persistence/reconnect semantics"
+  ],
+  "effortEstimate": "1-2 working days for separate upgrade PR, lock review, full Anvil browser suite and wallet QA; estimate, not evidence"
+}

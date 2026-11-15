@@ -1,0 +1,391 @@
+{
+  "base": "1e8b944",
+  "images": 76,
+  "distinctSHA256": 76,
+  "duplicateGroups": {},
+  "pinned": 76,
+  "deleted": [],
+  "reason": "Không có PNG trùng byte/hash; không xóa ảnh chỉ vì gần giống. Giữ nguyên manifest và bằng chứng hash-pin.",
+  "files": [
+    {
+      "path": "docs/phase3-screenshots/create-1280x800.png",
+      "sha256": "2249b8b19f9febb22acac836deeb0e1d6af8766fbe757c8ac0523b4079e20b4e",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/create-375x812.png",
+      "sha256": "5bb823a5cb886ff84d68cc3377690a87ddb3f5d510428e1ae636a917db454090",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/create-768x1024.png",
+      "sha256": "2412bf97d7caad65790b8d5b56cc1daba50006997fef53d21095c8f9402a916b",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-1280x800.png",
+      "sha256": "28404e28d9c8e8be3cc0fbb725650fee5d5f1537bc5a1766cf2337ce88728181",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-375x812.png",
+      "sha256": "04900a8ec3e3591f97d57d2356578be89325bbbf9dc8af8447a1a94649526883",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-768x1024.png",
+      "sha256": "ee638521d50f82319650b2ea8ece490ea0ee62ad55ba44dcc79058c403e82cd3",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-active-1280x800.png",
+      "sha256": "23990006e5bff664b423d95f43da3f39056b18daf22ad912a43fe262402a6e56",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-active-375x812.png",
+      "sha256": "9752275bc161a80bf1f745c99c892c2f88ca70651697e0880d5e9144d6dcd8ef",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/detail-active-768x1024.png",
+      "sha256": "ed69c24f09b1e506d0b1c4684a8764a7e892bd4c40fffdded582ac77156594d7",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/list-1280x800.png",
+      "sha256": "b2056ac0b9fd4681ce599455468bc1a37a1f8a9ef3e48f269935beacb0188faf",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/list-375x812.png",
+      "sha256": "b1d77081f4ae542d1aa0e7c6d3e4b752bbf30d7e26a9f295632a3205514525a0",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/list-768x1024.png",
+      "sha256": "1f8f8784a48587e96aa509333c74ce0f7cacb98e87fb51dc747571c6dcc64822",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/no-wallet-desktop-1280x800.png",
+      "sha256": "67411988bfbe6532685bd7cee4a73142f047092bac6cf333e9008de3ed150b61",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/no-wallet-mobile-375x812.png",
+      "sha256": "f87bf6b0ad6262a083803335c3e78aaa7f1fc57e32e89798d10740fa66d2ff4e",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/create-1280x800.png",
+      "sha256": "569a8797eb311cc18a71e073cceafed2e5e69e929a82a6687834a09cedf934eb",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/create-375x812.png",
+      "sha256": "b54339c591530e1b9a9fc3125c3fb0aea0d44d158f510d6e57780e4404ab3733",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/create-768x1024.png",
+      "sha256": "fc9de9dc237fba63974f111259c53e39aaa0ebe32352550a22dbfa879162e3b0",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-1280x800.png",
+      "sha256": "406edbb52679cdf2a0ba78d6daa97d3f7f2d19ec41a544f8d2e1baaa7d0bb825",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-375x812.png",
+      "sha256": "6d147b92f32c253de6a600a348c33f1ed983d3adcdba897719ef358ce54a1d88",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-768x1024.png",
+      "sha256": "760eba098218111f9fa71925f5d7160a479951ec5161cecd054c43640d3d8a24",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-active-1280x800.png",
+      "sha256": "3af25d8a11f8fe62673a9d479370445cadcd1914a59e163fc8c0390b90d26646",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-active-375x812.png",
+      "sha256": "4f045d07fd155842133c1ca362a725bc8af0ba6edacaef1450b55299e619f0d8",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/detail-active-768x1024.png",
+      "sha256": "24c0acd2d62a8e7346b88f6992ba1627789b4c4fa73a99ef7e72d3c2096f1227",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/list-1280x800.png",
+      "sha256": "052a03d65c987975111d92b1cfd4af579441120ba69cd4657882c761b035f1d2",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/list-375x812.png",
+      "sha256": "bdcb78f7f97303e13a11fe127a91e01d4ea31552c1bca6e4749d3d3b86c488da",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/list-768x1024.png",
+      "sha256": "05dcdd81710e80a9f0618888202cbe1b1b8ca5d39f9d03c8937dbc726ea4356f",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/no-wallet-desktop-1280x800.png",
+      "sha256": "9a8e6c2c51abebd4943c21619070760073aefc460b51427469d81cae720dd439",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/no-wallet-mobile-375x812.png",
+      "sha256": "c77984000654c46c5571b686928694e2bfc03eb1bbd06dc297f87e83cfceb173",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/wallet-1280x800.png",
+      "sha256": "35e91f70c09c449262760935883ed50da0dec366c1729d0f8689f85b19bab7c2",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/wallet-375x812.png",
+      "sha256": "89d7b2da9dd2110f7db2e20ba0565bff74a3777ec59384ddba687c1471a155bb",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/wallet-768x1024.png",
+      "sha256": "d7ccf88fb0529cc30060fa2fe06372ce735a938948e85e9ca6055515d30ff3f9",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original/wrong-chain-375x812.png",
+      "sha256": "985fc616e8c8afdcbe2cba35726b3e0312a94d24080a8458a23853f829edbbbe",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/create-1280x800.png",
+      "sha256": "ce178ac211e10345c450870a66f237becb6fabfd6b7347fe704db75ae2f710fd",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/create-375x812.png",
+      "sha256": "c8c5c718f40d2c4531a647d73e363c65ad73e9276942d12864392f5ea54b549e",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/create-768x1024.png",
+      "sha256": "13aac125d2f5703dc264534fda9b3928f331f6e11183e1971ba10c900c6852c9",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-1280x800.png",
+      "sha256": "61eca39f8936c591a02355fc8a851c5538d765cebc61c9fe07c047211a43a7f0",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-375x812.png",
+      "sha256": "bac5bc7e662f06974dfa00fffb1c002fbc56057316c7f4962597896dc5a527dd",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-768x1024.png",
+      "sha256": "62d6aea433f3dcd706c1c42fc8bd4f03210444b40895202f376dea822e92df72",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-1280x800.png",
+      "sha256": "07b1914cfe0b4956ab71bbd218e3353f6047e3002a6c2860ff264a71209804ae",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-375x812.png",
+      "sha256": "3b7a4ce2ea8b8efe80564edd9e54db33cf79d1856f1af69cc3fcf9025e840ae7",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/detail-active-768x1024.png",
+      "sha256": "af07ad7e821ddb7b4c2af3f449f17328c73b93980890527cd26317b58618dca5",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/list-1280x800.png",
+      "sha256": "53254bc1a02a10e8a11c4af4da8a54ba3c33043f828a3046f9211a62a6cfa801",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/list-375x812.png",
+      "sha256": "76796ab5d77663a5379e56506a28bd66faf89406a16821c9fb428cf71d18f8f4",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/list-768x1024.png",
+      "sha256": "46427bd2c3caf517ddbb0885dca574479c4d8582dc5e5b558df45dae08668532",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/no-wallet-desktop-1280x800.png",
+      "sha256": "bbf4cf22dd6ba4619cbd868968dffc7c23268cdb2b56eb300c53c45b01b4c457",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/no-wallet-mobile-375x812.png",
+      "sha256": "8b9b7db7dde4b0c6e89c01d6eacc6ee9bf4ba2497e022e71e7fb8bef2a74ba60",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/wallet-1280x800.png",
+      "sha256": "46248f776546c8e213dfff9fdf1e9f2a3820f344da61583df559ee756055aa25",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/wallet-375x812.png",
+      "sha256": "200da10318b1ed9f3defc8dc45fbd9d055bde27f883de432b108d27861f66e9b",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/wallet-768x1024.png",
+      "sha256": "01955a208e250dd44e2b95434a0d3fdfe014662c6f590f44ba5a572112c36184",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-original-current/wrong-chain-375x812.png",
+      "sha256": "f4476faddfc75e43853f8e7c229c608b84bf7f88564a9cf12a2efda132299536",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/reliability-1280.png",
+      "sha256": "651e2e905af187f5d07a198944b2d6b7c22c0a91da523c0fb84c916e5a7fb4d6",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/reliability-375.png",
+      "sha256": "b62521640cbd434c902d4b6113ce1733d4a4075d0e27990d26cc10e014087bb9",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/reliability-768.png",
+      "sha256": "c302ada7673f91d9624106c785b576ae4378265bd58856fb1536669877ee33d5",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-1280.png",
+      "sha256": "6056529b27faa366393d74016798e67e52567db1dd9402bbed0252dbc221751e",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-375.png",
+      "sha256": "c150d0a8d58873fc801cea075c0aebf7ff6996055de09d845613f5764eb01a53",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/rpc-error-768.png",
+      "sha256": "0f25ab6015c28e93912f92a361abc9c88766596dba3913b3785dc7519bbd47e3",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/verify-1280.png",
+      "sha256": "e976091c87f952dd8b208942ed9fb4464f3271939bed9d2828eedb8886076a22",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/verify-375.png",
+      "sha256": "3f694eaab36ef7b4ce7576c4a5fe4c3565513921a4edf74e1b6392edf2cc7ede",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/verify-768.png",
+      "sha256": "c8cd75e0067f9219cd37a00003b4e43fa88c03c2538a464b2adbf743ccaf8fb7",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-1280.png",
+      "sha256": "7345b8975ae72fb63eabb983cea585a28239ed1240ad7de5ffc3378456010c5d",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-375.png",
+      "sha256": "acf52d4c946d1af029ce073f723e12c6b4195bfde904a63a423b8eca62c83c85",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-final-supplement/wrong-chain-768.png",
+      "sha256": "248f895aa48bbb9854765729103e06883d8be3d4149a56b7895f4dea3797d4ba",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-02-list-1280.png",
+      "sha256": "363de9e6ed34cfcab00759ebf19041b70a6f00cee49b0fdcadfd54bed060b72c",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-02-list-375.png",
+      "sha256": "0f6dcd816aac9da59fd487fffd01c4924cba1b83b6ad79a01f61e9c2634b3c28",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-02-list-768.png",
+      "sha256": "b99f407c127ad6bd10d8c2a740f482bdb9af62ddea215610c85f9cf15903ec55",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-03-anvil-live-1280.png",
+      "sha256": "9ab3b39928eb12785f1307bf444bc418efb0d93ece30cb3a9423fc776b4522e8",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-03-verify-1280.png",
+      "sha256": "a3c01dc25ff9ef7c81f249c249209ee213df09f48e1eb49fedcf87dc9c7b1755",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-03-verify-375.png",
+      "sha256": "0dc1c91cef80f55132fa40e7d7bbe1c9e214cdf82ab3d348917f03741782e003",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-03-verify-768.png",
+      "sha256": "96c12a3de698006fc6a70f605abeddb3527efd4a32c960c7e754ee3eec23a155",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-04-pending-1280.png",
+      "sha256": "06a2d1856807911e67cbf66c67fa4615600bd21ee8acdeab9eb5546d2199edf8",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-04-pending-375.png",
+      "sha256": "4048f82316dc59e0426232239cb879f0de1766f2d79ddd5277fc635e15e94522",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/p3-fix-04-pending-768.png",
+      "sha256": "5b89d3637be243c5dd806ab7c6bd85aa63e458b4133752472d1de05ad31657f4",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/wallet-1280x800.png",
+      "sha256": "e18788de8d979f9068cdd2e827800eaf09fd4cb73f68b1c5cf0497802eb5420b",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/wallet-375x812.png",
+      "sha256": "4443399530267ad3b0a89e93d965582c07115f57ffce261b480cc06b9624a726",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/wallet-768x1024.png",
+      "sha256": "f9fb7bbf405136fb88a3b9f055f56021bd54885c8751c7cc6633073e5e31ea0f",
+      "manifestPinned": true
+    },
+    {
+      "path": "docs/phase3-screenshots/wrong-chain-375x812.png",
+      "sha256": "c7c2c5b5214658d35dee96284c0bcb9d0e2e171b754e516178065a3cf9a8062d",
+      "manifestPinned": true
+    }
+  ]
+}

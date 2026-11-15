@@ -19,7 +19,7 @@ The CLI and frontend share [shared/chains.ts](shared/chains.ts). Mainnet (1) and
 | Anvil, 31337 (default) | 12 | none | `LOCAL_DEPLOYMENT_EVIDENCE` |
 | Sepolia, 11155111 | 64 | [Sepolia Etherscan](https://sepolia.etherscan.io) | `PUBLIC_TESTNET_DEPLOYMENT_EVIDENCE` |
 
-64 is a conservative public-testnet confirmation policy, not a finality guarantee. Both labels describe bytecode, token linkage and event/storage consistency observed through an RPC; neither certifies authenticity, audited code or Etherscan source verification. See [threat model](docs/threat-model.md).
+64 is a conservative public-testnet confirmation policy, not a finality guarantee. Sepolia verification may lag roughly 13 minutes (64 × 12 seconds = 768 seconds, an estimate). Both labels describe bytecode, token linkage and event/storage consistency observed through an RPC; neither certifies authenticity, audited code or Etherscan source verification. See [threat model](docs/threat-model.md).
 
 Set `VITE_CHAIN_ID` for the frontend and `GOV_CHAIN_ID` for either CLI mode; both default to 31337. Sepolia requires an explicit `VITE_RPC_URL` / `GOV_RPC_URL` and the correct contract addresses. No public RPC endpoint is supplied automatically. Strict CLI `GOV_CONFIRMATIONS` overrides the profile default; legacy tally uses the profile default. Explorer links appear only on profiles with an explorer. Deployment scripts remain local-only in this phase; this is configuration preparation, **not a Sepolia deployment or an audit**.
 
@@ -37,15 +37,20 @@ Proposal list on a phone (375×812), a tablet (768×1024) and a desktop (1280×8
 
 ```mermaid
 flowchart LR
-  subgraph chain["EVM chain (Anvil, 31337)"]
-    GT["GovToken<br/>ERC20 + ERC20Votes<br/>fixed supply, no owner"]
+  Voter(("Voter")) --> FE["frontend<br/>React + wagmi + viem"]
+  FE -->|"request signature"| Wallet["MetaMask<br/>injected provider"]
+  FE -->|"read-only"| ReadRPC["Configured read RPC<br/>primary / fallback"]
+  Wallet -->|"signed transactions"| WalletRPC["MetaMask network RPC"]
+  subgraph chain["EVM profiles: Anvil 31337 / Sepolia 11155111<br/>Sepolia not deployed"]
+    GT["GovToken<br/>fixed supply, no owner"]
     GV["GovVote<br/>propose / castVote / state"]
-    GV -- "getPastVotes / getPastTotalSupply" --> GT
+    GV -->|"past votes / supply"| GT
   end
-  User(("Voter")) -- "delegate" --> GT
-  User -- "propose / castVote" --> GV
-  FE["frontend<br/>React + wagmi + viem"] -- "reads + wallet txs" --> chain
-  CLI["scripts/verify<br/>(read-only)"] -- "VoteCast logs vs storage" --> chain
+  ReadRPC --> GT
+  ReadRPC --> GV
+  WalletRPC --> GT
+  WalletRPC --> GV
+  CLI["scripts/verify<br/>read-only"] --> ReadRPC
 ```
 
 The frontend reads contract state and sends the user's transactions through an injected wallet. The verify CLI only reads: it rebuilds each tally from `VoteCast` events and compares it with contract storage at the same block.
