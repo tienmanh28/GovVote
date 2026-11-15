@@ -1,5 +1,49 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## PR-F — nghiệm thu MetaMask, CV và đề xuất ruleset, 16/11/2026, Codex
+
+- Nhánh `docs/p4-acceptance-and-cv`, base main **022a3aa**; fetch/pull ff-only, working tree sạch trước tạo. **PR #1–#5 đã MERGED** (verifier hardening, chain profile, deploy guard, backlog polish, hosting prep); các checkpoint OPEN bên dưới là lịch sử. PR #6/#7 đang OPEN, không merge hoặc nhập thay đổi của hai nhánh đó.
+- CI main mới nhất tại lúc soạn: [43708528573](https://github.com/tienmanh28/GovVote/actions/runs/43708528573), HEAD **022a3aa7fc44b0c323993e4d961f375487ca665e**, bốn job SUCCESS. Log xác nhận Forge **54**, Vitest **177** (13 files), CLI **37**, browser **66 = 34+12+3+17**; thời gian job lần lượt 49s/37s/28s/3m54s. Snapshot check 54 không cộng thêm vào số test độc lập. Không chạy lại code test local vì chỉ đổi tài liệu; CI PR sẽ chạy theo workflow hiện hành.
+- Thêm `docs/acceptance-metamask.md`: checklist F1 local Anvil8549, rồi Sepolia sau D2; mỗi ca có kỳ vọng và ô Owner điền bằng chứng. MISMATCH/INCOMPLETE cần điều kiện/fixture rõ, không giả mất mạng thành MISMATCH. Responsive điện thoại thật tách khỏi emulation. **Chưa chạy F1/D2/D3**, không RPC public, không Sepolia/Cloudflare, không khởi động Anvil trong phiên docs.
+- Thêm `docs/cv-summary.md`: tiếng Việt + 5 bullet English, số liệu main có link CI; fuzz/invariant và một mutation thủ công có nguồn báo cáo, không bịa mutation score/audit/deployment. Bytecode, code, test, workflow giữ nguyên.
+
+### Đề xuất Owner quyết: required status checks trên main (CHƯA THỰC HIỆN)
+
+Đọc API ngày 16/11/2026: ruleset **27262992**, `main: no force push or deletion`, active, chỉ có `non_fast_forward` và `deletion`, không bypass actors, áp `refs/heads/main`. Đề xuất bổ sung đủ bốn check theo đúng tên job hiện hành, strict để PR phải cập nhật main mới nhất. Không bật/sửa ruleset trong phiên này.
+
+Hệ quả: push trực tiếp một commit mới chưa có check đạt lên main sẽ bị chặn; phải push nhánh, chờ CI rồi merge. **Status checks riêng không bắt buộc mọi thay đổi đi qua PR**: commit đã có check hợp lệ có thể vẫn được push. Nếu Owner muốn chặn hoàn toàn đường push trực tiếp, cần quyết định thêm rule `pull_request` riêng; ví dụ dưới đây chỉ thêm checks. Strict có thể yêu cầu merge main vào nhánh và chạy CI lại; job đổi tên, thiếu hoặc đỏ sẽ chặn merge. Không bypass tự động, không dùng force push khi bị chặn. npm audit vẫn warning-only theo workflow, bốn check xanh không chứng minh audit=0.
+
+Ví dụ sau **chỉ để Owner xem xét sau quyết định**, không phải lệnh đã chạy. Tải bản ruleset mới nhất và giữ các rule/conditions/bypass hiện có; Owner phải đọc diff payload trước PUT. Cần quyền quản trị phù hợp. API có thể đổi; tham khảo [GitHub REST rulesets](https://docs.github.com/en/rest/repos/rules#update-a-repository-ruleset).
+
+```bash
+# CHỈ ĐỌC: Owner sao lưu ruleset hiện hành, không dùng bản cũ trong tài liệu.
+gh api repos/tienmanh28/GovVote/rulesets/27262992 > /tmp/govvote-main-ruleset-before.json
+# CHỈ TẠO PAYLOAD LOCAL: giữ ruleset hiện hành và thay đúng rule checks.
+jq '{name, target, enforcement, conditions, bypass_actors, rules} |
+  .rules = ([.rules[] | select(.type != "required_status_checks")] + [{
+    type: "required_status_checks",
+    parameters: {
+      strict_required_status_checks_policy: true,
+      required_status_checks: [
+        {context: "contracts (forge)"},
+        {context: "frontend (typecheck, format, Vitest, build)"},
+        {context: "verify-cli (scripts/verify)"},
+        {context: "e2e (Anvil + Playwright)"}
+      ]
+    }
+  }])' /tmp/govvote-main-ruleset-before.json > /tmp/govvote-main-ruleset-proposed.json
+# Xem diff trước, chưa gọi API ghi.
+diff -u /tmp/govvote-main-ruleset-before.json /tmp/govvote-main-ruleset-proposed.json
+# CHỈ OWNER CHẠY SAU KHI QUYẾT ĐỊNH: PUT thay đổi cài đặt repo.
+# gh api --method PUT repos/tienmanh28/GovVote/rulesets/27262992 \
+#   --input /tmp/govvote-main-ruleset-proposed.json
+```
+
+Rollback nếu Owner cần: xem lại bản sao lưu, tạo payload chỉ chứa các field ghi được như trên từ bản before, kiểm diff và tự quyết PUT; không gửi nguyên response chứa id/timestamps vào API. Không thực hiện rollback hay đổi cấu hình nào ở PR-F.
+
+- Git snapshot trước commit: base022a3aa; chỉ `docs/PROGRESS.md` modified và hai Markdown mới; không thay code/test/workflow. Bằng chứng CI main lưu trong link run còn truy cập được; số liệu CV cố định theo SHA, không tự nhận là các nhánh PR mới nhất. PR-F chờ CI/review; Owner merge.
+
+
 ## PR-A / P4-D1 — guard deploy và runbook, 15/11/2026, Codex
 
 - Nhánh `feat/p4-d1-deploy-guard`, base/main **1e8b944**; fetch/pull ff-only, PR #2 MERGED lúc 09:35:02 UTC, working tree sạch trước tạo nhánh. Owner giao ba PR độc lập A → B → C; D0 đã merge, checkpoint OPEN bên dưới là lịch sử. Không tự merge PR nào.
