@@ -106,6 +106,8 @@ jobs:
       # Anvil chỉ nghe trên loopback của runner.
       ANVIL_PORT: "8545"
       RPC_URL: http://127.0.0.1:8545
+      # Log chẩn đoán ở /tmp của runner; không ghi key/mnemonic hay artifact vào source tree.
+      CHAIN_DIAGNOSTICS_DIR: /tmp/govvote-chain-diagnostics
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -133,8 +135,12 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Khởi động Anvil (127.0.0.1, chain 31337)
         run: |
-          # Output khởi động của Anvil có in key test nên bỏ vào /dev/null. prepare-chain.sh tự chờ RPC.
-          nohup anvil --host 127.0.0.1 --port "$ANVIL_PORT" --chain-id 31337 > /dev/null 2>&1 &
+          mkdir -p "$CHAIN_DIAGNOSTICS_DIR"
+          # Filter loại startup key/mnemonic trước khi ghi; PID là Anvil thật để quản lý lifecycle.
+          { date -u; forge --version; cast --version; anvil --version; } > "$CHAIN_DIAGNOSTICS_DIR/versions.txt"
+          nohup python3 scripts/ci/anvil-log.py --port "$ANVIL_PORT" \
+            --log "$CHAIN_DIAGNOSTICS_DIR/anvil.log" --pid "$CHAIN_DIAGNOSTICS_DIR/anvil.pid" \
+            > "$CHAIN_DIAGNOSTICS_DIR/logger.log" 2>&1 &
       - name: Dựng chain demo (lifecycle Phase 1, proposal #1 Succeeded) và tạo frontend/.env.local
         env:
           ENV_OUT: frontend/.env.local
@@ -168,3 +174,12 @@ jobs:
             docs/phase3-screenshots
           retention-days: 5
           if-no-files-found: ignore
+      # Giữ riêng log setup kể cả fail trước khi Playwright tạo artifact; retention ngắn.
+      - name: Upload chẩn đoán Anvil khi fail
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: anvil-diagnostics
+          path: ${{ env.CHAIN_DIAGNOSTICS_DIR }}
+          retention-days: 2
+          if-no-files-found: warn
