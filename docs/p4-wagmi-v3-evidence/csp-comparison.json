@@ -1,0 +1,8 @@
+{
+  "baseline": "docs/p4-e1-evidence/headers-local.txt",
+  "sha256": "328b8e1fd17bf51cdf9cc6980c40f4053e91be745889fef312e141d3978ddf50",
+  "afterSha256": "328b8e1fd17bf51cdf9cc6980c40f4053e91be745889fef312e141d3978ddf50",
+  "identical": true,
+  "runtimeCspTests": "PASS; no extra origin allowed",
+  "anvilPort": 8549
+}

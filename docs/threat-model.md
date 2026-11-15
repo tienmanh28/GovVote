@@ -53,6 +53,11 @@ Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục
 - **Giới hạn:** không deploy/gọi API Cloudflare hoặc RPC public ở E1. Dashboard/TLS/CDN/CORS/MetaMask thật và wallet injection trên mobile **chưa xác minh**, chờ F1. CSP không ngăn bundle cùng origin bị chiếm hay RPC allowlist nói dối, không chứng minh contract chính chủ, không theo dõi fork sau anchor. Policy origin không giới hạn method/path, không bật report endpoint chưa được duyệt. Đổi RPC phải rebuild; không nới wildcard/unsafe-inline để che lỗi.
 - Nguồn và quy trình Owner tự làm sau duyệt: `docs/hosting-cloudflare.md`. Không chọn RPC Sepolia mới, không thay tham số/bytecode/dependency hoặc tự deploy.
 
+## PR-D — dependency wagmi v3 (16/11/2026)
+
+- Owner duyệt wagmi3.7.9, lock connectors8.2.2/core3.6.7; viem và nguồn đọc/CSP không đổi. npm audit tại thời điểm kiểm giảm từ27 (16high/11moderate) xuống0. Chỉ injected connector được khởi tạo, không thêm WalletConnect hoặc origin dự phòng. Audit CI vẫn continue-on-error theo quyết định hiện tại, không đổi ruleset.
+- Audit0 chỉ là snapshot advisory/dependency, không chứng minh không có lỗi hoặc thay thế audit contract. Kiểm fixture/Anvil và CSP không thay thế MetaMask thật, mobile injection hoặc persistence/reconnect thực; những phần đó chưa xác minh. RPC allowlist vẫn có thể nói dối nhất quán, fork sau anchor chưa theo dõi.
+
 ## Ngoài phạm vi
 
 - **Mua phiếu** (vote buying, hối lộ off-chain): phiếu công khai và không có cơ chế chống mua bán. Commit-reveal hoặc ZK thuộc v2.

@@ -1,5 +1,14 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## PR-D — nâng wagmi v3 theo Owner, 16/11/2026, Codex
+
+- Nhánh `feat/p4-wagmi-v3`, base main022a3aa, fetch/pull ff-only và working tree sạch trước tạo nhánh. Owner đã duyệt nâng v3; các ghi chú cũ giữ v2/spike chưa nâng bên dưới là lịch sử, không phải trạng thái hiện hành.
+- Root ghim wagmi **3.7.9**; package này khai báo chính xác connectors **8.2.2** và core **3.6.7**, lock chỉ còn đúng các bản đó. Không cần thêm root dependency không dùng hoặc đổi viem2.57.13/React/TanStack. Cài --save-exact --ignore-scripts. Hai lần thử nâng đồng thời root connectors/core gặp ERESOLVE do graph v2/porto cũ; nâng wagmi trước như spike đã giải quyết sạch, không dùng force/legacy-peer-deps. Không sửa source API hoặc test cũ.
+- Audit thực tế **27 → 0** (16 high,11 moderate →0). Typecheck, build, format PASS; Vitest **177/177**, CLI **37/37** (package CLI và shared không đổi). Browser **66/66** = validation34 + reliability12 + finalUI3 + E2E17, gồm hai CSP và responsive375/768/1280. Anvil8549 đã tắt. Header artifact cùng RPC8549 khớp từng byte với baseline E1 (SHA trong evidence), không thêm origin. Chỉ connector injected trong config, không thêm SDK/connector runtime hoặc origin CSP. CSP/build policy/CI audit continue-on-error giữ nguyên.
+- Bundle đo tổng tất cả JS/CSS trong production dist, gzip từng file với mtime0: JS **661.456 → 661.660 B**, gzip **196.066 → 196.107 B** (+204/+41); CSS **18.308 B**, gzip **4.506 B** không đổi. Không chọn ít chunk để làm số đẹp; header/static HTML không tính vào JS/CSS.
+- Bằng chứng docs/p4-wagmi-v3-evidence/. README EN/VI cập nhật số audit và phiên bản. Không sửa src/script/spec/bytecode/tham số deploy, không public RPC/Sepolia/Cloudflare, không sửa ruleset hoặc tự merge. MetaMask thật/mobile injection/persistence thật chưa xác minh. Đề xuất Owner cân nhắc bỏ continue-on-error của audit khi chấp nhận audit0; PR này không thực hiện.
+- Commit dependency **73ebe8d**; tài liệu/evidence có commit riêng. Trước commit docs: branchD, modified README EN/VI, docs/PROGRESS.md, docs/threat-model.md, mới docs/p4-wagmi-v3-evidence/. Kế tiếp mở PR và watch bốn job; CI chưa xác minh tại checkpoint này. Owner merge, không bắt đầu PR-E/F/D2.
+
 ## PR-A / P4-D1 — guard deploy và runbook, 15/11/2026, Codex
 
 - Nhánh `feat/p4-d1-deploy-guard`, base/main **1e8b944**; fetch/pull ff-only, PR #2 MERGED lúc 09:35:02 UTC, working tree sạch trước tạo nhánh. Owner giao ba PR độc lập A → B → C; D0 đã merge, checkpoint OPEN bên dưới là lịch sử. Không tự merge PR nào.
