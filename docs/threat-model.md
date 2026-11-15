@@ -65,6 +65,8 @@ Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục
 
 ### Kiểm chứng contract và gas (giữ từ Phase 2C)
 
+CI dựng chain (15/11/2026): request `cast rpc anvil_mine` đào khoảng 7.200 block có thể vượt timeout RPC mặc định **45s**; hai run có log xác nhận đúng lệnh lỗi, Anvil vẫn tiếp tục đào sau khi client timeout. `prepare-chain.sh` chia tối đa **500 block/request**, giữ nguyên tổng block/deadline, không tăng timeout, không retry RPC/giao dịch/test. Setup có giới hạn **180s**, log có timestamp và lọc key/mnemonic trước khi ghi, artifact lỗi/hủy giữ **2 ngày**. Ba full workflow attempts tại f73fe36 đều PASS 64 browser tests. Một run chẩn đoán từng treo tại SeedDemo chưa giải thích; guard 180s giữ lỗi hiển thị, không coi đó là đã sửa. Rủi ro RPC nói dối nhất quán và fork sau anchor vẫn giữ nguyên.
+
 - Coverage của `src/GovVote.sol`: 100% dòng, câu lệnh, nhánh và hàm (`forge coverage`, optimizer tắt).
 - `forge test` không cố định seed fuzz (`foundry.toml` không khai báo `seed`); `forge snapshot` cũng không có seed cố định mặc định. Hai lần Actions đầu tiên (14/11/2026) cho thấy ghim seed thôi chưa đủ: fuzz chạy song song nên gas (μ, ~) phụ thuộc cả seed lẫn số luồng. Tạo baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`, kiểm bằng `forge snapshot --check --fuzz-seed 0x1 --threads 1`. Chỉ so sánh `.gas-snapshot` khi cùng seed, số luồng, Foundry 1.7.1 và solc 0.8.28; số gas chỉ phản ánh tập đầu vào của cấu hình đó. Seed và luồng chỉ ghim cho bước snapshot; `forge test` vẫn fuzz ngẫu nhiên.
 - Độ phủ của invariant còn giới hạn: trong 40 seed, chỉ khoảng 25% run có ít nhất một proposal Succeeded. Chi tiết ở `docs/phase2a-invariant-report.md`. Các nhánh kết quả được kiểm thêm bằng unit test xác định trong `test/GovVote.t.sol`.

@@ -22,6 +22,9 @@ private_section = False
 assert child.stdout is not None
 with args.log.open("w", buffering=1) as output:
     for line in child.stdout:
+        # Timestamp đã có; giữ tiến độ block/RPC/lỗi, bỏ dòng trắng và hash/time lặp của từng block.
+        if not line.strip() or re.match(r"\s*Block (?:Hash|Time):", line):
+            continue
         # Startup mặc định in key Anvil: lọc trong pipe, không ghi bản thô ở bất cứ đâu.
         if "Private Keys" in line:
             private_section = True

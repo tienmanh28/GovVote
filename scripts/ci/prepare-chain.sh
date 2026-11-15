@@ -104,8 +104,9 @@ end_step
 # 3. Seed: Alice 400.000, Bob 250.000, Charlie 200.000, David 150.000 GOV.
 begin_step "forge script SeedDemo"
 step_log="$CHAIN_DIAGNOSTICS_DIR/forge-seed.log"
+# Output chuẩn vẫn giữ receipt/lỗi; trace EVM -vvvv dài không cần cho chẩn đoán timeout RPC.
 GOV_TOKEN="$GOV_TOKEN" DEMO_ALICE="$ALICE" DEMO_BOB="$BOB" DEMO_CHARLIE="$CHARLIE" DEMO_DAVID="$DAVID" \
-  forge script script/SeedDemo.s.sol:SeedDemo -vvvv --rpc-url "$RPC_URL" \
+  forge script script/SeedDemo.s.sol:SeedDemo --rpc-url "$RPC_URL" \
   --broadcast --unlocked --sender "$DEPLOYER" > "$step_log" 2>&1
 end_step
 

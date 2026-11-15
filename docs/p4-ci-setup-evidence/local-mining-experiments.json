@@ -1,0 +1,72 @@
+{
+  "diagnostics": {
+    "timeout": false,
+    "lifecyclePassed": true,
+    "tail": [
+      "[prepare-chain] 2026-11-15T00:29:26.816Z BEGIN mine past deadline",
+      "[prepare-chain] 2026-11-15T00:30:11.439Z END mine past deadline elapsed=45s",
+      "[prepare-chain] 2026-11-15T00:30:11.443Z BEGIN check final state/tally",
+      "[prepare-chain] proposal #1: Succeeded, For 600.000 GOV / Against 250.000 GOV, block hiện tại 7227",
+      "[prepare-chain] 2026-11-15T00:30:11.595Z END check final state/tally elapsed=0s",
+      "[prepare-chain] đã ghi diagnostics/frontend.env",
+      "GOV_TOKEN=0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      "GOV_VOTE=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
+    ]
+  },
+  "diagnostics-batched": {
+    "timeout": false,
+    "lifecyclePassed": true,
+    "tail": [
+      "[prepare-chain] mine batch=198 remaining=198",
+      "[prepare-chain] 2026-11-15T00:32:41.111Z END mine past deadline elapsed=48s",
+      "[prepare-chain] 2026-11-15T00:32:41.115Z BEGIN check final state/tally",
+      "[prepare-chain] proposal #1: Succeeded, For 600.000 GOV / Against 250.000 GOV, block hiện tại 7227",
+      "[prepare-chain] 2026-11-15T00:32:41.238Z END check final state/tally elapsed=0s",
+      "[prepare-chain] đã ghi diagnostics-batched/frontend.env",
+      "GOV_TOKEN=0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      "GOV_VOTE=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
+    ]
+  },
+  "diagnostics-500": {
+    "timeout": false,
+    "lifecyclePassed": true,
+    "tail": [
+      "[prepare-chain] mine batch=198 remaining=198",
+      "[prepare-chain] 2026-11-15T00:34:32.333Z END mine past deadline elapsed=44s",
+      "[prepare-chain] 2026-11-15T00:34:32.340Z BEGIN check final state/tally",
+      "[prepare-chain] proposal #1: Succeeded, For 600.000 GOV / Against 250.000 GOV, block hiện tại 7227",
+      "[prepare-chain] 2026-11-15T00:34:32.477Z END check final state/tally elapsed=0s",
+      "[prepare-chain] đã ghi diagnostics-500/frontend.env",
+      "GOV_TOKEN=0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      "GOV_VOTE=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
+    ]
+  },
+  "diagnostics-loaded": {
+    "timeout": true,
+    "lifecyclePassed": false,
+    "tail": [
+      "[prepare-chain] 2026-11-15T00:37:44.289Z BEGIN cast send Charlie For",
+      "[prepare-chain] 2026-11-15T00:37:44.322Z END cast send Charlie For elapsed=0s",
+      "[prepare-chain] 2026-11-15T00:37:44.327Z BEGIN mine past deadline",
+      "Error: error sending request for url (http://127.0.0.1:18549/)",
+      "",
+      "Context:",
+      "- operation timed out",
+      "[prepare-chain] 2026-11-15T00:38:29.377Z FAIL step=mine past deadline line=54 elapsed=45s command=cast rpc anvil_mine \"$1\" --rpc-url \"$RPC_URL\" > /dev/null"
+    ]
+  },
+  "diagnostics-fixed-loaded": {
+    "timeout": false,
+    "lifecyclePassed": true,
+    "tail": [
+      "[prepare-chain] 2026-11-15T00:40:56.704Z END anvil_mine batch=198 elapsed=4s",
+      "[prepare-chain] 2026-11-15T00:40:56.708Z END mine past deadline elapsed=89s",
+      "[prepare-chain] 2026-11-15T00:40:56.712Z BEGIN check final state/tally",
+      "[prepare-chain] proposal #1: Succeeded, For 600.000 GOV / Against 250.000 GOV, block hiện tại 7228",
+      "[prepare-chain] 2026-11-15T00:40:56.830Z END check final state/tally elapsed=0s",
+      "[prepare-chain] đã ghi diagnostics-fixed-loaded/frontend.env",
+      "GOV_TOKEN=0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      "GOV_VOTE=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
+    ]
+  }
+}

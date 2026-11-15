@@ -1,0 +1,41 @@
+{
+  "artifact": {
+    "created_at": "2026-11-15T00:45:49Z",
+    "id": 14139302737,
+    "name": "anvil-diagnostics",
+    "run": 43659539697
+  },
+  "files": [
+    {
+      "path": "versions.txt",
+      "bytes": 493,
+      "sha256": "e8b1d3f088d91dd3ad9d107bb988cf95e85be71d501a0238b5898e9af1b76a0f"
+    },
+    {
+      "path": "logger.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "forge-seed.log",
+      "bytes": 9533,
+      "sha256": "3cfb32e03f98493e4a9ff22513493477d760dfe35fb12c785a1b2a579454dbd9"
+    },
+    {
+      "path": "forge-deploy.log",
+      "bytes": 1290,
+      "sha256": "7982cc67a560c519048a46c0864b79fc089aa82c7007e878e434a8e15dbc2d73"
+    },
+    {
+      "path": "anvil.pid",
+      "bytes": 5,
+      "sha256": "0e900d0041b0e0294f7b8e37fc9debe0a7ceb5dd375f06c679beb839543f54bb"
+    },
+    {
+      "path": "anvil.log",
+      "bytes": 2177716,
+      "sha256": "5df4c9b8c9bbd24904f363133af88f29f6d6ffa05e4ff160db23d9d928187325"
+    }
+  ],
+  "findings": []
+}

@@ -1,5 +1,23 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+## CI setup — hoàn tất chứng minh, 15/11/2026, Codex
+
+- **READY_FOR_OWNER_REVIEW:** PR #1, nhánh feat/p4-b2-verifier-hardening; Owner merge. Fetch xác nhận HEAD/origin f73fe36 và working tree sạch lúc tiếp nhận; PROGRESS cũ đã lạc hậu. Không sửa contract/spec/test, không force push, không Sepolia, không merge.
+- Nguyên nhân đã xác nhận trên runner: `cast rpc anvil_mine` đào ~7.200 block/request vượt timeout mặc định **45s**. Hai diagnostic run 43659543705/43659539697 ghi FAIL đúng tại mine past deadline sau 45s; SeedDemo đã ONCHAIN EXECUTION COMPLETE & SUCCESSFUL; Anvil vẫn đào block sau client timeout. Run xanh đo mining31s, local44,66s; CPU load tái hiện cùng lỗi.
+- So sánh c20d2fb..b148b0a chỉ docs. Cùng Ubuntu24.04 image20261111.370.1, forge/anvil1.7.1 commit4072e487; mọi endpoint loopback127.0.0.1, không có localhost/IPv6. Cài Chromium kết thúc trước Anvil; forge/cast chờ receipt, không dùng sleep để chờ giao dịch. Timestamp đầy đủ tại baseline-comparison.json. Một rerun --failed trước sửa của b148b0a/43602966837 attempt2 đã xanh.
+- Fix **f73fe36** chia batch500, giữ tổng block/voting period7200/deadline và timeout45s. Không retry RPC, giao dịch hay test. Cùng tải CPU: trước sửa fail45s; sau sửa lifecycle/tally PASS, tổng mining89s nhưng batch dài nhất12s. Chẩn đoán: **1a531b6**, **61c4687**; setup guard180s/kill-after10s, artifact lỗi/hủy retention2 ngày.
+- Ba lần liên tiếp **cùng f73fe36**, run PR [43659985832](https://github.com/tienmanh28/GovVote/actions/runs/43659985832): push rồi hai full rerun, đều 4/4 job SUCCESS; mỗi lần contract53 (+snapshot53), Vitest151, CLI23. Không rerun riêng test lỗi.
+
+| Attempt | Kết luận | E2E | Browser tests |
+|---|---|---|---|
+| 1 | SUCCESS | 213s | 64 = 34+12+3+15 |
+| 2 | SUCCESS | 217s | 64 = 34+12+3+15 |
+| 3 | SUCCESS | 221s | 64 = 34+12+3+15 |
+
+- Quét artifact mới nhất **14139302737**, run43659539697, 6 file: không có 0xac0974be/PRIVATE_KEY/mnemonic/seed phrase (case-insensitive); không cần xóa artifact. Filter trước disk trong anvil-log.py được giữ. Dọn cuối: bỏ -vvvv SeedDemo, bỏ dòng trắng/hash/time lặp; giữ timestamp, tiến độ block/RPC/lỗi, log khi fail/hủy và guard180s. Shellcheck/actionlint/Python syntax PASS; commit dọn/docs sẽ được kiểm lại Checks của PR sau push.
+- Bằng chứng bền: docs/p4-ci-setup-evidence/ (ba attempts, so image/timestamps, lỗi runner30 dòng, local before/after, artifact audit). Rủi ro còn: diagnostic push1a531b6 từng kẹt >7 phút ở BEGIN SeedDemo rồi bị hủy, chưa giải thích và không tính proof; RPC có thể nói dối nhất quán; fork sau anchor chưa theo dõi. Không tuyên bố đã sửa riêng hang SeedDemo.
+- Git snapshot trước commit kết thúc: HEAD/origin=f73fe36, status/diff trống trước dọn/docs. PR chưa merge; khuyên Owner dùng **Create a merge commit** để giữ hash bằng chứng. Các checkpoint dưới là lịch sử.
+
 ## P4-B2 — verifier hardening, 14/11/2026, Codex
 
 - **CI_BLOCKED_SETUP — CHƯA ĐẠT yêu cầu 4 job xanh ở head mới nhất:** [PR #1](https://github.com/tienmanh28/GovVote/pull/1) trên `feat/p4-b2-verifier-hardening`, **chưa merge**, Owner merge. Implementation F3/F4 và tests đã PASS tại c20d2fb; sau commit chỉ-docs b148b0a, cả workflow push và PR lại FAIL khi dựng chain local. Dừng sửa, chờ Owner giao debug setup ngoài phạm vi verifier. Các checkpoint bên dưới là lịch sử.

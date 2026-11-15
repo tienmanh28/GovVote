@@ -149,7 +149,7 @@ jobs:
       - name: Build frontend với .env.local vừa tạo
         working-directory: frontend
         run: npx vite build
-      # 4 bộ browser test (tổng 61), mỗi bộ một bước để biết bộ nào fail.
+      # 4 bộ browser test (tổng 64), mỗi bộ một bước để biết bộ nào fail.
       - name: Playwright validation (34)
         working-directory: frontend
         run: npx playwright test -c playwright.validation.config.ts p3-fix-0 --workers=1
@@ -159,7 +159,7 @@ jobs:
       - name: Playwright final UI (3)
         working-directory: frontend
         run: npx playwright test -c playwright.validation.config.ts p3-final-ui --workers=1
-      - name: Playwright E2E gốc (12)
+      - name: Playwright E2E gốc và hardening (12 + 3)
         working-directory: frontend
         env:
           GOV_RPC_URL: ${{ env.RPC_URL }}

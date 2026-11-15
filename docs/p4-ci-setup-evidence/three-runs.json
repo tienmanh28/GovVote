@@ -1,0 +1,146 @@
+[
+  {
+    "run": 43659985832,
+    "attempt": 1,
+    "sha": "f73fe366250b98436d631635fd1f46bc147d3ee3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "contracts (forge)",
+        "conclusion": "success",
+        "seconds": 68,
+        "id": 132646912574
+      },
+      {
+        "name": "verify-cli (scripts/verify)",
+        "conclusion": "success",
+        "seconds": 24,
+        "id": 132646912721
+      },
+      {
+        "name": "frontend (typecheck, format, Vitest, build)",
+        "conclusion": "success",
+        "seconds": 34,
+        "id": 132646912745
+      },
+      {
+        "name": "e2e (Anvil + Playwright)",
+        "conclusion": "success",
+        "seconds": 213,
+        "id": 132647210947
+      }
+    ],
+    "contracts": [
+      53,
+      53
+    ],
+    "cli": [
+      23
+    ],
+    "vitest": [
+      151
+    ],
+    "browserSuites": [
+      34,
+      12,
+      3,
+      15
+    ]
+  },
+  {
+    "run": 43659985832,
+    "attempt": 2,
+    "sha": "f73fe366250b98436d631635fd1f46bc147d3ee3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "contracts (forge)",
+        "conclusion": "success",
+        "seconds": 46,
+        "id": 132648428568
+      },
+      {
+        "name": "frontend (typecheck, format, Vitest, build)",
+        "conclusion": "success",
+        "seconds": 46,
+        "id": 132648428676
+      },
+      {
+        "name": "verify-cli (scripts/verify)",
+        "conclusion": "success",
+        "seconds": 25,
+        "id": 132648428739
+      },
+      {
+        "name": "e2e (Anvil + Playwright)",
+        "conclusion": "success",
+        "seconds": 217,
+        "id": 132648636749
+      }
+    ],
+    "contracts": [
+      53,
+      53
+    ],
+    "vitest": [
+      151
+    ],
+    "cli": [
+      23
+    ],
+    "browserSuites": [
+      34,
+      12,
+      3,
+      15
+    ]
+  },
+  {
+    "run": 43659985832,
+    "attempt": 3,
+    "sha": "f73fe366250b98436d631635fd1f46bc147d3ee3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "contracts (forge)",
+        "conclusion": "success",
+        "seconds": 47,
+        "id": 132750587393
+      },
+      {
+        "name": "frontend (typecheck, format, Vitest, build)",
+        "conclusion": "success",
+        "seconds": 32,
+        "id": 132750587591
+      },
+      {
+        "name": "verify-cli (scripts/verify)",
+        "conclusion": "success",
+        "seconds": 30,
+        "id": 132750587595
+      },
+      {
+        "name": "e2e (Anvil + Playwright)",
+        "conclusion": "success",
+        "seconds": 221,
+        "id": 132750784271
+      }
+    ],
+    "contracts": [
+      53,
+      53
+    ],
+    "vitest": [
+      151
+    ],
+    "cli": [
+      23
+    ],
+    "browserSuites": [
+      34,
+      12,
+      3,
+      15
+    ]
+  }
+]
