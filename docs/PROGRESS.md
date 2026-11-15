@@ -172,6 +172,7 @@
 - **B1 đã được sửa sẵn trên main:** `frontend/e2e/01-wallet-states.spec.ts:86` lấy origin từ RPC_URL; helper đọc VITE_RPC_URL, mặc định127.0.0.1:8545. Không sửa lại test; proof riêng cổng8549 sẽ lưu ở docs/p4-backlog-evidence/. Backlog cũ bên dưới đã lạc hậu.
 - **B2 audit:** 76 PNG, 76 SHA256 khác nhau, không có nhóm trùng byte; 76/76 được manifest pin đúng hash. Không xóa ảnh hay sửa manifest. Inventory đầy đủ tại docs/p4-backlog-evidence/screenshot-audit.json; tên thư mục gần giống không đủ căn cứ xóa bằng chứng.
 - **B3:** README EN/VI thể hiện Voter → frontend, MetaMask ký qua RPC ví và nguồn đọc cấu hình riêng → GovToken/GovVote; không đồng nhất RPC ví với frontend. Mermaid CLI12.0.0 (stable24/09, chỉ cài /tmp với ignore-scripts) render thành công cả 4 diagram, có SVG kiến trúc và summary. Thêm lưu ý verify64 confirmations ~13 phút, không bảo đảm finality.
+- **B4 phân tích, không sửa:** getVotes tại B dự đoán txB+1 là đúng, nhưng simulation không đặt blockTag nên mặc định latestB; contract kiểm getPastVotes(B-1). Sau tăng quyền ở B có thể false-enable rồi simulation revert, Anvil cần block mới. Chỉ là UX, contract không bị bypass; chưa tái hiện bằng test mới. Đề xuất gate theo pastVotes(B-1)/nhắc chờ block, cần Owner duyệt PR riêng. Chi tiết docs/p4-backlog-review.md.
 
 ### Backlog đã ghi nhận, chưa triển khai
 
