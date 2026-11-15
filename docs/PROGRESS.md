@@ -1,6 +1,6 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
-## P4-D0 — hoàn tất kiểm cục bộ, chuẩn bị PR, 15/11/2026, Codex
+## P4-D0 — PR #2 đã qua CI, chờ kiểm commit docs cuối, 15/11/2026, Codex
 
 - Checkpoint hiện hành; mục DỪNG bên dưới là lịch sử đã được Owner giải quyết. Nhánh `feat/p4-d0-chain-profile`, base `aaf77fa`, PR #1 đã merge. Các commit: `31b9458` (profile), `fd6b8ac` (consumers), `bd0adc6` (tests). Chưa merge nhánh D0; Owner merge.
 - Nguồn chính sách: `shared/chains.ts`, chỉ `{31337, 11155111}`; mainnet và mọi ID khác bị từ chối rõ ràng. Cấu hình sai bị chặn trước RPC; endpoint trả chain khác bị chặn ngay sau eth_chainId, trước state/logs. CLI mới có `GOV_CHAIN_ID`, mặc định local; frontend dùng `VITE_CHAIN_ID`. Sepolia phải có URL RPC tường minh, không tự dùng RPC public của viem.
@@ -10,11 +10,27 @@
 
 - **Owner đã cho phép:** `frontend/tests/lib.test.ts:172`, đổi duy nhất `VITE_CHAIN_ID: "11155111"` thành `"137"`; dòng 171 thêm comment tiếng Việt vì Sepolia được P4-D0 hỗ trợ. **Assertion 3 lỗi tại dòng 175 và mọi assertion cũ giữ nguyên.** Ý định test vẫn là hai địa chỉ sai + chain không được hỗ trợ. Không thay test để che lỗi.
 - Test mới `frontend/tests/chainProfile.test.ts` (đổi tên từ draft .tsx, không đổi cấu hình Vitest) kiểm riêng Sepolia hợp lệ, Sepolia thiếu địa chỉ chỉ có hai lỗi địa chỉ, mainnet bị chặn; thêm metadata, provenance, confirmations, explorer an toàn, ConfigGuard không mount RPC và continuity anchor. CLI thêm 14 ca loopback cho strict/legacy, kể cả exit 2 trước RPC.
-- Bằng chứng cục bộ tại `docs/p4-d0-evidence/`: frontend/CLI typecheck PASS, format:check PASS, forge fmt PASS, forge **53/53**. Vitest **151 cũ + 22 mới = 173**, tất cả đã được chạy và xanh: full run đầu 170/170; ba ca continuity bổ sung được kiểm trong profile 22/22, suites liên quan cuối 46/46; không chạy lại suite không đổi. CLI **37/37** (23 + 14), 0 fail/skip. Full run 173 ở CI **chưa xác minh** tại checkpoint này.
+- Bằng chứng cục bộ tại `docs/p4-d0-evidence/`: frontend/CLI typecheck PASS, format:check PASS, forge fmt PASS, forge **53/53**. Vitest **151 cũ + 22 mới = 173**, tất cả đã được chạy và xanh: full run đầu 170/170; ba ca continuity bổ sung được kiểm trong profile 22/22, suites liên quan cuối 46/46; không chạy lại suite không đổi. CLI **37/37** (23 + 14), 0 fail/skip. Full run CI đã xác nhận **173/173**, 12 files, không skip ở d45298f.
 - Browser **64/64** trên Anvil 1.7.1 cô lập **18548**: validation 34 (1,1 phút), reliability 12 (14,8s), final UI 3 (5,2s), E2E gốc/hardening 15 (25,1s). Dựng chain bằng script CI nguyên bản, không retry, timeout RPC giữ 45s. Trap đã tắt Anvil, kiểm bind xác nhận cổng được trả. Các đổi template tên mạng cuối giữ nguyên chữ local; unit liên quan xanh, CI sẽ kiểm lại 64 browser ở HEAD cuối.
 - Không sửa contract `src/`, script deploy `script/`, spec, CI, dependency, browser test hoặc cấu hình Vitest. Không public RPC, không Sepolia deploy, không tác động chain 8545, không force push/merge. README EN/VI và threat-model ghi rõ CHƯA deploy Sepolia, CHƯA audit. Còn chưa xác minh: mạng public/MetaMask thật; RPC có thể nói dối nhất quán, fork sau anchor chưa theo dõi; diagnostic hang SeedDemo cũ chưa giải thích.
 - Kế tiếp sau Owner merge: **D1 guard EXPECTED_CHAIN_ID trong script deploy phải được Owner duyệt trước**; sau đó mới xem xét deploy Sepolia, mỗi giao dịch cần Owner xác nhận. Không bắt đầu D1 hay Sepolia trong D0.
-- Git snapshot trước commit docs: HEAD `bd0adc6`; status chỉ README.md, README.vi.md, docs/PROGRESS.md, docs/threat-model.md modified và docs/p4-d0-evidence/ mới. Chưa push/open PR; Actions D0 chưa xác minh. Hash commit docs sẽ được báo cùng URL PR khi hoàn tất.
+- Git snapshot trước commit docs: HEAD `bd0adc6`; status chỉ README.md, README.vi.md, docs/PROGRESS.md, docs/threat-model.md modified và docs/p4-d0-evidence/ mới. Đây là snapshot lịch sử trước docs d45298f; sau đó đã push thường và mở PR #2. Hash commit docs kết thúc sẽ được báo ở PR và báo cáo cuối.
+
+### Bằng chứng CI trên PR #2
+
+- [PR #2](https://github.com/tienmanh28/GovVote/pull/2) OPEN, Owner merge; các commit code/tests `31b9458`, `fd6b8ac`, `bd0adc6`, docs/local evidence `d45298f`. Working tree sạch sau bốn commit và push thường, không merge.
+- [PR run 43697609309](https://github.com/tienmanh28/GovVote/actions/runs/43697609309), attempt 1, HEAD **d45298f7218158d5c516036bc337173ad73b8c2e**: **4/4 SUCCESS**. Không job đỏ, không sửa CI, không rerun test. Summary/API/logs xác nhận số thực, lưu `docs/p4-d0-evidence/actions-d45298f.json`.
+
+| Job | Kết luận | Thời gian | Test thực tế |
+|---|---|---|---|
+| contracts | SUCCESS | 40s | forge 53/53; snapshot 53/53 |
+| frontend | SUCCESS | 35s | Vitest 173/173 = 151 cũ + 22 mới |
+| verify-cli | SUCCESS | 38s | CLI 37/37 = 23 cũ + 14 mới |
+| e2e | SUCCESS | 3m04s | browser 64/64 = validation 34 + reliability 12 + final UI 3 + E2E gốc/hardening 15 |
+
+- 64 browser tests ở CI đã kiểm cả template tên mạng cuối trên code fd6b8ac. Refactor giữ chữ local, không cần chỉnh bất kỳ assertion/browser test nào. Kiểm local không chạy lại suite không đổi; CI thực hiện đầy đủ workflow theo chính sách repo.
+- Commit kết thúc này **chỉ docs/bằng chứng CI**; sau push vẫn phải `gh pr checks --watch` cho HEAD mới, chưa tuyên bố trước kết quả. Nếu bốn job xanh, P4-D0 **READY_FOR_OWNER_REVIEW**, dừng chờ Owner merge, khuyên **Create a merge commit** để giữ hash bằng chứng. Không tự bắt đầu D1/deploy Sepolia.
+- Git snapshot ngay trước cập nhật CI: HEAD/origin `d45298f`, status/diff sạch. Sau cập nhật: `docs/PROGRESS.md`, `docs/threat-model.md` modified, `docs/p4-d0-evidence/actions-d45298f.json` mới; không thay code/test.
 
 ## P4-D0 — DỪNG vì test cũ mâu thuẫn allowlist mới, 15/11/2026, Codex
 

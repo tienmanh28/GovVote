@@ -1,0 +1,48 @@
+{
+  "run": 43697609309,
+  "attempt": 1,
+  "sha": "d45298f7218158d5c516036bc337173ad73b8c2e",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "verify-cli (scripts/verify)",
+      "conclusion": "success",
+      "seconds": 38,
+      "id": 132761505271
+    },
+    {
+      "name": "frontend (typecheck, format, Vitest, build)",
+      "conclusion": "success",
+      "seconds": 35,
+      "id": 132761505465
+    },
+    {
+      "name": "contracts (forge)",
+      "conclusion": "success",
+      "seconds": 40,
+      "id": 132761505504
+    },
+    {
+      "name": "e2e (Anvil + Playwright)",
+      "conclusion": "success",
+      "seconds": 184,
+      "id": 132761681623
+    }
+  ],
+  "cli": [
+    37
+  ],
+  "vitest": [
+    173
+  ],
+  "contracts": [
+    53,
+    53
+  ],
+  "browserSuites": [
+    34,
+    12,
+    3,
+    15
+  ]
+}
