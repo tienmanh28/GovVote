@@ -2,6 +2,8 @@
 // không chèn HTML thô ở bất kỳ đâu.
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { STATE_LABELS } from "../lib/format.ts";
+import { useAppConfig } from "../appContext.ts";
+import { requireChainProfile, explorerLink } from "../../../shared/chains.ts";
 import type { TxState } from "../lib/txMachine.ts";
 
 /** Nút cao tối thiểu 44px (min-h-11) để dễ chạm trên điện thoại. */
@@ -106,7 +108,25 @@ const TX_TEXT: Record<TxState["status"], string> = {
   ERROR: "Giao dịch không thành công.",
 };
 
-/** Hiển thị trạng thái giao dịch và tx hash dạng văn bản (Anvil không có explorer nên không có link). */
+// Link chỉ xuất hiện khi profile có explorer; React escape văn bản và URL do allowlist dựng.
+export function ExplorerValue({ kind, value }: { kind: "tx" | "address"; value: string }) {
+  const profile = requireChainProfile(useAppConfig().chainId);
+  const href = explorerLink(profile, kind, value);
+  return href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="break-all font-mono underline"
+    >
+      {value}
+    </a>
+  ) : (
+    <span className="break-all font-mono">{value}</span>
+  );
+}
+
+/** Giữ tx hash local dạng văn bản; mạng có explorer thêm link an toàn. */
 export function TxStatusView({ state }: { state: TxState }) {
   if (state.status === "IDLE") return null;
   const tone = state.status === "ERROR" ? "error" : state.status === "SUCCESS" ? "info" : "warn";
@@ -117,7 +137,10 @@ export function TxStatusView({ state }: { state: TxState }) {
         {state.status === "ERROR" && <p data-testid="tx-error">{state.message}</p>}
         {hash && (
           <p className="mt-1 font-mono text-xs break-all">
-            Tx hash: <span data-testid="tx-hash">{hash}</span>
+            Tx hash:{" "}
+            <span data-testid="tx-hash">
+              <ExplorerValue kind="tx" value={hash} />
+            </span>
           </p>
         )}
       </Notice>

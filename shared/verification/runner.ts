@@ -1,4 +1,5 @@
 // Runner dùng Web APIs chuẩn; codec và JSON-RPC transport do từng adapter cung cấp.
+import { chainProfile, chainError } from "../chains.ts";
 import {
   addressValid,
   hashValid,
@@ -137,7 +138,9 @@ export async function runVerification(
     return finish(
       "INVALID_INPUT",
       "INVALID_INPUT",
-      "ID, chain, confirmations hoặc ngân sách không hợp lệ.",
+      chainProfile(input.chainId)
+        ? "ID, confirmations hoặc ngân sách không hợp lệ."
+        : chainError(input.chainId),
     );
   function check() {
     if (options.signal?.aborted) incomplete("CANCELLED", "Lần kiểm chứng đã bị hủy.");
@@ -275,7 +278,10 @@ export async function runVerification(
       return finish(
         "INVALID_INPUT",
         "WRONG_CHAIN",
-        "RPC trả sai chain ID; chỉ hỗ trợ Anvil 31337.",
+        // Dừng ngay sau eth_chainId, trước mọi phép đọc state hoặc log.
+        chainProfile(chainId)
+          ? `RPC trả sai chain ID; cấu hình cần ${input.chainId}.`
+          : chainError(chainId),
       );
     const latest = await block("latest");
     const head = latest.number - input.confirmations;
@@ -292,7 +298,7 @@ export async function runVerification(
       token: "",
       delay: 0n,
       period: 0n,
-      provenance: "LOCAL_DEPLOYMENT_EVIDENCE",
+      provenance: chainProfile(input.chainId)!.provenance,
     };
     const govCode = await rpc("eth_getCode", [input.govVote, stateBlock(anchor.hash)]);
     if (typeof govCode !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(govCode))

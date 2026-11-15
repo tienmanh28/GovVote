@@ -18,21 +18,14 @@ import { govVoteAbi } from "./abi.ts";
 import { fetchVoteLogs } from "./fetch.ts";
 import { aggregateVotes, compareWithChain, type CompareResult, type Tally } from "./verify.ts";
 
-/** Chỉ cho phép Anvil. Chặn chạy nhầm lên Sepolia hay mainnet. */
-const ALLOWED_CHAIN_ID = 31_337;
-
-/**
- * Số block xác nhận (confirmation) phải chờ. head = latest − 12.
- * Vì sao: vài block mới nhất có thể bị reorg (chain tổ chức lại, thay block cuối bằng nhánh khác).
- * Đọc ở block đã có đủ 12 block phía sau thì log và storage gần như chắc chắn không còn đổi.
- * Trên Anvil không có reorg, nhưng giữ cùng quy tắc để script giống khi chạy trên mạng thật.
- */
-const CONFIRMATIONS = 12n;
+// Legacy giữ cách tally cũ, chỉ chia sẻ chính sách chain và khoảng lùi xác nhận.
+import { readChainConfig, ChainConfigError } from "./chain.ts";
+import { chainProfile, chainError, DEFAULT_CHAIN_PROFILE } from "../../../shared/chains.ts";
 
 class ConfigError extends Error {}
 
 function readConfig(): { rpcUrl: string; gov: Address } {
-  const rpcUrl = process.env.GOV_RPC_URL ?? "http://127.0.0.1:8545";
+  const { rpcUrl } = readChainConfig(process.env);
   const gov = process.env.GOV_VOTE;
   if (gov === undefined || gov === "")
     throw new ConfigError("Thiếu biến môi trường GOV_VOTE (địa chỉ GovVote)");
@@ -65,18 +58,21 @@ function printTable(result: CompareResult): void {
 }
 
 async function main(): Promise<number> {
+  const { profile } = readChainConfig(process.env);
+  const confirmations = profile.confirmations;
   const { rpcUrl, gov: govAddress } = readConfig();
   const client: PublicClient = createPublicClient({ transport: http(rpcUrl) });
 
   const chainId = await client.getChainId();
-  if (chainId !== ALLOWED_CHAIN_ID) {
-    throw new ConfigError(`chainId = ${chainId}, chỉ cho phép ${ALLOWED_CHAIN_ID} (Anvil)`);
-  }
+  // eth_chainId là phép RPC duy nhất trước khi xác nhận chain được phép và đúng cấu hình.
+  if (!chainProfile(chainId)) throw new ChainConfigError(chainError(chainId));
+  if (chainId !== profile.chainId)
+    throw new ChainConfigError(`RPC trả sai chain ID; cấu hình cần ${profile.chainId}.`);
 
   const latest = await client.getBlockNumber();
-  const head = latest - CONFIRMATIONS;
+  const head = latest - confirmations;
   if (head < 1n)
-    throw new ConfigError(`Chain mới có ${latest} block, chưa đủ ${CONFIRMATIONS} block xác nhận`);
+    throw new ConfigError(`Chain mới có ${latest} block, chưa đủ ${confirmations} block xác nhận`);
 
   // Vì sao mọi phép đọc đều ở CÙNG block `head`:
   // storage là ảnh chụp tại một block; log là lịch sử tới block đó. Nếu đọc storage ở `latest` nhưng log
@@ -112,7 +108,7 @@ async function main(): Promise<number> {
 
   console.log(`chainId        : ${chainId}`);
   console.log(`GovVote        : ${govAddress}`);
-  console.log(`latest / head  : ${latest} / ${head} (chờ ${CONFIRMATIONS} block xác nhận)`);
+  console.log(`latest / head  : ${latest} / ${head} (chờ ${confirmations} block xác nhận)`);
   console.log(`proposalCount  : ${count} (tại head)`);
   console.log(`VoteCast logs  : ${logs.length} (block 0..${head})`);
   console.log("");
@@ -129,9 +125,11 @@ main().then(
   (err: unknown) => {
     // Không in error transport/raw input: chúng có thể chứa credentials của RPC URL.
     console.error(
-      err instanceof ConfigError
-        ? "Lỗi cấu hình legacy: kiểm tra GOV_VOTE và chain Anvil."
-        : "RPC legacy lỗi; không thể đối chiếu tally.",
+      err instanceof ChainConfigError
+        ? err.message
+        : err instanceof ConfigError
+          ? `Lỗi cấu hình legacy: kiểm tra GOV_VOTE và chain ${chainProfile(process.env.GOV_CHAIN_ID ?? DEFAULT_CHAIN_PROFILE.chainId)!.name}.`
+          : "RPC legacy lỗi; không thể đối chiếu tally.",
     );
     process.exitCode = 2;
   },

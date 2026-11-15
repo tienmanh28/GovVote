@@ -1,4 +1,5 @@
 // Probe endpoint trước khi dùng: chain, hai bytecode và token liên kết phải đúng.
+import { requireChainProfile } from "../../../shared/chains.ts";
 import { createHttpRequest } from "../../../shared/verification/http.ts";
 import { verificationCodec } from "./verificationAdapter.ts";
 import type { AppConfig } from "../config.ts";
@@ -10,6 +11,8 @@ export async function probeEndpoint(
   cfg: AppConfig,
   signal?: AbortSignal,
 ): Promise<void> {
+  // Cả caller ngoài parseEnv cũng phải qua allowlist trước khi chạm RPC.
+  requireChainProfile(cfg.chainId);
   const request = createHttpRequest(url);
   async function read(method: string, params: unknown[]) {
     const c = new AbortController();
@@ -73,7 +76,9 @@ export function createContinuityProbe() {
         controller.signal,
       )) as { number: string; hash: string };
       const height = BigInt(latest.number);
-      const number = anchor?.number ?? (height > 12n ? height - 12n : 0n);
+      // Anchor chuyển nguồn dùng cùng khoảng lùi mặc định với verifier của chain.
+      const confirmations = requireChainProfile(cfg.chainId).confirmations;
+      const number = anchor?.number ?? (height > confirmations ? height - confirmations : 0n);
       const block = (await request(
         "eth_getBlockByNumber",
         [`0x${number.toString(16)}`, false],

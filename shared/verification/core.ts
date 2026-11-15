@@ -1,3 +1,4 @@
+import { chainProfile, type DeploymentProvenance } from "../chains.ts";
 // Core thuần: chỉ nhận evidence, không RPC, React, Node hoặc viem.
 export type VerificationStatus =
   "VERIFIED" | "MISMATCH" | "INCOMPLETE" | "RPC_ERROR" | "IDLE" | "RUNNING" | "INVALID_INPUT";
@@ -48,7 +49,7 @@ export type VerificationContext = {
   token: string;
   delay: bigint;
   period: bigint;
-  provenance: "LOCAL_DEPLOYMENT_EVIDENCE";
+  provenance: DeploymentProvenance;
 };
 export type ProposalStorage = {
   proposer: string;
@@ -116,7 +117,9 @@ const eq = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const uint = (n: unknown): n is bigint => typeof n === "bigint" && n >= 0n && n < 2n ** 256n;
 export function inputValid(i: VerificationInput): boolean {
   return (
-    i.chainId === 31337n &&
+    // Allowlist dùng chung chặn mainnet trước khi runner gọi RPC.
+    uint(i.chainId) &&
+    chainProfile(i.chainId) !== undefined &&
     addressValid(i.govVote) &&
     (i.govToken === undefined || addressValid(i.govToken)) &&
     uint(i.proposalId) &&

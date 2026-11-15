@@ -6,9 +6,22 @@ GovVote là một dApp (ứng dụng phi tập trung) bỏ phiếu DAO on-chain 
 
 ## Trạng thái
 
-- Chỉ chạy và kiểm thử trên **chain Anvil cục bộ** (chain ID 31337).
-- **Chưa deploy** lên testnet hay mainnet nào.
+- Profile hỗ trợ **Anvil (31337)** và **Sepolia (11155111)**. Kiểm trên chain thật chỉ dùng Anvil cục bộ cô lập; Sepolia chỉ được kiểm bằng fixture (dữ liệu giả).
+- **Chưa deploy Sepolia** hoặc bất kỳ testnet/mainnet nào.
 - **Chưa có audit (kiểm toán bảo mật) độc lập.** Đây là dự án học tập; token GOV không có giá trị tiền thật.
+
+## Chain được hỗ trợ
+
+CLI và frontend dùng chung [shared/chains.ts](shared/chains.ts). Mainnet (1) và mọi ID khác bị từ chối tường minh trước các phép đọc RPC tiếp theo.
+
+| Chain | Confirmations mặc định | Explorer | Nhãn deployment evidence |
+|---|---|---|---|
+| Anvil, 31337 (mặc định) | 12 | không có | `LOCAL_DEPLOYMENT_EVIDENCE` |
+| Sepolia, 11155111 | 64 | [Sepolia Etherscan](https://sepolia.etherscan.io) | `PUBLIC_TESTNET_DEPLOYMENT_EVIDENCE` |
+
+64 là chính sách khoảng lùi thận trọng hơn trên public testnet, không bảo đảm finality (tính cuối cùng). Hai nhãn chỉ mô tả việc đối chiếu bytecode, token liên kết và event/storage qua RPC; không chứng nhận nguồn gốc, audit hoặc source verification trên Etherscan. Xem [threat model](docs/threat-model.md).
+
+Chọn `VITE_CHAIN_ID` cho frontend, `GOV_CHAIN_ID` cho cả hai chế độ CLI; mặc định đều là 31337. Sepolia bắt buộc có `VITE_RPC_URL` / `GOV_RPC_URL` tường minh và địa chỉ contract đúng; không tự chọn endpoint RPC công khai. Strict CLI cho phép `GOV_CONFIRMATIONS` ghi đè mặc định; legacy tally dùng mặc định của profile. Link explorer chỉ hiện khi profile có explorer. Script deploy vẫn chỉ dùng local ở bước này; đây là chuẩn bị cấu hình, **CHƯA deploy Sepolia, CHƯA audit**.
 
 ## Ảnh màn hình
 
@@ -125,7 +138,7 @@ npm ci --ignore-scripts
 GOV_VOTE=<địa chỉ GovVote> npm run verify
 ```
 
-Exit code 0 là VERIFIED (khớp), 1 là MISMATCH (lệch), 2 là lỗi cấu hình hoặc RPC. `GOV_RPC_URL` thay cho mặc định `http://127.0.0.1:8545`. Không đặt `GOV_PROPOSAL_ID` thì CLI chạy chế độ legacy tally (đếm phiếu kiểu cũ); đặt `GOV_PROPOSAL_ID` (kèm `GOV_TOKEN`) thì chạy kiểm tra strict (chặt) cho từng proposal.
+Exit code 0 là VERIFIED (khớp), 1 là MISMATCH (lệch), 2 là lỗi cấu hình hoặc RPC; strict còn trả 3 khi INCOMPLETE (chưa đủ bằng chứng). `GOV_RPC_URL` thay cho mặc định `http://127.0.0.1:8545`. Không đặt `GOV_PROPOSAL_ID` thì CLI chạy chế độ legacy tally (đếm phiếu kiểu cũ); đặt `GOV_PROPOSAL_ID` (kèm `GOV_TOKEN`) thì chạy kiểm tra strict (chặt) cho từng proposal.
 
 ## Testing (kiểm thử)
 
@@ -136,9 +149,9 @@ Exit code 0 là VERIFIED (khớp), 1 là MISMATCH (lệch), 2 là lỗi cấu h�
 | Foundry invariant (bất biến) | 256 runs, depth 50: tally, mỗi voter một phiếu, tally đóng băng sau deadline | nằm trong 53 |
 | **Tổng `forge test`** | 4 suite: 4 + 39 unit, 3 fuzz, 7 invariant | **53 passed** |
 | Mutation (CLI, cố ý làm hỏng code) | Bỏ bước khử log trùng trong `aggregateVotes` thì test CLI phát hiện | phát hiện được |
-| Vitest (frontend) | map lỗi, bộ đếm byte, máy trạng thái giao dịch, verification core, logic RPC/session | **137 passed** (9 file) |
-| Node test runner (CLI) | các ca của `scripts/verify`: log trùng, thiếu log, cửa sổ block | **17 passed** |
-| Playwright (trình duyệt) | validation 34, reliability 12, final UI 3, E2E gốc 12 | **61 passed** |
+| Vitest (frontend) | map lỗi, bộ đếm byte, máy trạng thái giao dịch, verification core, logic RPC/session | **173 passed** (12 file) |
+| Node test runner (CLI) | các ca của `scripts/verify`: log trùng, thiếu log, cửa sổ block | **37 passed** |
+| Playwright (trình duyệt) | validation 34, reliability 12, final UI 3, E2E gốc 12 + hardening 3 | **64 passed** |
 
 Giới hạn độ phủ đã biết: bộ invariant không thường xuyên chạm tới mọi kết quả. Trên 40 seed, chỉ 25% run có ít nhất một proposal Succeeded và 32,5% có ít nhất một proposal Defeated có phiếu. Các nhánh kết quả này được kiểm bằng unit test xác định (deterministic) thay thế. Chi tiết: [docs/phase2a-invariant-report.md](docs/phase2a-invariant-report.md).
 

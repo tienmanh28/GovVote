@@ -1,0 +1,49 @@
+
+> govvote-verify@0.1.0 test
+> tsx --test test/*.test.ts
+
+✔ strict: chain 1 exit 2 trước RPC (533.246531ms)
+✔ strict: chain 137 exit 2 trước RPC (474.778413ms)
+✔ strict: chain 0 exit 2 trước RPC (480.636739ms)
+✔ strict: chain -1 exit 2 trước RPC (444.234212ms)
+✔ strict: chain oops exit 2 trước RPC (372.319356ms)
+✔ strict: Sepolia fixture VERIFIED và mặc định 64 confirmations (489.519258ms)
+✔ strict: RPC thực trả mainnet bị chặn ngay sau eth_chainId (473.105286ms)
+✔ legacy: chain 1 exit 2 trước RPC (443.120934ms)
+✔ legacy: chain 137 exit 2 trước RPC (419.888097ms)
+✔ legacy: chain 0 exit 2 trước RPC (371.307302ms)
+✔ legacy: chain -1 exit 2 trước RPC (373.417809ms)
+✔ legacy: chain oops exit 2 trước RPC (340.10176ms)
+✔ legacy: Sepolia fixture VERIFIED và mặc định 64 confirmations (420.747803ms)
+✔ legacy: RPC thực trả mainnet bị chặn ngay sau eth_chainId (382.637837ms)
+✔ CLI EIP-1898: hash hợp lệ (681.464527ms)
+✔ CLI EIP-1898: eth_getCode (544.46973ms)
+✔ CLI EIP-1898: eth_call (593.61288ms)
+✔ CLI body 5242880 bytes, Content-Length=false (728.216348ms)
+✔ CLI body 5242881 bytes, Content-Length=false (567.442877ms)
+✔ CLI body 5242881 bytes, Content-Length=true (526.402227ms)
+✔ strict CLI codec và core dùng evidence đầy đủ (14.948312ms)
+✔ strict exit codes tách mismatch/incomplete/RPC (0.841417ms)
+✔ strict CLI HTTP fixture VERIFIED, exit 0 (669.828242ms)
+✔ strict CLI HTTP fixture MISMATCH, exit 1 (578.825185ms)
+✔ strict CLI HTTP fixture INCOMPLETE, exit 3 (572.678361ms)
+✔ strict CLI HTTP fixture RPC_ERROR, exit 2 (456.177081ms)
+✔ strict invalid input không in credentials RPC (373.979054ms)
+✔ CLI legacy/strict không echo input cấu hình nhạy cảm không hợp lệ (843.543001ms)
+✔ (a) valid logs without duplicates => VERIFIED (1.989953ms)
+✔ (b) exact duplicate (same txHash, logIndex, content) => VERIFIED, counted once (0.311427ms)
+✔ (c) one log with tampered weight => MISMATCH on exactly that id (0.297923ms)
+✔ (d) one missing log => MISMATCH (0.231716ms)
+✔ (e) logs with blockNumber > headBlock are ignored => VERIFIED (0.298985ms)
+✔ (f) same txHash:logIndex key with different content => aggregateVotes throws (1.585764ms)
+✔ (g) votes for an id outside 1..proposalCount => MISMATCH (0.820578ms)
+✔ (h) proposal with no votes on either side => VERIFIED with For = 0, Against = 0 (0.274402ms)
+✔ (i) blockWindows boundaries: contiguous, no gaps, no overlap (0.612015ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6522.827072

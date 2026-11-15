@@ -6,9 +6,22 @@ GovVote is an on-chain DAO voting dApp for EVM chains. Voting is token-weighted,
 
 ## Status
 
-- Runs and is tested on a **local Anvil chain only** (chain ID 31337).
-- **Not deployed** to any testnet or mainnet.
+- Chain profiles support **Anvil (31337)** and **Sepolia (11155111)**. Live-chain testing uses isolated local Anvil; Sepolia support is checked with fixtures only.
+- **Not deployed to Sepolia** or any other testnet/mainnet.
 - **No independent security audit.** It is a learning project; the GOV token has no monetary value.
+
+## Supported chains
+
+The CLI and frontend share [shared/chains.ts](shared/chains.ts). Mainnet (1) and all other IDs are explicitly rejected before further RPC reads.
+
+| Chain | Default confirmations | Explorer | Deployment evidence label |
+|---|---|---|---|
+| Anvil, 31337 (default) | 12 | none | `LOCAL_DEPLOYMENT_EVIDENCE` |
+| Sepolia, 11155111 | 64 | [Sepolia Etherscan](https://sepolia.etherscan.io) | `PUBLIC_TESTNET_DEPLOYMENT_EVIDENCE` |
+
+64 is a conservative public-testnet confirmation policy, not a finality guarantee. Both labels describe bytecode, token linkage and event/storage consistency observed through an RPC; neither certifies authenticity, audited code or Etherscan source verification. See [threat model](docs/threat-model.md).
+
+Set `VITE_CHAIN_ID` for the frontend and `GOV_CHAIN_ID` for either CLI mode; both default to 31337. Sepolia requires an explicit `VITE_RPC_URL` / `GOV_RPC_URL` and the correct contract addresses. No public RPC endpoint is supplied automatically. Strict CLI `GOV_CONFIRMATIONS` overrides the profile default; legacy tally uses the profile default. Explorer links appear only on profiles with an explorer. Deployment scripts remain local-only in this phase; this is configuration preparation, **not a Sepolia deployment or an audit**.
 
 ## Screenshots
 
@@ -125,7 +138,7 @@ npm ci --ignore-scripts
 GOV_VOTE=<GovVote address> npm run verify
 ```
 
-Exit code 0 means VERIFIED, 1 means MISMATCH, 2 means a configuration or RPC error. `GOV_RPC_URL` overrides the default `http://127.0.0.1:8545`. Without `GOV_PROPOSAL_ID` the CLI runs the legacy tally mode; setting `GOV_PROPOSAL_ID` (with `GOV_TOKEN`) runs the strict per-proposal check.
+Exit code 0 means VERIFIED, 1 means MISMATCH, 2 means a configuration or RPC error; strict mode also returns 3 for INCOMPLETE. `GOV_RPC_URL` overrides the default `http://127.0.0.1:8545`. Without `GOV_PROPOSAL_ID` the CLI runs the legacy tally mode; setting `GOV_PROPOSAL_ID` (with `GOV_TOKEN`) runs the strict per-proposal check.
 
 ## Testing
 
@@ -136,9 +149,9 @@ Exit code 0 means VERIFIED, 1 means MISMATCH, 2 means a configuration or RPC err
 | Foundry invariant | 256 runs, depth 50: tallies, one vote per voter, tally frozen after deadline | part of 53 |
 | **`forge test` total** | 4 suites: 4 + 39 unit, 3 fuzz, 7 invariant | **53 passed** |
 | Mutation (CLI) | Removing the log de-duplication step in `aggregateVotes` is caught by the CLI tests | detected |
-| Vitest (frontend) | error mapping, byte counter, tx state machine, verification core, RPC/session logic | **137 passed** (9 files) |
-| Node test runner (CLI) | `scripts/verify` cases: duplicates, missing logs, block windows | **17 passed** |
-| Playwright (browser) | validation 34, reliability 12, final UI 3, original E2E 12 | **61 passed** |
+| Vitest (frontend) | error mapping, byte counter, tx state machine, verification core, RPC/session logic | **173 passed** (12 files) |
+| Node test runner (CLI) | `scripts/verify` cases: duplicates, missing logs, block windows | **37 passed** |
+| Playwright (browser) | validation 34, reliability 12, final UI 3, original E2E 12 + hardening 3 | **64 passed** |
 
 Known coverage limit: the invariant suite does not reach every outcome often. Over 40 seeds, only 25% of runs reached at least one Succeeded proposal and 32.5% at least one Defeated proposal with votes. Those outcome branches are covered by deterministic unit tests instead. Details: [docs/phase2a-invariant-report.md](docs/phase2a-invariant-report.md).
 

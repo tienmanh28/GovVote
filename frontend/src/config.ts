@@ -2,10 +2,17 @@
 // Biến VITE_* nằm trong bundle gửi tới trình duyệt: chỉ chứa địa chỉ công khai, không bao giờ chứa key.
 import { createConfig, http, injected } from "wagmi";
 import { type Transport } from "viem";
-import { defineChain, getAddress, isAddress, type Address } from "viem";
+import { getAddress, isAddress, type Address, type Chain } from "viem";
+import { foundry, sepolia } from "viem/chains";
+import {
+  DEFAULT_CHAIN_PROFILE,
+  chainProfile,
+  chainError,
+  requireChainProfile,
+} from "../../shared/chains.ts";
 
-/** Phase 3 chỉ chạy trên Anvil local. Sepolia thuộc Phase 4. */
-export const SUPPORTED_CHAIN_ID = 31_337;
+/** Alias mặc định giữ tương thích; allowlist nằm duy nhất trong shared/chains.ts. */
+export const SUPPORTED_CHAIN_ID = DEFAULT_CHAIN_PROFILE.chainId;
 
 export type AppConfig = {
   rpcUrl: string;
@@ -43,12 +50,15 @@ export function parseEnv(env: Record<string, string | undefined>): ParsedEnv {
     errors.push(
       "VITE_RPC_FALLBACK_URLS chỉ nhận tối đa hai HTTP(S) URL hợp lệ, không credentials.",
     );
-  const chainId = Number(env.VITE_CHAIN_ID ?? SUPPORTED_CHAIN_ID);
-  if (chainId !== SUPPORTED_CHAIN_ID) {
+  const requested = env.VITE_CHAIN_ID ?? SUPPORTED_CHAIN_ID;
+  const profile = chainProfile(requested);
+  const chainId = profile?.chainId ?? Number.NaN;
+  if (!profile) errors.push(`VITE_CHAIN_ID: ${chainError(requested)}`);
+  // Public testnet phải được cấp endpoint rõ ràng, không dùng endpoint mặc định của viem.
+  if (profile && profile !== DEFAULT_CHAIN_PROFILE && !env.VITE_RPC_URL?.trim())
     errors.push(
-      `VITE_CHAIN_ID = ${String(env.VITE_CHAIN_ID)}: Phase 3 chỉ hỗ trợ Anvil (${SUPPORTED_CHAIN_ID}).`,
+      `VITE_RPC_URL bắt buộc khi dùng ${profile.displayName}; không tự chọn RPC công khai.`,
     );
-  }
   const addr = (key: "VITE_GOV_VOTE" | "VITE_GOV_TOKEN"): Address | null => {
     const v = env[key]?.trim();
     if (!v) {
@@ -76,14 +86,11 @@ export function parseEnv(env: Record<string, string | undefined>): ParsedEnv {
   };
 }
 
-export function makeChain(cfg: AppConfig) {
-  return defineChain({
-    id: cfg.chainId,
-    name: "Anvil (GovVote local)",
-    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-    rpcUrls: { default: { http: [cfg.rpcUrl] } },
-    testnet: true,
-  });
+export function makeChain(cfg: AppConfig): Chain {
+  const profile = requireChainProfile(cfg.chainId);
+  // Dùng metadata viem nhưng mọi RPC đều là URL do người dùng cấu hình.
+  const chain = profile === DEFAULT_CHAIN_PROFILE ? foundry : sepolia;
+  return { ...chain, rpcUrls: { default: { http: [cfg.rpcUrl] } } };
 }
 
 export function makeWagmiConfig(cfg: AppConfig, onFailure?: () => void) {

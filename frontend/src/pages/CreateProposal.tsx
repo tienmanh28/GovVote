@@ -1,3 +1,5 @@
+// Nhãn và chính sách mạng lấy từ profile chung để không gắn nhãn local cho testnet.
+import { requireChainProfile } from "../../../shared/chains.ts";
 import { useFreshness, DataFreshness } from "../lib/freshness.tsx";
 import { ReadError } from "../components/ReadError.tsx";
 // Form tạo proposal.
@@ -24,6 +26,7 @@ import { useTx } from "../lib/useTx.ts";
 
 export function CreateProposal() {
   const cfg = useAppConfig();
+  const profile = requireChainProfile(cfg.chainId);
   const wagmiConfig = useConfig();
   const { address, canWrite, isConnected } = useWallet();
   const block = useCurrentBlock();
@@ -81,7 +84,8 @@ export function CreateProposal() {
 
   let blockReason: string | null = null;
   if (!isConnected) blockReason = "Kết nối ví để tạo proposal.";
-  else if (!canWrite) blockReason = "Ví đang ở sai mạng, hãy chuyển sang Anvil (31337).";
+  else if (!canWrite)
+    blockReason = `Ví đang ở sai mạng, hãy chuyển sang ${profile.name} (${profile.chainId}).`;
   else if (votes.data === undefined || threshold.data === undefined)
     blockReason = "Đang tải voting power…";
   else if (!enoughPower)
