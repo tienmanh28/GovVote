@@ -1,13 +1,70 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
-## PR-D — nâng wagmi v3 theo Owner, 16/11/2026, Codex
+## PR-F — nghiệm thu MetaMask, CV và đề xuất ruleset, 16/11/2026, Codex
 
-- Nhánh `feat/p4-wagmi-v3`, base main022a3aa, fetch/pull ff-only và working tree sạch trước tạo nhánh. Owner đã duyệt nâng v3; các ghi chú cũ giữ v2/spike chưa nâng bên dưới là lịch sử, không phải trạng thái hiện hành.
-- Root ghim wagmi **3.7.9**; package này khai báo chính xác connectors **8.2.2** và core **3.6.7**, lock chỉ còn đúng các bản đó. Không cần thêm root dependency không dùng hoặc đổi viem2.57.13/React/TanStack. Cài --save-exact --ignore-scripts. Hai lần thử nâng đồng thời root connectors/core gặp ERESOLVE do graph v2/porto cũ; nâng wagmi trước như spike đã giải quyết sạch, không dùng force/legacy-peer-deps. Không sửa source API hoặc test cũ.
-- Audit thực tế **27 → 0** (16 high,11 moderate →0). Typecheck, build, format PASS; Vitest **177/177**, CLI **37/37** (package CLI và shared không đổi). Browser **66/66** = validation34 + reliability12 + finalUI3 + E2E17, gồm hai CSP và responsive375/768/1280. Anvil8549 đã tắt. Header artifact cùng RPC8549 khớp từng byte với baseline E1 (SHA trong evidence), không thêm origin. Chỉ connector injected trong config, không thêm SDK/connector runtime hoặc origin CSP. CSP/build policy/CI audit continue-on-error giữ nguyên.
-- Bundle đo tổng tất cả JS/CSS trong production dist, gzip từng file với mtime0: JS **661.456 → 661.660 B**, gzip **196.066 → 196.107 B** (+204/+41); CSS **18.308 B**, gzip **4.506 B** không đổi. Không chọn ít chunk để làm số đẹp; header/static HTML không tính vào JS/CSS.
-- Bằng chứng docs/p4-wagmi-v3-evidence/. README EN/VI cập nhật số audit và phiên bản. Không sửa src/script/spec/bytecode/tham số deploy, không public RPC/Sepolia/Cloudflare, không sửa ruleset hoặc tự merge. MetaMask thật/mobile injection/persistence thật chưa xác minh. Đề xuất Owner cân nhắc bỏ continue-on-error của audit khi chấp nhận audit0; PR này không thực hiện.
-- Commit dependency **73ebe8d**; tài liệu/evidence có commit riêng. Trước commit docs: branchD, modified README EN/VI, docs/PROGRESS.md, docs/threat-model.md, mới docs/p4-wagmi-v3-evidence/. Kế tiếp mở PR và watch bốn job; CI chưa xác minh tại checkpoint này. Owner merge, không bắt đầu PR-E/F/D2.
+- Nhánh `docs/p4-acceptance-and-cv`, base main **022a3aa**; fetch/pull ff-only, working tree sạch trước tạo. **PR #1–#5 đã MERGED** (verifier hardening, chain profile, deploy guard, backlog polish, hosting prep); các checkpoint OPEN bên dưới là lịch sử. PR #7 được merge đồng thời ngoài phiên này thành main2cc3477; đã merge origin/main vào nhánh PR-F bằng 795965c, giữ mục PR-E khi giải quyết xung đột docs. PR #6 vẫn OPEN, không merge. Chuyển sang worktree /tmp/govvote-pr-f để tránh checkout đồng thời của phiên khác.
+- CI main mới nhất tại lúc soạn: [43744115832](https://github.com/tienmanh28/GovVote/actions/runs/43744115832), HEAD **2cc3477ffd49f7d7b231e9826c091ac8c4418605**, bốn job SUCCESS. Log xác nhận Forge **54**, Vitest **177** (13 files), CLI **37**, browser **67 = 34+12+3+18**; thời gian job lần lượt 46s/35s/31s/3m13s. Snapshot check 54 không cộng thêm vào số test độc lập. Không chạy lại code test local vì chỉ đổi tài liệu; CI PR sẽ chạy theo workflow hiện hành.
+- Thêm `docs/acceptance-metamask.md`: checklist F1 local Anvil8549, rồi Sepolia sau D2; mỗi ca có kỳ vọng và ô Owner điền bằng chứng. MISMATCH/INCOMPLETE cần điều kiện/fixture rõ, không giả mất mạng thành MISMATCH. Responsive điện thoại thật tách khỏi emulation. **Chưa chạy F1/D2/D3**, không RPC public, không Sepolia/Cloudflare, không khởi động Anvil trong phiên docs.
+- Thêm `docs/cv-summary.md`: tiếng Việt + 5 bullet English, số liệu main có link CI; fuzz/invariant và một mutation thủ công có nguồn báo cáo, không bịa mutation score/audit/deployment. Bytecode, code, test, workflow giữ nguyên.
+
+### Đề xuất Owner quyết: required status checks trên main (CHƯA THỰC HIỆN)
+
+Đọc API ngày 16/11/2026: ruleset **27262992**, `main: no force push or deletion`, active, chỉ có `non_fast_forward` và `deletion`, không bypass actors, áp `refs/heads/main`. Đề xuất bổ sung đủ bốn check theo đúng tên job hiện hành, strict để PR phải cập nhật main mới nhất. Không bật/sửa ruleset trong phiên này.
+
+Hệ quả: push trực tiếp một commit mới chưa có check đạt lên main sẽ bị chặn; phải push nhánh, chờ CI rồi merge. **Status checks riêng không bắt buộc mọi thay đổi đi qua PR**: commit đã có check hợp lệ có thể vẫn được push. Nếu Owner muốn chặn hoàn toàn đường push trực tiếp, cần quyết định thêm rule `pull_request` riêng; ví dụ dưới đây chỉ thêm checks. Strict có thể yêu cầu merge main vào nhánh và chạy CI lại; job đổi tên, thiếu hoặc đỏ sẽ chặn merge. Không bypass tự động, không dùng force push khi bị chặn. npm audit vẫn warning-only theo workflow, bốn check xanh không chứng minh audit=0.
+
+Ví dụ sau **chỉ để Owner xem xét sau quyết định**, không phải lệnh đã chạy. Tải bản ruleset mới nhất và giữ các rule/conditions/bypass hiện có; Owner phải đọc diff payload trước PUT. Cần quyền quản trị phù hợp. API có thể đổi; tham khảo [GitHub REST rulesets](https://docs.github.com/en/rest/repos/rules#update-a-repository-ruleset).
+
+```bash
+# CHỈ ĐỌC: Owner sao lưu ruleset hiện hành, không dùng bản cũ trong tài liệu.
+gh api repos/tienmanh28/GovVote/rulesets/27262992 > /tmp/govvote-main-ruleset-before.json
+# CHỈ TẠO PAYLOAD LOCAL: giữ ruleset hiện hành và thay đúng rule checks.
+python3 - <<'PYTHON'
+import json
+from pathlib import Path
+before = json.loads(Path("/tmp/govvote-main-ruleset-before.json").read_text())
+proposal = {key: before[key] for key in (
+    "name", "target", "enforcement", "conditions", "bypass_actors", "rules"
+)}
+proposal["rules"] = [rule for rule in proposal["rules"]
+                     if rule["type"] != "required_status_checks"] + [{
+    "type": "required_status_checks",
+    "parameters": {
+        "strict_required_status_checks_policy": True,
+        "required_status_checks": [{"context": name} for name in (
+            "contracts (forge)",
+            "frontend (typecheck, format, Vitest, build)",
+            "verify-cli (scripts/verify)",
+            "e2e (Anvil + Playwright)",
+        )],
+    },
+}]
+Path("/tmp/govvote-main-ruleset-proposed.json").write_text(
+    json.dumps(proposal, indent=2) + "\n"
+)
+PYTHON
+# Xem diff trước, chưa gọi API ghi.
+diff -u /tmp/govvote-main-ruleset-before.json /tmp/govvote-main-ruleset-proposed.json
+# CHỈ OWNER CHẠY SAU KHI QUYẾT ĐỊNH: PUT thay đổi cài đặt repo.
+# gh api --method PUT repos/tienmanh28/GovVote/rulesets/27262992 \
+#   --input /tmp/govvote-main-ruleset-proposed.json
+```
+
+Rollback nếu Owner cần: xem lại bản sao lưu, tạo payload chỉ chứa các field ghi được như trên từ bản before, kiểm diff và tự quyết PUT; không gửi nguyên response chứa id/timestamps vào API. Không thực hiện rollback hay đổi cấu hình nào ở PR-F.
+
+- Kiểm tài liệu: Prettier hai Markdown mới, link tương đối và diff --check PASS. Lần kiểm mẫu đầu thiếu jq; đã thay bằng Python3 và xác nhận payload local giữ hai rule/conditions/bypass, thêm bốn checks PASS. Không chạy PUT.
+- Git snapshot trước commit: base022a3aa; chỉ `docs/PROGRESS.md` modified và hai Markdown mới; không thay code/test/workflow. Bằng chứng CI main lưu trong link run còn truy cập được; số liệu CV cố định theo SHA, không tự nhận là các nhánh PR mới nhất. PR-F chờ CI/review; Owner merge.
+
+
+## PR-E — đóng backlog B4, gate quyền tại block trước, 16/11/2026, Codex
+
+- Nhánh `fix/p4-gate-previous-block`, base main022a3aa, working tree sạch trước tạo; độc lập PR-D #6 chưa merge. Đọc src/GovVote.sol:196 xác nhận propose dùng token.getPastVotes(msg.sender,block.number-1), không phải getVotes hiện tại hay snapshot của proposal.
+- **Bước1 trước sửa:** commit regression **d70168e** chỉ test mới/evidence. Trên dependency main wagmi2.19.5 và code cũ: Anvil block5 có getVotes=1.000GOV, getPastVotes(B-1)=0; simulateContract thực tại B revert BelowThreshold, UI vẫn bật gửi. Test đỏ đúng `toBeDisabled received enabled`, lưu nguyên docs/p4-gate-evidence/repro-red-before-fix.log + baseline/test SHA256. Fixture tối thiểu dùng cùng contract/tham số, mint cho deployer Anvil và transfer tuần tự cho Alice; không cần proposal demo. Chọn fixture này vì full prepare-chain bị treo SeedDemo một lần, chưa sửa script/hạ tầng. Một lần debug test chờ query ban đầu sai suffix GOV đã sửa trước commit đỏ chính thức, không tính là bằng chứng lỗi gate.
+- **Bước2:** fix **38f95a2**, eligibility gọi GovToken.getPastVotes(ví,B-1) tại state B, chặn khi block chưa có/genesis để không hỏi tương lai. Gate chỉ so eligibility với threshold; getVotes giữ để hiển thị quyền hiện tại riêng, bổ sung ô quyền block trước và hướng dẫn chờ block mới. ReadError/freshness xử lý cả hai query, không giả lỗi thành0.
+- Cùng test chuyển xanh **không đổi hash/assertion**, log repro-green-after-fix.log: tại B nút disabled, sau mine1 nút enabled và simulation tại B+1 thành công; kiểm 375×812,768×1024,1280×800 không tràn ngang. **B4 ĐÃ ĐÓNG trong implementation/test của PR-E**, Owner review/merge; không tuyên bố main đã có fix.
+- Typecheck/format PASS, Vitest **177/177**, CLI **37/37**, bytecode runtime GovToken6846/GovVote4603 không đổi. Full browser **67/67** (66 cũ +1 mới) = validation34 + reliability12 + finalUI3 + E2E18, bằng prepare-chain CI nguyên bản trên Anvil8549. Đã tắt node và kiểm cleanup; CSP và ba viewport đều xanh. Không sửa contract/src, script, spec, test cũ, dependency, CSP hoặc CI. Anvil dùng8549, cleanup bằng trap; không chạm8545 hay public RPC/Sepolia/Cloudflare.
+- Giới hạn: gate là kiểm trước tại block B đã quan sát, quyền/chain có thể đổi trước simulation/latest hoặc tx vào block mới; contract quyết định cuối. Người mới đủ quyền phải chờ block mới, Anvil không tự tăng khi không có giao dịch. RPC có thể nói dối/reorg; không làm gate thành chứng nhận nguồn hoặc finality.
+- Git snapshot trước commit docs: HEAD38f95a2, code fix đã commit; chỉ docs/evidence mới và PROGRESS/threat-model modified, không có thay đổi Owner bị ghi đè. CI chưa xác minh tại checkpoint này; không tự merge hoặc bắt đầu PR-F/D2.
 
 ## PR-A / P4-D1 — guard deploy và runbook, 15/11/2026, Codex
 
@@ -191,7 +248,7 @@
 - **B1 đã được sửa sẵn trên main:** `frontend/e2e/01-wallet-states.spec.ts:86` lấy origin từ RPC_URL; helper đọc VITE_RPC_URL, mặc định127.0.0.1:8545. Không sửa lại test; proof riêng cổng8549 đã PASS **6/6** trong docs/p4-backlog-evidence/wallet-8549.log; Anvil đã tắt. Backlog cũ bên dưới đã lạc hậu.
 - **B2 audit:** 76 PNG, 76 SHA256 khác nhau, không có nhóm trùng byte; 76/76 được manifest pin đúng hash. Không xóa ảnh hay sửa manifest. Inventory đầy đủ tại docs/p4-backlog-evidence/screenshot-audit.json; tên thư mục gần giống không đủ căn cứ xóa bằng chứng.
 - **B3:** README EN/VI thể hiện Voter → frontend, MetaMask ký qua RPC ví và nguồn đọc cấu hình riêng → GovToken/GovVote; không đồng nhất RPC ví với frontend. Mermaid CLI12.0.0 (stable24/09, chỉ cài /tmp với ignore-scripts) render thành công cả 4 diagram, có SVG kiến trúc và summary. Thêm lưu ý verify64 confirmations ~13 phút, không bảo đảm finality.
-- **B4 phân tích, không sửa:** getVotes tại B dự đoán txB+1 là đúng, nhưng simulation không đặt blockTag nên mặc định latestB; contract kiểm getPastVotes(B-1). Sau tăng quyền ở B có thể false-enable rồi simulation revert, Anvil cần block mới. Chỉ là UX, contract không bị bypass; chưa tái hiện bằng test mới. Đề xuất gate theo pastVotes(B-1)/nhắc chờ block, cần Owner duyệt PR riêng. Chi tiết docs/p4-backlog-review.md.
+- **B4 lịch sử phân tích (đã đóng trong PR-E, xem checkpoint đầu file):** getVotes tại B dự đoán txB+1 là đúng, nhưng simulation không đặt blockTag nên mặc định latestB; contract kiểm getPastVotes(B-1). Sau tăng quyền ở B có thể false-enable rồi simulation revert, Anvil cần block mới. Chỉ là UX, contract không bị bypass; chưa tái hiện bằng test mới. Đề xuất gate theo pastVotes(B-1)/nhắc chờ block, cần Owner duyệt PR riêng. Chi tiết docs/p4-backlog-review.md.
 - **B5 spike /tmp:** wagmi3.7.9 + core3.6.7 + connectors8.2.2, stable21/10 đủ14ngày; audit27 (16high/11moderate) → **0**, cặp standalone cũng0. Không sửa source trong spike: typecheck, Vitest173, build PASS. API đang dùng chưa cần sửa qua các check này; browser v3/MetaMask/persistence thực chưa xác minh. Ước lượng1–2ngày cho PR nâng riêng và QA, không phải cam kết. Không đổi frontend/package*.json; summary và log tại docs/p4-backlog-evidence/.
 
 - Kiểm PR-B trên code/main v2 không đổi: typecheck, build, format:check PASS, Vitest **173/173**, E2E01 **6/6** trên Anvil8549. Không test bị xóa/skip, không sửa src/script/frontend logic/test cũ/package*.json. CI sẽ chạy đủ64 browser; chưa xác minh tại checkpoint này. Commits B1 fea03f6, B2 3967023, B3 2f2aee6, B4 9f647a2 + abb07ec (đối chiếu tên lỗi), B5 7fb67ba; commit proof có hash riêng. Git status trước proof commit chỉ docs/PROGRESS.md và bằng chứng mới; không public RPC, không merge.
