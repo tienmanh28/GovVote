@@ -54,6 +54,14 @@ export class VerificationProblem extends Error {
     super(message);
   }
 }
+// Tách lỗi JSON-RPC khỏi lỗi mạng để không coi việc từ chối EIP-1898 là kết quả hợp lệ.
+export class RpcResponseError extends Error {
+  constructor(public readonly code?: number) {
+    super("RPC returned error");
+  }
+}
+// Hash xác định đúng một state dù RPC load balancer chuyển request sang node khác.
+const stateBlock = (hash: string) => ({ blockHash: hash, requireCanonical: true });
 const incomplete = (reason: VerificationFailureReason, message: string): never => {
   throw new VerificationProblem("INCOMPLETE", reason, message);
 };
@@ -182,6 +190,13 @@ export async function runVerification(
         ]);
       } catch (err) {
         if (err instanceof VerificationProblem && err.status === "INCOMPLETE") throw err;
+        if (err instanceof RpcResponseError && (method === "eth_call" || method === "eth_getCode"))
+          return incomplete(
+            "MISSING_DATA",
+            err.code === -32601 || err.code === -32602
+              ? "RPC không hỗ trợ đọc state theo blockHash (EIP-1898); không quay về số block."
+              : "RPC từ chối đọc state theo blockHash (EIP-1898), hash có thể không khả dụng; không quay về số block.",
+          );
         if (attempt >= budget.retries)
           throw err instanceof VerificationProblem
             ? err
@@ -209,7 +224,7 @@ export async function runVerification(
     address: string,
     name: string,
     args: readonly unknown[],
-    at: bigint,
+    at: string,
   ): Promise<unknown> {
     let data: string;
     try {
@@ -217,7 +232,7 @@ export async function runVerification(
     } catch {
       return incomplete("MISSING_DATA", "ABI không hỗ trợ hàm bắt buộc.");
     }
-    const raw = await rpc("eth_call", [{ to: address, data }, hex(at)]);
+    const raw = await rpc("eth_call", [{ to: address, data }, stateBlock(at)]);
     if (typeof raw !== "string") return incomplete("MISSING_DATA", "RPC thiếu kết quả eth_call.");
     try {
       return codec.decode(target, name, raw);
@@ -279,31 +294,32 @@ export async function runVerification(
       period: 0n,
       provenance: "LOCAL_DEPLOYMENT_EVIDENCE",
     };
-    const govCode = await rpc("eth_getCode", [input.govVote, hex(head)]);
+    const govCode = await rpc("eth_getCode", [input.govVote, stateBlock(anchor.hash)]);
     if (typeof govCode !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(govCode))
       return finish("INVALID_INPUT", "NO_CODE", "GovVote không có bytecode tại H.");
-    const count = uint(await read("gov", input.govVote, "proposalCount", [], head));
+    const count = uint(await read("gov", input.govVote, "proposalCount", [], anchor.hash));
     if (input.proposalId > count) {
-      const latestCount = uint(
-        await read("gov", input.govVote, "proposalCount", [], latest.number),
-      );
+      // Chỉ dùng latest để phân biệt ID chưa đủ confirmations; vẫn ghim hash đã quan sát.
+      const latestCount = uint(await read("gov", input.govVote, "proposalCount", [], latest.hash));
       return input.proposalId <= latestCount
         ? finish("INCOMPLETE", "NOT_CONFIRMED", "Proposal chưa đủ block xác nhận tại H.")
         : finish("INVALID_INPUT", "INVALID_INPUT", "Không tồn tại proposal ID này.");
     }
-    const token = await read("gov", input.govVote, "token", [], head);
+    const token = await read("gov", input.govVote, "token", [], anchor.hash);
     if (
       !addressValid(token) ||
       (input.govToken && token.toLowerCase() !== input.govToken.toLowerCase())
     )
       return finish("MISMATCH", "PROPOSAL_MISMATCH", "Địa chỉ token không khớp cấu hình.");
     context.token = token;
-    const code = await rpc("eth_getCode", [token, hex(head)]);
+    const code = await rpc("eth_getCode", [token, stateBlock(anchor.hash)]);
     if (typeof code !== "string" || !/^0x(?:[0-9a-f]{2})+$/i.test(code))
       return finish("INVALID_INPUT", "NO_CODE", "GovToken không có bytecode tại H.");
-    context.delay = uint(await read("gov", input.govVote, "votingDelayBlocks", [], head));
-    context.period = uint(await read("gov", input.govVote, "votingPeriodBlocks", [], head));
-    const p = object(await read("gov", input.govVote, "getProposal", [input.proposalId], head));
+    context.delay = uint(await read("gov", input.govVote, "votingDelayBlocks", [], anchor.hash));
+    context.period = uint(await read("gov", input.govVote, "votingPeriodBlocks", [], anchor.hash));
+    const p = object(
+      await read("gov", input.govVote, "getProposal", [input.proposalId], anchor.hash),
+    );
     if (
       !addressValid(p.proposer) ||
       typeof p.title !== "string" ||
@@ -398,16 +414,16 @@ export async function runVerification(
       });
     }
     evidence.contractState = uint(
-      await read("gov", input.govVote, "state", [input.proposalId], head),
+      await read("gov", input.govVote, "state", [input.proposalId], anchor.hash),
     );
     if (head > proposal.snapshotBlock)
       evidence.quorum = {
         pastTotalSupply: uint(
-          await read("token", token, "getPastTotalSupply", [proposal.snapshotBlock], head),
+          await read("token", token, "getPastTotalSupply", [proposal.snapshotBlock], anchor.hash),
         ),
-        quorumBps: uint(await read("gov", input.govVote, "quorumBps", [], head)),
+        quorumBps: uint(await read("gov", input.govVote, "quorumBps", [], anchor.hash)),
         contractQuorum: uint(
-          await read("gov", input.govVote, "quorumVotes", [input.proposalId], head),
+          await read("gov", input.govVote, "quorumVotes", [input.proposalId], anchor.hash),
         ),
       };
     const finalAnchor = await block(head);

@@ -53,6 +53,8 @@ export function rawEvent(kind: "ProposalCreated" | "VoteCast", e: ProposalEviden
 export function rpcFixture() {
   const f = fixture();
   const calls: { method: string; params: unknown[] }[] = [];
+  // Cho phép đổi confirmations: chỉ nhận hash đã thực sự trả qua block RPC.
+  const observedHashes = new Set<string>();
   const control = {
     fail: false,
     reorg: false,
@@ -70,13 +72,18 @@ export function rpcFixture() {
     if (method === "eth_getBlockByNumber") {
       const number = params[0] === "latest" ? f.context.latest : BigInt(String(params[0]));
       if (number === f.context.head) control.headReads++;
-      return {
-        number: `0x${number.toString(16)}`,
-        hash:
-          control.reorg && control.headReads > 1 && number === f.context.head
-            ? hash(99999)
-            : hash(number),
-      };
+      const blockHash =
+        control.reorg && control.headReads > 1 && number === f.context.head
+          ? hash(99999)
+          : hash(number);
+      observedHashes.add(blockHash);
+      return { number: `0x${number.toString(16)}`, hash: blockHash };
+    }
+    // Fixture kiểm đúng selector; không cho test vô tình dùng lại số block.
+    if (method === "eth_getCode" || method === "eth_call") {
+      const selector = params[1] as { blockHash?: string; requireCanonical?: boolean };
+      if (selector?.requireCanonical !== true || !observedHashes.has(selector.blockHash ?? ""))
+        throw new Error("Fixture yêu cầu EIP-1898 với hash đã quan sát");
     }
     if (method === "eth_getCode") return control.noCode ? "0x" : "0x6000";
     if (method === "eth_call") {

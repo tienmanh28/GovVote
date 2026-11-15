@@ -1,6 +1,6 @@
 // Trạng thái ví và lỗi hiển thị trên trình duyệt thật (Bước 3, 6).
 import { expect, test } from "@playwright/test";
-import { ACCOUNTS, installFakeWallet } from "./helpers.ts";
+import { ACCOUNTS, installFakeWallet, RPC_URL } from "./helpers.ts";
 
 const IPHONE_UA =
   "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
@@ -82,7 +82,8 @@ test("VITE_GOV_VOTE không có bytecode: hiện lỗi cấu hình thay vì dữ 
 }) => {
   // Chặn đúng lời gọi eth_getCode tới RPC và trả "0x" (giả lập địa chỉ sai / Anvil đã khởi động lại).
   await page.route(
-    (url) => url.port === "8545",
+    // Đọc endpoint từ fixture để chạy Anvil cô lập mà vẫn chặn đúng request cần kiểm.
+    (url) => url.origin === new URL(RPC_URL).origin,
     async (route) => {
       const body = route.request().postDataJSON() as { id: number; method: string } | undefined;
       if (body?.method === "eth_getCode") {

@@ -1,0 +1,35 @@
+
+> govvote-verify@0.1.0 test
+> tsx --test test/*.test.ts
+
+✔ CLI EIP-1898: hash hợp lệ (502.284034ms)
+✔ CLI EIP-1898: eth_getCode (450.285055ms)
+✔ CLI EIP-1898: eth_call (443.910533ms)
+✔ CLI body 5242880 bytes, Content-Length=false (547.401316ms)
+✔ CLI body 5242881 bytes, Content-Length=false (491.724037ms)
+✔ CLI body 5242881 bytes, Content-Length=true (406.010956ms)
+✔ strict CLI codec và core dùng evidence đầy đủ (14.812194ms)
+✔ strict exit codes tách mismatch/incomplete/RPC (0.580405ms)
+✔ strict CLI HTTP fixture VERIFIED, exit 0 (505.220395ms)
+✔ strict CLI HTTP fixture MISMATCH, exit 1 (501.114896ms)
+✔ strict CLI HTTP fixture INCOMPLETE, exit 3 (458.206889ms)
+✔ strict CLI HTTP fixture RPC_ERROR, exit 2 (390.455216ms)
+✔ strict invalid input không in credentials RPC (308.096869ms)
+✔ CLI legacy/strict không echo input cấu hình nhạy cảm không hợp lệ (628.224383ms)
+✔ (a) valid logs without duplicates => VERIFIED (2.662027ms)
+✔ (b) exact duplicate (same txHash, logIndex, content) => VERIFIED, counted once (0.251288ms)
+✔ (c) one log with tampered weight => MISMATCH on exactly that id (0.290713ms)
+✔ (d) one missing log => MISMATCH (0.24159ms)
+✔ (e) logs with blockNumber > headBlock are ignored => VERIFIED (0.215641ms)
+✔ (f) same txHash:logIndex key with different content => aggregateVotes throws (1.299624ms)
+✔ (g) votes for an id outside 1..proposalCount => MISMATCH (0.425489ms)
+✔ (h) proposal with no votes on either side => VERIFIED with For = 0, Against = 0 (0.297346ms)
+✔ (i) blockWindows boundaries: contiguous, no gaps, no overlap (0.825115ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3268.055985

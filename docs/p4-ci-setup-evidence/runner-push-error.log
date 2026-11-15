@@ -1,0 +1,16 @@
+2026-11-15T00:45:01.2745690Z [prepare-chain] 2026-11-15T00:45:01.273Z END cast send propose and read timing elapsed=0s
+2026-11-15T00:45:01.2761300Z [prepare-chain] 2026-11-15T00:45:01.275Z BEGIN mine to snapshot
+2026-11-15T00:45:01.3078081Z [prepare-chain] 2026-11-15T00:45:01.307Z END mine to snapshot elapsed=0s
+2026-11-15T00:45:01.3094108Z [prepare-chain] 2026-11-15T00:45:01.308Z BEGIN cast send Alice For
+2026-11-15T00:45:01.3276238Z [prepare-chain] 2026-11-15T00:45:01.327Z END cast send Alice For elapsed=0s
+2026-11-15T00:45:01.3292550Z [prepare-chain] 2026-11-15T00:45:01.328Z BEGIN cast send Bob Against
+2026-11-15T00:45:01.3472006Z [prepare-chain] 2026-11-15T00:45:01.346Z END cast send Bob Against elapsed=0s
+2026-11-15T00:45:01.3488789Z [prepare-chain] 2026-11-15T00:45:01.348Z BEGIN cast send Charlie For
+2026-11-15T00:45:01.3675835Z [prepare-chain] 2026-11-15T00:45:01.367Z END cast send Charlie For elapsed=0s
+2026-11-15T00:45:01.3691999Z [prepare-chain] 2026-11-15T00:45:01.368Z BEGIN mine past deadline
+2026-11-15T00:45:46.3975723Z Error: error sending request for url (http://127.0.0.1:8545/)
+2026-11-15T00:45:46.3976113Z
+2026-11-15T00:45:46.3976221Z Context:
+2026-11-15T00:45:46.3976467Z - operation timed out
+2026-11-15T00:45:46.4006720Z [prepare-chain] 2026-11-15T00:45:46.400Z FAIL step=mine past deadline line=54 elapsed=45s command=cast rpc anvil_mine "$1" --rpc-url "$RPC_URL" > /dev/null
+2026-11-15T00:45:46.4026449Z ##[error]Process completed with exit code 1.
