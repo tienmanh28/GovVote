@@ -1,0 +1,6 @@
+
+> govvote-frontend@0.1.0 format:check
+> prettier --ignore-path ../.prettierignore --check "src/**/*.{ts,tsx,mjs}" "e2e/**/*.{ts,tsx,mjs}" "tests/**/*.{ts,tsx,mjs}" "validation/**/*.{ts,tsx,mjs}" "../shared/**/*.{ts,tsx,mjs}" "../scripts/verify/src/**/*.ts" "../scripts/verify/test/**/*.ts"
+
+Checking formatting...
+All matched files use Prettier code style!

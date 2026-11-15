@@ -46,6 +46,13 @@ Tài liệu này chỉ ghi những gì v1.1 làm và không làm, kèm bằng ch
 
 Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục 4.4, cộng đoạn Reentrancy cuối mục này. Các dòng đánh dấu "chưa làm, thuộc Phase 3/4" là biện pháp đặc tả yêu cầu nhưng chưa có trong code hiện tại.
 
+## P4-E1 — hosting/CSP (chuẩn bị, chưa deploy)
+
+- Mối đe dọa: bundle bị chèn inline/nguồn script ngoài, kết nối ra origin không được duyệt, clickjacking, MIME sniffing và rò referrer. `_headers` static + policy sinh lúc build giới hạn script/style/font/img self, không inline/eval, connect-src chỉ self và RPC primary/fallback được cấu hình; frame-ancestors/object/base/form bị khóa. Header Permissions-Policy tắt quyền thiết bị không dùng.
+- `vite preview` phục vụ đúng header từ artifact dist để kiểm local, không chỉ kiểm meta hoặc file text. Vitest kiểm nguồn/format; Playwright có flow hợp lệ ở ba viewport/Injected EIP-1193 và probe âm loopback/inline bị chặn. Kết quả chạy thực ở PROGRESS/evidence; không sửa hoặc nới test cũ. Hash routing không cần _redirects.
+- **Giới hạn:** không deploy/gọi API Cloudflare hoặc RPC public ở E1. Dashboard/TLS/CDN/CORS/MetaMask thật và wallet injection trên mobile **chưa xác minh**, chờ F1. CSP không ngăn bundle cùng origin bị chiếm hay RPC allowlist nói dối, không chứng minh contract chính chủ, không theo dõi fork sau anchor. Policy origin không giới hạn method/path, không bật report endpoint chưa được duyệt. Đổi RPC phải rebuild; không nới wildcard/unsafe-inline để che lỗi.
+- Nguồn và quy trình Owner tự làm sau duyệt: `docs/hosting-cloudflare.md`. Không chọn RPC Sepolia mới, không thay tham số/bytecode/dependency hoặc tự deploy.
+
 ## Ngoài phạm vi
 
 - **Mua phiếu** (vote buying, hối lộ off-chain): phiếu công khai và không có cơ chế chống mua bán. Commit-reveal hoặc ZK thuộc v2.

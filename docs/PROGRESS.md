@@ -542,6 +542,16 @@ Phase 3, từng bước, theo bảng trạng thái trong `docs/phase3-frontend-r
   - `.github/workflows/test.yml` và `README.md` là bản mẫu của `forge init`, có từ trước, **không thuộc Phase 3**.
   - `frontend/.env.local`, `node_modules/`, `dist/` đã bị ignore.
 
+## PR-C / P4-E1 — hosting prep, checkpoint 15/11/2026, Codex
+
+- Nhánh `feat/p4-e1-hosting-prep`, từ main **1e8b944**, độc lập PR-A/PR-B. Cả A/B chưa merge bởi AI; Owner merge A → B → C. PR-A #3 HEAD9fa2ffb xanh4/4 (forge/snapshot54, Vitest173, CLI37, browser64, e2e186s); PR-B #4 HEADd4df3ac xanh4/4 (forge/snapshot53, Vitest173, CLI37, browser64, e2e212s). Metadata bền tại docs/p4-e1-evidence/actions-pr-a.json và actions-pr-b.json; các checkpoint OPEN/CI pending cũ là lịch sử.
+- **C1:** docs/hosting-cloudflare.md ghi root frontend, npm ci --ignore-scripts + build, output dist, Node24.19.0 theo CI và frontend/.node-version; env VITE chain/RPC/fallback/hai địa chỉ chỉ placeholder/công khai. Không tạo project, deploy hoặc gọi API Cloudflare; hướng dẫn Owner tự làm sau duyệt, chưa xác minh dashboard thật.
+- **C2:** public/_headers template đóng mạng ngoài; plugin Vite sinh dist/_headers theo đúng origin primary/fallback build, bỏ path/query, chặn credentials/fragment/scheme khácHTTP(S), không wildcard. Script/style/font/img self, không inline/eval, frame-ancestors/object/base/form/media/worker none; nosniff/no-referrer/permissions. React bar dùng CSSOM qua policy style-src-attr none đã kiểm flow thực, không cần unsafe-inline.
+- **C3:** không thêm _redirects vì App hash routing (fragment không gửi server), giữ tài nguyên JS/CSS; Pages có default SPA fallback khi không có404.html theo docs chính thức. Không bịa rule rewrite rộng.
+- **C4:** vite preview phục vụ chính header artifact (preview mặc định bỏ qua _headers). Typecheck/format PASS; Vitest **177/177** (173+4); browser **66/66** trên Anvil8549 = validation34 + reliability12 + finalUI3 + defaultE2E17 (15cũ+2CSP). Các trang list/create/wallet/detail/verify ở375×812,768×1024,1280×800 không CSP violation, mock EIP-1193 hoạt động và strict VERIFIED. Probe âm riêng cố ý tạo hai violation cho inline script/origin loopback ngoài allowlist, không gọi mạng public. Anvil đã tắt sau test.
+- **C5:** threat-model thêm hosting/CSP và giới hạn. Cloudflare dashboard/header CDN/domain/TLS, RPC public/CORS và MetaMask/mobile thật **chưa xác minh** (F1); CSP không bảo vệ khi bundle cùng origin hoặc RPC được phép bị chiếm/nói dối. Không deploy Sepolia/Cloudflare, không bắt đầu D2/D3; không sửa contract, script, spec, test cũ, dependency hoặc CI; label CI cũ ghi64 nhưng số thực sau thêm test là66.
+- Bằng chứng local tại docs/p4-e1-evidence; CI của PR-C chưa xác minh tại commit checkpoint này, sẽ watch sau push. Git snapshot trước commit: branchC từ1e8b944, modified frontend/vite.config.ts và docs/threat-model.md, mới policy/public header/Nodepin/4unit/2browser/docs hosting/evidence; tất cả do phiên này tạo, không xóa/ghi đè thay đổi Owner.
+
 ## 3. Việc kế tiếp (theo thứ tự)
 
 1. Bước 10 Phase 3: đã PASS. Không còn việc dở.

@@ -1,0 +1,12 @@
+[WebServer] (node:38803) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:38846) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 validation/p3-final-ui.spec.ts:11:3 › final RPC error và wrong chain responsive 375 (1.2s)
+  ✓  2 validation/p3-final-ui.spec.ts:11:3 › final RPC error và wrong chain responsive 768 (1.2s)
+  ✓  3 validation/p3-final-ui.spec.ts:11:3 › final RPC error và wrong chain responsive 1280 (1.2s)
+
+  3 passed (5.2s)

@@ -1,0 +1,27 @@
+{
+  "base": "1e8b944",
+  "node": "24.19.0",
+  "vitest": 177,
+  "vitestNew": 4,
+  "browser": [
+    34,
+    12,
+    3,
+    17
+  ],
+  "browserTotal": 66,
+  "browserNew": 2,
+  "anvilPort": 8549,
+  "cspPositive": "No securitypolicyviolation across main routes and viewports375/768/1280; fake injected wallet + strict VERIFIED",
+  "cspNegative": "inline script not executed; connect-src blocked unlisted loopback65534",
+  "headers": "Actual HTTP response from built dist/_headers via vite preview",
+  "routing": "hash routes; _redirects unnecessary",
+  "publicRpcCalls": 0,
+  "cloudflareApiCalls": 0,
+  "notVerified": [
+    "Cloudflare dashboard/deploy/CDN/TLS/domain",
+    "Public RPC CORS",
+    "Real MetaMask/mobile injection"
+  ],
+  "bytecode": "src and deployment scripts unchanged in this branch"
+}
