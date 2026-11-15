@@ -1,0 +1,13 @@
+
+> govvote-frontend@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /home/tienm/blockchain/GovVote/frontend
+
+
+ Test Files  12 passed (12)
+      Tests  173 passed (173)
+   Start at  17:08:41
+   Duration  1.08s (import 81%, tests 10%, transform 8%, worker 1%)
+

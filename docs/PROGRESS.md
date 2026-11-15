@@ -168,12 +168,14 @@
 
 ### PR-B / backlog polish — checkpoint 15/11/2026, Codex
 
-- Nhánh `chore/p4-backlog-polish`, từ main `1e8b944`, độc lập PR-A; PR-A #3 đang CI, chỉ mở PR-B sau khi PR-A xanh. Không sửa src/script/test cũ hoặc dependency trong repo.
-- **B1 đã được sửa sẵn trên main:** `frontend/e2e/01-wallet-states.spec.ts:86` lấy origin từ RPC_URL; helper đọc VITE_RPC_URL, mặc định127.0.0.1:8545. Không sửa lại test; proof riêng cổng8549 sẽ lưu ở docs/p4-backlog-evidence/. Backlog cũ bên dưới đã lạc hậu.
+- Nhánh `chore/p4-backlog-polish`, từ main `1e8b944`, độc lập PR-A; PR-A #3 đã xanh4/4 tại9fa2ffb: forge/snapshot54, Vitest173, CLI37, browser64; PR-B độc lập, không chứa guard của A. Không sửa src/script/test cũ hoặc dependency trong repo.
+- **B1 đã được sửa sẵn trên main:** `frontend/e2e/01-wallet-states.spec.ts:86` lấy origin từ RPC_URL; helper đọc VITE_RPC_URL, mặc định127.0.0.1:8545. Không sửa lại test; proof riêng cổng8549 đã PASS **6/6** trong docs/p4-backlog-evidence/wallet-8549.log; Anvil đã tắt. Backlog cũ bên dưới đã lạc hậu.
 - **B2 audit:** 76 PNG, 76 SHA256 khác nhau, không có nhóm trùng byte; 76/76 được manifest pin đúng hash. Không xóa ảnh hay sửa manifest. Inventory đầy đủ tại docs/p4-backlog-evidence/screenshot-audit.json; tên thư mục gần giống không đủ căn cứ xóa bằng chứng.
 - **B3:** README EN/VI thể hiện Voter → frontend, MetaMask ký qua RPC ví và nguồn đọc cấu hình riêng → GovToken/GovVote; không đồng nhất RPC ví với frontend. Mermaid CLI12.0.0 (stable24/09, chỉ cài /tmp với ignore-scripts) render thành công cả 4 diagram, có SVG kiến trúc và summary. Thêm lưu ý verify64 confirmations ~13 phút, không bảo đảm finality.
 - **B4 phân tích, không sửa:** getVotes tại B dự đoán txB+1 là đúng, nhưng simulation không đặt blockTag nên mặc định latestB; contract kiểm getPastVotes(B-1). Sau tăng quyền ở B có thể false-enable rồi simulation revert, Anvil cần block mới. Chỉ là UX, contract không bị bypass; chưa tái hiện bằng test mới. Đề xuất gate theo pastVotes(B-1)/nhắc chờ block, cần Owner duyệt PR riêng. Chi tiết docs/p4-backlog-review.md.
 - **B5 spike /tmp:** wagmi3.7.9 + core3.6.7 + connectors8.2.2, stable21/10 đủ14ngày; audit27 (16high/11moderate) → **0**, cặp standalone cũng0. Không sửa source trong spike: typecheck, Vitest173, build PASS. API đang dùng chưa cần sửa qua các check này; browser v3/MetaMask/persistence thực chưa xác minh. Ước lượng1–2ngày cho PR nâng riêng và QA, không phải cam kết. Không đổi frontend/package*.json; summary và log tại docs/p4-backlog-evidence/.
+
+- Kiểm PR-B trên code/main v2 không đổi: typecheck, build, format:check PASS, Vitest **173/173**, E2E01 **6/6** trên Anvil8549. Không test bị xóa/skip, không sửa src/script/frontend logic/test cũ/package*.json. CI sẽ chạy đủ64 browser; chưa xác minh tại checkpoint này. Commits B1 fea03f6, B2 3967023, B3 2f2aee6, B4 9f647a2 + abb07ec (đối chiếu tên lỗi), B5 7fb67ba; commit proof có hash riêng. Git status trước proof commit chỉ docs/PROGRESS.md và bằng chứng mới; không public RPC, không merge.
 
 ### Backlog đã ghi nhận, chưa triển khai
 
