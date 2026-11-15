@@ -1,0 +1,9 @@
+
+ RUN  v5.0.5 /home/tienm/blockchain/GovVote/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  46 passed (46)
+   Start at  16:03:28
+   Duration  802ms (import 86%, transform 7%, tests 6%, worker 1%)
+

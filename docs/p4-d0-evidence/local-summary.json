@@ -1,0 +1,31 @@
+{
+  "branch": "feat/p4-d0-chain-profile",
+  "base": "aaf77fa",
+  "contracts": 53,
+  "vitest": {
+    "old": 151,
+    "new": 22,
+    "total": 173,
+    "note": "Full run 170/170; three added continuity cases passed in profile suite 22/22. Final affected suites 46/46; unchanged suites not rerun."
+  },
+  "cli": {
+    "old": 23,
+    "new": 14,
+    "total": 37
+  },
+  "browser": {
+    "validation": 34,
+    "reliability": 12,
+    "finalUI": 3,
+    "originalAndHardening": 15,
+    "total": 64
+  },
+  "localAnvil": "127.0.0.1:18548",
+  "setupScript": "scripts/ci/prepare-chain.sh (180s guard, unchanged)",
+  "cleanup": "Anvil stopped; loopback18548 bind verified",
+  "publicRpcCalls": 0,
+  "notes": [
+    "Local browser build preceded final text-to-profile interpolation; these replacements retain local strings, affected unit suites passed, final CI will rerun all browser suites.",
+    "No contract, deploy script, spec, CI, existing assertions or browser tests changed."
+  ]
+}

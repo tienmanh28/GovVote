@@ -1,0 +1,9 @@
+Ran 3 tests for test/GovVoteFuzz.t.sol:GovVoteFuzzTest
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 1.04s (1.67s CPU time)
+Ran 39 tests for test/GovVote.t.sol:GovVoteTest
+Suite result: ok. 39 passed; 0 failed; 0 skipped; finished in 6.16s (60.86ms CPU time)
+Ran 4 tests for test/GovToken.t.sol:GovTokenTest
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 10.43s (7.39ms CPU time)
+Ran 7 tests for test/GovVoteInvariant.t.sol:GovVoteInvariantTest
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 10.43s (37.31s CPU time)
+Ran 4 test suites in 10.44s (28.06s CPU time): 53 tests passed, 0 failed, 0 skipped (53 total tests)
