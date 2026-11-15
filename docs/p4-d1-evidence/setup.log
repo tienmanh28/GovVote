@@ -1,0 +1,73 @@
+[prepare-chain] 2026-11-15T09:55:17.575Z BEGIN Anvil readiness
+[prepare-chain] Anvil sẵn sàng tại http://127.0.0.1:8549 (chain 31337), block 0
+[prepare-chain] 2026-11-15T09:55:18.248Z END Anvil readiness elapsed=1s
+[prepare-chain] 2026-11-15T09:55:18.253Z BEGIN forge script Deploy
+[prepare-chain] 2026-11-15T09:55:20.968Z END forge script Deploy elapsed=2s
+[prepare-chain] 2026-11-15T09:55:20.971Z BEGIN read deployment and check bytecode/proposalCount
+[prepare-chain] GovToken 0x5fbdb2315678afecb367f032d93f642f64180aa3
+[prepare-chain] GovVote  0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+[prepare-chain] 2026-11-15T09:55:21.105Z END read deployment and check bytecode/proposalCount elapsed=1s
+[prepare-chain] 2026-11-15T09:55:21.109Z BEGIN forge script SeedDemo
+[prepare-chain] 2026-11-15T09:55:23.576Z END forge script SeedDemo elapsed=2s
+[prepare-chain] 2026-11-15T09:55:23.580Z BEGIN cast send delegate 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+[prepare-chain] 2026-11-15T09:55:23.607Z END cast send delegate 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.611Z BEGIN cast send delegate 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+[prepare-chain] 2026-11-15T09:55:23.637Z END cast send delegate 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.641Z BEGIN cast send delegate 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+[prepare-chain] 2026-11-15T09:55:23.669Z END cast send delegate 0x90F79bf6EB2c4f870365E785982E1f101E93b906 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.673Z BEGIN cast send delegate 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+[prepare-chain] 2026-11-15T09:55:23.700Z END cast send delegate 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.704Z BEGIN mine after delegation
+[prepare-chain] 2026-11-15T09:55:23.707Z BEGIN anvil_mine batch=2 remaining=2
+[prepare-chain] 2026-11-15T09:55:23.731Z END anvil_mine batch=2 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.735Z END mine after delegation elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.740Z BEGIN cast send propose and read timing
+[prepare-chain] 2026-11-15T09:55:23.812Z END cast send propose and read timing elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.815Z BEGIN mine to snapshot
+[prepare-chain] 2026-11-15T09:55:23.836Z BEGIN anvil_mine batch=15 remaining=15
+[prepare-chain] 2026-11-15T09:55:23.859Z END anvil_mine batch=15 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.862Z END mine to snapshot elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.865Z BEGIN cast send Alice For
+[prepare-chain] 2026-11-15T09:55:23.888Z END cast send Alice For elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.892Z BEGIN cast send Bob Against
+[prepare-chain] 2026-11-15T09:55:23.914Z END cast send Bob Against elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.917Z BEGIN cast send Charlie For
+[prepare-chain] 2026-11-15T09:55:23.940Z END cast send Charlie For elapsed=0s
+[prepare-chain] 2026-11-15T09:55:23.943Z BEGIN mine past deadline
+[prepare-chain] 2026-11-15T09:55:23.964Z BEGIN anvil_mine batch=500 remaining=7198
+[prepare-chain] 2026-11-15T09:55:24.174Z END anvil_mine batch=500 elapsed=1s
+[prepare-chain] 2026-11-15T09:55:24.178Z BEGIN anvil_mine batch=500 remaining=6698
+[prepare-chain] 2026-11-15T09:55:24.939Z END anvil_mine batch=500 elapsed=0s
+[prepare-chain] 2026-11-15T09:55:24.942Z BEGIN anvil_mine batch=500 remaining=6198
+[prepare-chain] 2026-11-15T09:55:25.900Z END anvil_mine batch=500 elapsed=1s
+[prepare-chain] 2026-11-15T09:55:25.904Z BEGIN anvil_mine batch=500 remaining=5698
+[prepare-chain] 2026-11-15T09:55:27.449Z END anvil_mine batch=500 elapsed=2s
+[prepare-chain] 2026-11-15T09:55:27.453Z BEGIN anvil_mine batch=500 remaining=5198
+[prepare-chain] 2026-11-15T09:55:29.746Z END anvil_mine batch=500 elapsed=2s
+[prepare-chain] 2026-11-15T09:55:29.753Z BEGIN anvil_mine batch=500 remaining=4698
+[prepare-chain] 2026-11-15T09:55:32.581Z END anvil_mine batch=500 elapsed=3s
+[prepare-chain] 2026-11-15T09:55:32.584Z BEGIN anvil_mine batch=500 remaining=4198
+[prepare-chain] 2026-11-15T09:55:36.423Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:55:36.429Z BEGIN anvil_mine batch=500 remaining=3698
+[prepare-chain] 2026-11-15T09:55:41.867Z END anvil_mine batch=500 elapsed=5s
+[prepare-chain] 2026-11-15T09:55:41.925Z BEGIN anvil_mine batch=500 remaining=3198
+[prepare-chain] 2026-11-15T09:55:45.890Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:55:45.893Z BEGIN anvil_mine batch=500 remaining=2698
+[prepare-chain] 2026-11-15T09:55:49.504Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:55:49.507Z BEGIN anvil_mine batch=500 remaining=2198
+[prepare-chain] 2026-11-15T09:55:53.270Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:55:53.275Z BEGIN anvil_mine batch=500 remaining=1698
+[prepare-chain] 2026-11-15T09:55:57.309Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:55:57.314Z BEGIN anvil_mine batch=500 remaining=1198
+[prepare-chain] 2026-11-15T09:56:01.655Z END anvil_mine batch=500 elapsed=4s
+[prepare-chain] 2026-11-15T09:56:01.660Z BEGIN anvil_mine batch=500 remaining=698
+[prepare-chain] 2026-11-15T09:56:06.219Z END anvil_mine batch=500 elapsed=5s
+[prepare-chain] 2026-11-15T09:56:06.224Z BEGIN anvil_mine batch=198 remaining=198
+[prepare-chain] 2026-11-15T09:56:08.195Z END anvil_mine batch=198 elapsed=2s
+[prepare-chain] 2026-11-15T09:56:08.200Z END mine past deadline elapsed=45s
+[prepare-chain] 2026-11-15T09:56:08.204Z BEGIN check final state/tally
+[prepare-chain] proposal #1: Succeeded, For 600.000 GOV / Against 250.000 GOV, block hiện tại 7228
+[prepare-chain] 2026-11-15T09:56:08.317Z END check final state/tally elapsed=0s
+[prepare-chain] đã ghi frontend/.env.local
+GOV_TOKEN=0x5fbdb2315678afecb367f032d93f642f64180aa3
+GOV_VOTE=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512

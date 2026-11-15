@@ -1,0 +1,35 @@
+{
+  "forge": {
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "summary": "5 test suites in 7.19s (19.31s CPU time): 54 tests passed, 0 failed, 0 skipped (54 total tests)"
+  },
+  "snapshot-create": {
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "summary": "5 test suites in 21.12s (21.12s CPU time): 54 tests passed, 0 failed, 0 skipped (54 total tests)"
+  },
+  "snapshot-check1": {
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "summary": "5 test suites in 21.98s (21.98s CPU time): 54 tests passed, 0 failed, 0 skipped (54 total tests)"
+  },
+  "snapshot-check2": {
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "summary": "5 test suites in 21.44s (21.44s CPU time): 54 tests passed, 0 failed, 0 skipped (54 total tests)"
+  },
+  "newFoundryTest": {
+    "tests": 1,
+    "sequentialScenarios": 11,
+    "reason": "vm.setEnv process-global; clean env and broadcast context per scenario"
+  },
+  "bytecode": "Both creation and runtime bytecode SHA256 unchanged; runtime GovToken6846, GovVote4603",
+  "shellcheck": "PASS, scripts/ci/prepare-chain.sh",
+  "missingEnv": "Real absent EXPECTED_CHAIN_ID, offline forge script => ExpectedChainIdRequired (no RPC/broadcast)",
+  "publicRpcCalls": 0
+}

@@ -21,6 +21,9 @@ Contract (ở gốc repo):
 - Fuzz chạy song song nên gas phụ thuộc cả seed lẫn số luồng. Chỉ ghim seed và luồng cho bước snapshot; `forge test` vẫn fuzz ngẫu nhiên. Tạo lại baseline bằng `forge snapshot --fuzz-seed 0x1 --threads 1`.
 
 Chain local:
+- Deploy bắt buộc `EXPECTED_CHAIN_ID` khớp chain thật; allowlist 31337/11155111 đồng bộ `shared/chains.ts`. Sepolia chỉ mint toàn bộ GOV cho broadcaster thực; SeedDemo chỉ local. Không tự chạy testnet.
+- Lệnh local: `EXPECTED_CHAIN_ID=31337 TOKEN_RECIPIENT=<địa chỉ Anvil> forge script script/Deploy.s.sol:Deploy --rpc-url http://127.0.0.1:8545 --broadcast --unlocked --sender <địa chỉ Anvil>`; seed thêm `EXPECTED_CHAIN_ID=31337` với các biến demo như README.
+- Runbook testnet CHƯA thực hiện: `docs/sepolia-runbook.md`; dry-run không broadcast, kiểm chain/deployer/số dư, chỉ Owner xác nhận mới ký bằng `--account govvote-deployer`.
 - `anvil` (mặc định: 127.0.0.1:8545, chainId 31337). Chain mất khi tắt Anvil.
 - Deploy, seed, lifecycle: theo đúng lệnh ở `docs/phase1-demo-report.md` mục 5 và 6b, ký bằng `--unlocked --sender/--from`. Bản chạy gần nhất: `docs/phase3-frontend-report.md`, mục "Chuẩn bị chain".
 

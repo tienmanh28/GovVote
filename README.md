@@ -104,12 +104,12 @@ anvil --port 8545 > /dev/null 2>&1
 **3. Deploy and seed.** Transactions are signed with `--unlocked --sender`: Anvil's account 0 is already unlocked, so no private key appears in any command or file.
 
 ```bash
-TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
+EXPECTED_CHAIN_ID=31337 TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
 PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 VOTING_DELAY_BLOCKS=15 VOTING_PERIOD_BLOCKS=7200 \
   forge script script/Deploy.s.sol:Deploy --rpc-url http://127.0.0.1:8545 \
   --broadcast --unlocked --sender 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 
-GOV_TOKEN=<GovToken address from the deploy log> \
+EXPECTED_CHAIN_ID=31337 GOV_TOKEN=<GovToken address from the deploy log> \
 DEMO_ALICE=0x70997970C51812dc3A010C7d01b50e0d17dc79C8 \
 DEMO_BOB=0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC \
 DEMO_CHARLIE=0x90F79bf6EB2c4f870365E785982E1f101E93b906 \
@@ -140,6 +140,12 @@ GOV_VOTE=<GovVote address> npm run verify
 
 Exit code 0 means VERIFIED, 1 means MISMATCH, 2 means a configuration or RPC error; strict mode also returns 3 for INCOMPLETE. `GOV_RPC_URL` overrides the default `http://127.0.0.1:8545`. Without `GOV_PROPOSAL_ID` the CLI runs the legacy tally mode; setting `GOV_PROPOSAL_ID` (with `GOV_TOKEN`) runs the strict per-proposal check.
 
+## Testnet deployment procedure (not executed)
+
+Sepolia is **not deployed**. Follow [the Vietnamese Sepolia runbook](docs/sepolia-runbook.md) only with Owner approval: prepare the `govvote-deployer` keystore, check chain ID 11155111, deployer and balance, dry-run **without** `--broadcast`, then obtain Owner confirmation before broadcasting with `--account govvote-deployer`. No raw private key is passed on the command line.
+
+Sepolia requires `TOKEN_RECIPIENT` to equal the actual broadcaster, which receives all 1,000,000 GOV; Owner later confirms each of four transfers separately. SeedDemo is local-only. Read balances/configuration back after each step. Strict verification may lag approximately 13 minutes for 64 confirmations (12-second block estimate, not a finality guarantee).
+
 ## Testing
 
 | Layer | What it covers | Result |
@@ -147,7 +153,7 @@ Exit code 0 means VERIFIED, 1 means MISMATCH, 2 means a configuration or RPC err
 | Foundry unit | GovToken and GovVote rules, revert paths, boundary blocks | part of 53 |
 | Foundry fuzz | 1,000 runs per test (weight equals past votes, threshold boundary, ...) | part of 53 |
 | Foundry invariant | 256 runs, depth 50: tallies, one vote per voter, tally frozen after deadline | part of 53 |
-| **`forge test` total** | 4 suites: 4 + 39 unit, 3 fuzz, 7 invariant | **53 passed** |
+| **`forge test` total** | 5 suites: 53 existing tests + 1 script test (11 guard/distribution scenarios) | **54 passed** |
 | Mutation (CLI) | Removing the log de-duplication step in `aggregateVotes` is caught by the CLI tests | detected |
 | Vitest (frontend) | error mapping, byte counter, tx state machine, verification core, RPC/session logic | **173 passed** (12 files) |
 | Node test runner (CLI) | `scripts/verify` cases: duplicates, missing logs, block windows | **37 passed** |

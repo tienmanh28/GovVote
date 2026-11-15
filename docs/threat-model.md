@@ -55,6 +55,13 @@ Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục
 
 ## Ghi chú kiểm chứng
 
+### P4-D1 — deploy nhầm mạng và nhập sai địa chỉ phân phối
+
+- `Deploy.run` bắt buộc `EXPECTED_CHAIN_ID` đọc bằng envUint, không có default. Thiếu/không đọc được biến: `ExpectedChainIdRequired`; chain ngoài `{31337,11155111}`: `UnsupportedExpectedChainId`; expected/actual lệch: `DeploymentChainMismatch(expected,actual)`. Guard chạy trước mọi startBroadcast. Hai hằng Solidity có comment nguồn `shared/chains.ts`; test mới kiểm đúng hai chain và từ chối 1/137/0, cần giữ đồng bộ khi sửa profile sau này.
+- Sepolia lấy signer thực từ `vm.readCallers()` sau startBroadcast, không dùng msg.sender; recipient khác signer bị chặn trước CREATE. Signer nhận toàn bộ 1.000.000 GOV, hậu kiểm supply/balance/token liên kết/tham số. Local giữ recipient tùy chọn như cũ. SeedDemo chỉ 31337, báo `LocalDemoOnly(actual)` trước env/token/broadcast. Không sửa bytecode contract nghiệp vụ.
+- **Rủi ro còn lại:** guard không biết ý định Owner nếu expected và RPC thật cùng bị chọn nhầm nhưng cùng là một chain được phép; không chứng minh RPC trung thực. Receipt không rollback hai giao dịch deploy đã lên chain nếu bước sau lỗi; cần dừng và kiểm tx/nonce, không tự deploy lại. Địa chỉ nhận sai khi transfer có thể làm mất GOV vĩnh viễn; runbook yêu cầu Owner kiểm bằng mắt từng địa chỉ/lượng/chain, xác nhận riêng từng giao dịch và đọc lại balanceOf. Guard không tự kiểm chủ sở hữu của địa chỉ nhận.
+- `docs/sepolia-runbook.md` chỉ là quy trình chuẩn bị D2/D3, **CHƯA thực hiện trên Sepolia**, không RPC công khai ở D1. Không dùng SeedDemo trên testnet, không lưu key/mnemonic/API credential. Các tình huống Sepolia chỉ mô phỏng bằng vm.chainId; MetaMask/keystore thật và mạng công khai chưa xác minh. 64 confirmations có thể trễ khoảng 13 phút (ước tính), không bảo đảm finality.
+
 ### P4-D0 — profile chain và provenance (15/11/2026)
 
 - `shared/chains.ts` là nguồn chính sách duy nhất cho allowlist `{31337, 11155111}`, nhãn mạng, explorer và confirmations. **Mainnet (1) bị chặn có chủ ý**, mọi chain khác cũng bị từ chối. Cấu hình không hợp lệ bị chặn trước RPC; endpoint thực tế được kiểm `eth_chainId` trước bytecode/state/logs. CLI sai chain exit 2; strict 0/1/3/2 và legacy 0/1/2 giữ nguyên. Guard triển khai `EXPECTED_CHAIN_ID` trong script deploy **chưa làm**; cần Owner duyệt ở D1.

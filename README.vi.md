@@ -104,12 +104,12 @@ anvil --port 8545 > /dev/null 2>&1
 **3. Deploy và seed (nạp dữ liệu demo).** Giao dịch được ký bằng `--unlocked --sender`: account 0 của Anvil đã được mở khóa sẵn, nên không có private key trong lệnh hay file nào.
 
 ```bash
-TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
+EXPECTED_CHAIN_ID=31337 TOKEN_RECIPIENT=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
 PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 VOTING_DELAY_BLOCKS=15 VOTING_PERIOD_BLOCKS=7200 \
   forge script script/Deploy.s.sol:Deploy --rpc-url http://127.0.0.1:8545 \
   --broadcast --unlocked --sender 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 
-GOV_TOKEN=<địa chỉ GovToken trong log deploy> \
+EXPECTED_CHAIN_ID=31337 GOV_TOKEN=<địa chỉ GovToken trong log deploy> \
 DEMO_ALICE=0x70997970C51812dc3A010C7d01b50e0d17dc79C8 \
 DEMO_BOB=0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC \
 DEMO_CHARLIE=0x90F79bf6EB2c4f870365E785982E1f101E93b906 \
@@ -140,6 +140,12 @@ GOV_VOTE=<địa chỉ GovVote> npm run verify
 
 Exit code 0 là VERIFIED (khớp), 1 là MISMATCH (lệch), 2 là lỗi cấu hình hoặc RPC; strict còn trả 3 khi INCOMPLETE (chưa đủ bằng chứng). `GOV_RPC_URL` thay cho mặc định `http://127.0.0.1:8545`. Không đặt `GOV_PROPOSAL_ID` thì CLI chạy chế độ legacy tally (đếm phiếu kiểu cũ); đặt `GOV_PROPOSAL_ID` (kèm `GOV_TOKEN`) thì chạy kiểm tra strict (chặt) cho từng proposal.
 
+## Quy trình deploy testnet (chưa thực hiện)
+
+**CHƯA deploy Sepolia.** Chỉ Owner làm theo [runbook Sepolia](docs/sepolia-runbook.md): chuẩn bị keystore `govvote-deployer`, kiểm chain ID 11155111, địa chỉ deployer và số dư, dry-run **không** `--broadcast`, rồi Owner xác nhận mới broadcast bằng `--account govvote-deployer`. Không truyền private key thô qua dòng lệnh.
+
+Sepolia bắt buộc `TOKEN_RECIPIENT` là broadcaster thực, nhận toàn bộ 1.000.000 GOV; Owner kiểm địa chỉ bằng mắt và xác nhận riêng từng giao dịch chuyển cho bốn tài khoản. SeedDemo chỉ local. Đọc lại balance/config sau từng bước. Strict verify có thể trễ khoảng 13 phút vì 64 confirmations (ước tính 12 giây/block, không bảo đảm finality).
+
 ## Testing (kiểm thử)
 
 | Lớp | Phạm vi | Kết quả |
@@ -147,7 +153,7 @@ Exit code 0 là VERIFIED (khớp), 1 là MISMATCH (lệch), 2 là lỗi cấu h�
 | Foundry unit | quy tắc GovToken và GovVote, các nhánh revert, block biên | nằm trong 53 |
 | Foundry fuzz (đầu vào ngẫu nhiên) | 1.000 runs mỗi test (weight bằng past votes, biên threshold, ...) | nằm trong 53 |
 | Foundry invariant (bất biến) | 256 runs, depth 50: tally, mỗi voter một phiếu, tally đóng băng sau deadline | nằm trong 53 |
-| **Tổng `forge test`** | 4 suite: 4 + 39 unit, 3 fuzz, 7 invariant | **53 passed** |
+| **Tổng `forge test`** | 5 suite: 53 test cũ + 1 test script (11 tình huống guard/phân phối) | **54 passed** |
 | Mutation (CLI, cố ý làm hỏng code) | Bỏ bước khử log trùng trong `aggregateVotes` thì test CLI phát hiện | phát hiện được |
 | Vitest (frontend) | map lỗi, bộ đếm byte, máy trạng thái giao dịch, verification core, logic RPC/session | **173 passed** (12 file) |
 | Node test runner (CLI) | các ca của `scripts/verify`: log trùng, thiếu log, cửa sổ block | **37 passed** |
