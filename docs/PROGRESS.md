@@ -173,6 +173,7 @@
 - **B2 audit:** 76 PNG, 76 SHA256 khác nhau, không có nhóm trùng byte; 76/76 được manifest pin đúng hash. Không xóa ảnh hay sửa manifest. Inventory đầy đủ tại docs/p4-backlog-evidence/screenshot-audit.json; tên thư mục gần giống không đủ căn cứ xóa bằng chứng.
 - **B3:** README EN/VI thể hiện Voter → frontend, MetaMask ký qua RPC ví và nguồn đọc cấu hình riêng → GovToken/GovVote; không đồng nhất RPC ví với frontend. Mermaid CLI12.0.0 (stable24/09, chỉ cài /tmp với ignore-scripts) render thành công cả 4 diagram, có SVG kiến trúc và summary. Thêm lưu ý verify64 confirmations ~13 phút, không bảo đảm finality.
 - **B4 phân tích, không sửa:** getVotes tại B dự đoán txB+1 là đúng, nhưng simulation không đặt blockTag nên mặc định latestB; contract kiểm getPastVotes(B-1). Sau tăng quyền ở B có thể false-enable rồi simulation revert, Anvil cần block mới. Chỉ là UX, contract không bị bypass; chưa tái hiện bằng test mới. Đề xuất gate theo pastVotes(B-1)/nhắc chờ block, cần Owner duyệt PR riêng. Chi tiết docs/p4-backlog-review.md.
+- **B5 spike /tmp:** wagmi3.7.9 + core3.6.7 + connectors8.2.2, stable21/10 đủ14ngày; audit27 (16high/11moderate) → **0**, cặp standalone cũng0. Không sửa source trong spike: typecheck, Vitest173, build PASS. API đang dùng chưa cần sửa qua các check này; browser v3/MetaMask/persistence thực chưa xác minh. Ước lượng1–2ngày cho PR nâng riêng và QA, không phải cam kết. Không đổi frontend/package*.json; summary và log tại docs/p4-backlog-evidence/.
 
 ### Backlog đã ghi nhận, chưa triển khai
 
