@@ -1,0 +1,49 @@
+
+> govvote-verify@0.1.0 test
+> tsx --test test/*.test.ts
+
+✔ strict: chain 1 exit 2 trước RPC (437.516246ms)
+✔ strict: chain 137 exit 2 trước RPC (451.351497ms)
+✔ strict: chain 0 exit 2 trước RPC (453.115914ms)
+✔ strict: chain -1 exit 2 trước RPC (405.593274ms)
+✔ strict: chain oops exit 2 trước RPC (354.896744ms)
+✔ strict: Sepolia fixture VERIFIED và mặc định 64 confirmations (588.012859ms)
+✔ strict: RPC thực trả mainnet bị chặn ngay sau eth_chainId (395.149426ms)
+✔ legacy: chain 1 exit 2 trước RPC (414.134565ms)
+✔ legacy: chain 137 exit 2 trước RPC (374.240716ms)
+✔ legacy: chain 0 exit 2 trước RPC (529.446624ms)
+✔ legacy: chain -1 exit 2 trước RPC (362.671056ms)
+✔ legacy: chain oops exit 2 trước RPC (410.31412ms)
+✔ legacy: Sepolia fixture VERIFIED và mặc định 64 confirmations (460.251606ms)
+✔ legacy: RPC thực trả mainnet bị chặn ngay sau eth_chainId (385.62829ms)
+✔ CLI EIP-1898: hash hợp lệ (585.13722ms)
+✔ CLI EIP-1898: eth_getCode (520.958355ms)
+✔ CLI EIP-1898: eth_call (533.507664ms)
+✔ CLI body 5242880 bytes, Content-Length=false (615.151736ms)
+✔ CLI body 5242881 bytes, Content-Length=false (544.097091ms)
+✔ CLI body 5242881 bytes, Content-Length=true (485.344342ms)
+✔ strict CLI codec và core dùng evidence đầy đủ (14.875582ms)
+✔ strict exit codes tách mismatch/incomplete/RPC (0.861142ms)
+✔ strict CLI HTTP fixture VERIFIED, exit 0 (573.361363ms)
+✔ strict CLI HTTP fixture MISMATCH, exit 1 (539.619394ms)
+✔ strict CLI HTTP fixture INCOMPLETE, exit 3 (558.727582ms)
+✔ strict CLI HTTP fixture RPC_ERROR, exit 2 (437.56778ms)
+✔ strict invalid input không in credentials RPC (451.82829ms)
+✔ CLI legacy/strict không echo input cấu hình nhạy cảm không hợp lệ (772.319011ms)
+✔ (a) valid logs without duplicates => VERIFIED (4.98309ms)
+✔ (b) exact duplicate (same txHash, logIndex, content) => VERIFIED, counted once (0.297469ms)
+✔ (c) one log with tampered weight => MISMATCH on exactly that id (0.462454ms)
+✔ (d) one missing log => MISMATCH (0.310838ms)
+✔ (e) logs with blockNumber > headBlock are ignored => VERIFIED (0.363351ms)
+✔ (f) same txHash:logIndex key with different content => aggregateVotes throws (1.589617ms)
+✔ (g) votes for an id outside 1..proposalCount => MISMATCH (0.574815ms)
+✔ (h) proposal with no votes on either side => VERIFIED with For = 0, Against = 0 (0.361818ms)
+✔ (i) blockWindows boundaries: contiguous, no gaps, no overlap (0.794448ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6843.402335
