@@ -31,7 +31,7 @@ PROPOSAL_THRESHOLD_GOV=1000 QUORUM_BPS=1000 VOTING_DELAY_BLOCKS=15 VOTING_PERIOD
   --account govvote-deployer
 ```
 
-**Không có `--broadcast`.** Đối chiếu log chain/name/broadcaster/recipient/tham số, gas dự kiến và bytecode với commit được Owner duyệt. Script dùng `vm.readCallers()` sau `startBroadcast` để lấy signer thực; không suy ra signer từ `msg.sender`. Bất kỳ mismatch/revert nào đều dừng; không retry giao dịch để che lỗi.
+**Không có `--broadcast`.** So sánh chính xác dòng `broadcaster (sender)` trong log dry-run với địa chỉ trả bởi `cast wallet address --account govvote-deployer`; **DỪNG nếu khác**, không broadcast hoặc chuyển GOV. Đối chiếu log chain/name/broadcaster/recipient/tham số, gas dự kiến và bytecode với commit được Owner duyệt. Script dùng `vm.readCallers()` sau `startBroadcast` để lấy signer thực; không suy ra signer từ `msg.sender`. Bất kỳ mismatch/revert nào đều dừng; không retry giao dịch để che lỗi.
 
 ## 3. Owner xác nhận rồi mới broadcast deploy
 
