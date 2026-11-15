@@ -53,6 +53,12 @@ Bảng trên phủ đủ 11 mối đe dọa trong bảng của đặc tả mục
 - **Giới hạn:** không deploy/gọi API Cloudflare hoặc RPC public ở E1. Dashboard/TLS/CDN/CORS/MetaMask thật và wallet injection trên mobile **chưa xác minh**, chờ F1. CSP không ngăn bundle cùng origin bị chiếm hay RPC allowlist nói dối, không chứng minh contract chính chủ, không theo dõi fork sau anchor. Policy origin không giới hạn method/path, không bật report endpoint chưa được duyệt. Đổi RPC phải rebuild; không nới wildcard/unsafe-inline để che lỗi.
 - Nguồn và quy trình Owner tự làm sau duyệt: `docs/hosting-cloudflare.md`. Không chọn RPC Sepolia mới, không thay tham số/bytecode/dependency hoặc tự deploy.
 
+## PR-E — gate đề xuất và simulation theo block trước
+
+- Frontend từng dùng getVotes tại B để bật gửi, trong khi GovVote.propose kiểm token.getPastVotes(proposer,B-1). Tái hiện Anvil thật: vừa delegate ở B đủ1.000GOV hiện tại nhưng pastVotes(B-1)=0, simulation BelowThreshold, nút vẫn bật. Evidence đỏ được lưu trước sửa, không sửa contract hoặc test cũ.
+- Gate mới đọc getPastVotes(ví,B-1) tại state B, khóa khi dữ liệu/block chưa sẵn sàng và tránh underflow genesis/future lookup; quyền hiện tại chỉ là thông tin so sánh. Sau block mới, query key theo account/block đổi và quyền lịch sử có thể đạt, không dùng placeholderData. Regression test cùng hash chuyển đỏ→xanh, có ba viewport và positive simulation sau mine1.
+- Đây là sửa lệch UX/simulation, **không** tăng quyền on-chain. Quyền có thể đổi sau lần đọc hoặc trước tx vào block mới; simulation và contract vẫn là nguồn quyết định cuối. RPC nói dối/reorg còn nguyên; F1 MetaMask/public RPC chưa xác minh, không thêm retry giao dịch hoặc nới CSP. Test mới dùng Anvil local, không có broadcast lên mạng công khai.
+
 ## Ngoài phạm vi
 
 - **Mua phiếu** (vote buying, hối lộ off-chain): phiếu công khai và không có cơ chế chống mua bán. Commit-reveal hoặc ZK thuộc v2.
