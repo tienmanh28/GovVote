@@ -19,19 +19,30 @@ Ví dụ sau **chỉ để Owner xem xét sau quyết định**, không phải l
 # CHỈ ĐỌC: Owner sao lưu ruleset hiện hành, không dùng bản cũ trong tài liệu.
 gh api repos/tienmanh28/GovVote/rulesets/27262992 > /tmp/govvote-main-ruleset-before.json
 # CHỈ TẠO PAYLOAD LOCAL: giữ ruleset hiện hành và thay đúng rule checks.
-jq '{name, target, enforcement, conditions, bypass_actors, rules} |
-  .rules = ([.rules[] | select(.type != "required_status_checks")] + [{
-    type: "required_status_checks",
-    parameters: {
-      strict_required_status_checks_policy: true,
-      required_status_checks: [
-        {context: "contracts (forge)"},
-        {context: "frontend (typecheck, format, Vitest, build)"},
-        {context: "verify-cli (scripts/verify)"},
-        {context: "e2e (Anvil + Playwright)"}
-      ]
-    }
-  }])' /tmp/govvote-main-ruleset-before.json > /tmp/govvote-main-ruleset-proposed.json
+python3 - <<'PYTHON'
+import json
+from pathlib import Path
+before = json.loads(Path("/tmp/govvote-main-ruleset-before.json").read_text())
+proposal = {key: before[key] for key in (
+    "name", "target", "enforcement", "conditions", "bypass_actors", "rules"
+)}
+proposal["rules"] = [rule for rule in proposal["rules"]
+                     if rule["type"] != "required_status_checks"] + [{
+    "type": "required_status_checks",
+    "parameters": {
+        "strict_required_status_checks_policy": True,
+        "required_status_checks": [{"context": name} for name in (
+            "contracts (forge)",
+            "frontend (typecheck, format, Vitest, build)",
+            "verify-cli (scripts/verify)",
+            "e2e (Anvil + Playwright)",
+        )],
+    },
+}]
+Path("/tmp/govvote-main-ruleset-proposed.json").write_text(
+    json.dumps(proposal, indent=2) + "\n"
+)
+PYTHON
 # Xem diff trước, chưa gọi API ghi.
 diff -u /tmp/govvote-main-ruleset-before.json /tmp/govvote-main-ruleset-proposed.json
 # CHỈ OWNER CHẠY SAU KHI QUYẾT ĐỊNH: PUT thay đổi cài đặt repo.
@@ -41,6 +52,7 @@ diff -u /tmp/govvote-main-ruleset-before.json /tmp/govvote-main-ruleset-proposed
 
 Rollback nếu Owner cần: xem lại bản sao lưu, tạo payload chỉ chứa các field ghi được như trên từ bản before, kiểm diff và tự quyết PUT; không gửi nguyên response chứa id/timestamps vào API. Không thực hiện rollback hay đổi cấu hình nào ở PR-F.
 
+- Kiểm tài liệu: Prettier hai Markdown mới, link tương đối và diff --check PASS. Lần kiểm mẫu đầu thiếu jq; đã thay bằng Python3 và xác nhận payload local giữ hai rule/conditions/bypass, thêm bốn checks PASS. Không chạy PUT.
 - Git snapshot trước commit: base022a3aa; chỉ `docs/PROGRESS.md` modified và hai Markdown mới; không thay code/test/workflow. Bằng chứng CI main lưu trong link run còn truy cập được; số liệu CV cố định theo SHA, không tự nhận là các nhánh PR mới nhất. PR-F chờ CI/review; Owner merge.
 
 
