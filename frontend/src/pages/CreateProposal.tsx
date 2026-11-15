@@ -4,12 +4,9 @@ import { useFreshness, DataFreshness } from "../lib/freshness.tsx";
 import { ReadError } from "../components/ReadError.tsx";
 // Form tạo proposal.
 // - Bộ đếm byte UTF-8 (TextEncoder) hiển thị trực tiếp, giới hạn đọc từ contract (MAX_TITLE_BYTES, MAX_DESCRIPTION_BYTES).
-// - Nút gửi bị khóa nếu getVotes(ví) < proposalThreshold. proposalThreshold đọc từ contract, không hardcode.
-//   Vì sao getVotes: block hiện tại là B; giao dịch propose sẽ nằm ở block kế tiếp B + 1, nên contract đọc
-//   getPastVotes(ví, (B + 1) − 1) = voting power ở cuối block B. getVotes(ví) đọc tại block B cho đúng giá trị đó.
-//   (getPastVotes(ví, B) không gọi được tại B vì B chưa thuộc quá khứ → ERC5805FutureLookup.)
-//   Đây chỉ là kiểm tra trước ở UI: nếu voting power đổi giữa lúc kiểm tra và lúc giao dịch vào block, contract
-//   vẫn là bên quyết định cuối cùng và lỗi BelowThreshold được hiển thị bằng tiếng Việt (errors.ts).
+// - Simulation tại block B kiểm GovToken.getPastVotes(ví, B-1), đúng GovVote.propose.
+//   getVotes hiện tại chỉ để tham khảo; vừa nhận quyền ở B cần chờ block mới trước khi gate mở.
+//   Dữ liệu UI vẫn có thể đổi trước lúc gửi: simulation và contract luôn quyết định cuối cùng.
 import { useState } from "react";
 import { useConfig, useReadContract } from "wagmi";
 import { simulateContract, writeContract } from "wagmi/actions";
@@ -30,6 +27,8 @@ export function CreateProposal() {
   const wagmiConfig = useConfig();
   const { address, canWrite, isConnected } = useWallet();
   const block = useCurrentBlock();
+  // Không hỏi timepoint tương lai hoặc trừ dưới genesis khi block chưa sẵn sàng.
+  const previousBlock = block !== undefined && block > 0n ? block - 1n : undefined;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [createdId, setCreatedId] = useState<bigint | null>(null);
@@ -61,7 +60,17 @@ export function CreateProposal() {
     query: { enabled: !!address && block !== undefined },
   });
 
-  const reads = [threshold, maxTitle, maxDesc, ...(address ? [votes] : [])];
+  // Ghim cả state đọc và timepoint: tại B chỉ kiểm quyền đã chốt ở B-1, không dự đoán B+1.
+  const eligibility = useReadContract({
+    chainId: cfg.chainId,
+    address: cfg.govToken,
+    abi: govTokenAbi,
+    functionName: "getPastVotes",
+    args: [address!, previousBlock ?? 0n],
+    blockNumber: block,
+    query: { enabled: !!address && previousBlock !== undefined },
+  });
+  const reads = [threshold, maxTitle, maxDesc, ...(address ? [votes, eligibility] : [])];
   const freshness = useFreshness(reads, `${cfg.rpcUrl}:${address ?? ""}`, block);
   const stamp = <DataFreshness info={freshness} />;
   if (reads.some((q) => q.error))
@@ -80,16 +89,18 @@ export function CreateProposal() {
     Number(maxDesc.data ?? 0n),
   );
   const enoughPower =
-    votes.data !== undefined && threshold.data !== undefined && votes.data >= threshold.data;
+    eligibility.data !== undefined &&
+    threshold.data !== undefined &&
+    eligibility.data >= threshold.data;
 
   let blockReason: string | null = null;
   if (!isConnected) blockReason = "Kết nối ví để tạo proposal.";
   else if (!canWrite)
     blockReason = `Ví đang ở sai mạng, hãy chuyển sang ${profile.name} (${profile.chainId}).`;
-  else if (votes.data === undefined || threshold.data === undefined)
+  else if (eligibility.data === undefined || threshold.data === undefined)
     blockReason = "Đang tải voting power…";
   else if (!enoughPower)
-    blockReason = `Voting power hiện tại (block ${block?.toString()}) là ${formatGov(votes.data)}, cần tối thiểu ${formatGov(threshold.data)}.`;
+    blockReason = `Voting power tại block trước (${previousBlock?.toString() ?? "…"}) là ${formatGov(eligibility.data)}, cần tối thiểu ${formatGov(threshold.data)}. Nếu vừa delegate hoặc nhận quyền, hãy đợi block mới.`;
   else if (!limitsReady) blockReason = "Đang tải giới hạn độ dài…";
   else if (!check.ok) blockReason = check.titleError ?? check.descriptionError;
 
@@ -143,8 +154,20 @@ export function CreateProposal() {
           value={
             address ? (votes.data !== undefined ? formatGov(votes.data) : "…") : "Chưa kết nối ví"
           }
-          hint="getVotes(ví): giá trị contract sẽ dùng khi giao dịch vào block kế tiếp. Không phải số dư."
+          hint="getVotes(ví) chỉ tham khảo hiện tại; gate dùng quyền tại block trước, không phải số dư."
           testId="current-votes"
+        />
+        <Stat
+          label={`Quyền tạo proposal tại block trước (${previousBlock?.toString() ?? "…"})`}
+          value={
+            address
+              ? eligibility.data !== undefined
+                ? formatGov(eligibility.data)
+                : "…"
+              : "Chưa kết nối ví"
+          }
+          hint="getPastVotes(ví, B−1) tại block B, cùng quy tắc với simulation."
+          testId="proposal-eligibility-votes"
         />
       </div>
       <Card>

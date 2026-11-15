@@ -1,0 +1,33 @@
+{
+  "base": "022a3aa",
+  "redCommit": "d70168e",
+  "fixCommit": "38f95a2",
+  "redGreenTestSha256": "574fc0dc221797b96a99979b877c7034e545a4a2bb87824f1ed5cb49a0a66122",
+  "sameTestAndAssertions": true,
+  "vitest": 177,
+  "cli": 37,
+  "browser": [
+    34,
+    12,
+    3,
+    18
+  ],
+  "browserTotal": 67,
+  "newBrowserTests": 1,
+  "bytecodeRuntime": {
+    "GovToken": 6846,
+    "GovVote": 4603
+  },
+  "viewports": [
+    "375x812",
+    "768x1024",
+    "1280x800"
+  ],
+  "anvilPort": 8549,
+  "publicRpcCalls": 0,
+  "oldTestsChanged": false,
+  "notes": [
+    "Full standard prepare-chain succeeded for complete67 suite; minimal fixture used for isolated red/green because prior setup hung SeedDemo.",
+    "Initial test waiting regexp corrected before official red commit, not a weakened gate assertion."
+  ]
+}

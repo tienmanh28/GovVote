@@ -1,0 +1,10 @@
+{
+  "base": "022a3aa",
+  "wagmi": "2.19.5",
+  "testSha256": "574fc0dc221797b96a99979b877c7034e545a4a2bb87824f1ed5cb49a0a66122",
+  "setup": "Anvil8549 minimal, same contracts/threshold1000/quorum1000/delay15/period7200; mint to default deployer, sequential transfer400000GOV to Alice",
+  "actual": "B=5; getVotes1000GOV; getPastVotes(B-1)=0; real simulateContract atB => BelowThreshold; UI submit enabled",
+  "expectedExit": 1,
+  "reason": "toBeDisabled received enabled",
+  "note": "Full prepare-chain earlier hung SeedDemo; minimal fixture avoids that unrelated setup stage, no script/contract edits."
+}
