@@ -92,7 +92,7 @@ end_step
 begin_step "forge script SeedDemo"
 step_log="$CHAIN_DIAGNOSTICS_DIR/forge-seed.log"
 GOV_TOKEN="$GOV_TOKEN" DEMO_ALICE="$ALICE" DEMO_BOB="$BOB" DEMO_CHARLIE="$CHARLIE" DEMO_DAVID="$DAVID" \
-  forge script script/SeedDemo.s.sol:SeedDemo --rpc-url "$RPC_URL" \
+  forge script script/SeedDemo.s.sol:SeedDemo -vvvv --rpc-url "$RPC_URL" \
   --broadcast --unlocked --sender "$DEPLOYER" > "$step_log" 2>&1
 end_step
 

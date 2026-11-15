@@ -144,7 +144,8 @@ jobs:
       - name: Dựng chain demo (lifecycle Phase 1, proposal #1 Succeeded) và tạo frontend/.env.local
         env:
           ENV_OUT: frontend/.env.local
-        run: bash scripts/ci/prepare-chain.sh
+        # Diagnostic run từng kẹt SeedDemo >7 phút: dừng hữu hạn để artifact được upload, không retry.
+        run: timeout --signal=TERM --kill-after=10s 180s bash scripts/ci/prepare-chain.sh
       - name: Build frontend với .env.local vừa tạo
         working-directory: frontend
         run: npx vite build
@@ -176,7 +177,8 @@ jobs:
           if-no-files-found: ignore
       # Giữ riêng log setup kể cả fail trước khi Playwright tạo artifact; retention ngắn.
       - name: Upload chẩn đoán Anvil khi fail
-        if: failure()
+        # Giữ cả khi runner bị hủy, để không mất công đoạn cuối đang kẹt.
+        if: failure() || cancelled()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: anvil-diagnostics
