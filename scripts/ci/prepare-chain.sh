@@ -32,6 +32,9 @@ DAVID=0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
 # Cấu hình demo (giống Phase 1).
 VOTING_DELAY_BLOCKS=15
 VOTING_PERIOD_BLOCKS=7200
+# Một RPC đào ~7.200 block đã vượt timeout mặc định 45s trên runner.
+# Chia công việc theo batch; không đổi voting period/tổng block và không retry RPC/broadcast.
+MINE_BATCH_BLOCKS=500
 
 log() { printf '[prepare-chain] %s\n' "$*"; }
 begin_step() {
@@ -51,7 +54,17 @@ on_error() {
 trap 'on_error "$?" "$LINENO" "$BASH_COMMAND"' ERR
 fail() { printf '[prepare-chain] LỖI: %s\n' "$*" >&2; exit 1; }
 head_block() { cast block-number --rpc-url "$RPC_URL"; }
-mine() { if [ "$1" -gt 0 ]; then cast rpc anvil_mine "$1" --rpc-url "$RPC_URL" > /dev/null; fi; }
+mine() {
+  local remaining="$1" batch batch_started
+  while [ "$remaining" -gt 0 ]; do
+    batch=$((remaining > MINE_BATCH_BLOCKS ? MINE_BATCH_BLOCKS : remaining))
+    batch_started=$SECONDS
+    log "$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ) BEGIN anvil_mine batch=$batch remaining=$remaining" >&2
+    cast rpc anvil_mine "$batch" --rpc-url "$RPC_URL" > /dev/null
+    log "$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ) END anvil_mine batch=$batch elapsed=$((SECONDS - batch_started))s" >&2
+    remaining=$((remaining - batch))
+  done
+}
 send() { cast send "$@" --unlocked --rpc-url "$RPC_URL" > /dev/null; }
 
 # 1. Chờ Anvil trả lời RPC (tối đa 60 giây) và chỉ chấp nhận chain local 31337.
