@@ -168,7 +168,8 @@ describe("cấu hình env", () => {
       ...ok,
       VITE_GOV_VOTE: "",
       VITE_GOV_TOKEN: "0x123",
-      VITE_CHAIN_ID: "11155111",
+      // Owner cho phép Sepolia ở P4-D0 nên 11155111 không còn là chain không hỗ trợ.
+      VITE_CHAIN_ID: "137",
     });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors).toHaveLength(3);
