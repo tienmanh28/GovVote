@@ -1,0 +1,29 @@
+[WebServer] (node:114988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin rolldown:vite-resolve] Module "node:worker_threads" has been externalized for browser compatibility, imported by "/home/tienm/blockchain/GovVote/frontend/node_modules/ox/_esm/tempo/internal/virtualMasterPool.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:115037) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:115080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 validation/p3-fix-04.spec.ts:199:1 › primary ưu tiên, fallback không bị gọi khi primary tốt (270ms)
+  ✓   2 validation/p3-fix-04.spec.ts:205:1 › primary lỗi => fallback hợp lệ; phục hồi primary bằng retry (320ms)
+  ✓   3 validation/p3-fix-04.spec.ts:216:3 › không còn endpoint, fallback wrong chain=false (376ms)
+  ✓   4 validation/p3-fix-04.spec.ts:216:3 › không còn endpoint, fallback wrong chain=true (281ms)
+  ✓   5 validation/p3-fix-04.spec.ts:231:1 › verification fallback đọc lại context và evidence từ đầu ở nguồn mới (413ms)
+  ✓   6 validation/p3-fix-04.spec.ts:243:1 › freshness không tiến khi lỗi/đồng hồ chạy; retry cập nhật thành công (2.8s)
+  ✓   7 validation/p3-fix-04.spec.ts:260:1 › Pending getVotes dự kiến, đổi account, snapshot historical và sai chain (1.6s)
+  ✓   8 validation/p3-fix-04.spec.ts:286:3 › reliability responsive 375 (331ms)
+  ✓   9 validation/p3-fix-04.spec.ts:286:3 › reliability responsive 768 (305ms)
+  ✓  10 validation/p3-fix-04.spec.ts:286:3 › reliability responsive 1280 (327ms)
+  ✓  11 validation/p3-fix-04.spec.ts:305:1 › endpoint cũ trả muộn không ghi đè fallback (2.6s)
+  ✓  12 validation/p3-fix-04.spec.ts:320:1 › cùng chain ID/contract nhưng khác lịch sử: từ chối fallback (1.6s)
+
+  12 passed (14.5s)

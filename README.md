@@ -80,7 +80,7 @@ stateDiagram-v2
 | Area | Tools (versions pinned in the repo) |
 |---|---|
 | Contracts | Solidity 0.8.28 (EVM `cancun`, optimizer 200 runs), Foundry, OpenZeppelin Contracts v5.6.1, forge-std v1.17.0 |
-| Frontend | React 19.3.1, wagmi 2.19.5, viem 2.57.13, TanStack Query 5.105.0, Vite 8.3.5, Tailwind CSS 4.3.3, TypeScript 7.0.2 |
+| Frontend | React 19.3.1, wagmi 3.7.9, viem 2.57.13, TanStack Query 5.105.0, Vite 8.3.5, Tailwind CSS 4.3.3, TypeScript 7.0.2 |
 | Verify CLI | Node.js ≥ 24, viem 2.57.11, tsx 4.23.15, TypeScript 7.0.2 |
 | Tests | forge test, Vitest 5.0.5, Node test runner (CLI), Playwright 1.64.1 |
 
@@ -174,7 +174,7 @@ From [docs/threat-model.md](docs/threat-model.md) and the project progress notes
 - **Sybil and concentration.** This is token-weighted voting, not one-person-one-vote. `hasVoted` blocks per address, not per person.
 - **The verify CLI trusts its RPC.** It detects inconsistencies between logs and storage, but an RPC that is wrong in a consistent way can still mislead it.
 - **Not tested with a real wallet.** Browser tests use an injected fake wallet; real MetaMask flows are unverified.
-- **npm audit:** the frontend reports 27 advisories (16 high, 11 moderate, 0 critical) that come through wagmi's connector dependency tree (`@wagmi/connectors`). The app only instantiates the `injected()` connector. Upgrading needs wagmi v3, which is not decided yet. The verify CLI reports 0.
+- **npm audit:** 0 frontend advisories after upgrading to wagmi 3.7.9 / connectors 8.2.2 (previously 27: 16 high, 11 moderate). Only `injected()` is instantiated; no WalletConnect added. A clean dependency audit does not replace contract security review or real MetaMask QA.
 - No owner, no roles, no setters, no mint after deploy. Changing a rule means deploying a new contract.
 
 ## Repository layout
