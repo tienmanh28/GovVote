@@ -16,3 +16,4 @@ broadcast/
 !.env.example
 .solidity-auditor/
 .audit-*/
+graphify-out/
