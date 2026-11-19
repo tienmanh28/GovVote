@@ -80,7 +80,7 @@ stateDiagram-v2
 | Mảng | Công cụ (phiên bản ghim trong repo) |
 |---|---|
 | Contract | Solidity 0.8.28 (EVM `cancun`, optimizer 200 runs), Foundry, OpenZeppelin Contracts v5.6.1, forge-std v1.17.0 |
-| Frontend | React 19.3.1, wagmi 2.19.5, viem 2.57.13, TanStack Query 5.105.0, Vite 8.3.5, Tailwind CSS 4.3.3, TypeScript 7.0.2 |
+| Frontend | React 19.3.1, wagmi 3.7.9, viem 2.57.13, TanStack Query 5.105.0, Vite 8.3.5, Tailwind CSS 4.3.3, TypeScript 7.0.2 |
 | CLI verify | Node.js ≥ 24, viem 2.57.11, tsx 4.23.15, TypeScript 7.0.2 |
 | Test | forge test, Vitest 5.0.5, Node test runner (CLI), Playwright 1.64.1 |
 
@@ -174,7 +174,7 @@ Lấy từ [docs/threat-model.md](docs/threat-model.md) và ghi chép tiến đ�
 - **Sybil (một người dùng nhiều danh tính) và tập trung token.** Đây là token-weighted voting, không phải mỗi người một phiếu. `hasVoted` chặn theo địa chỉ, không theo người thật.
 - **CLI verify tin RPC.** Nó phát hiện chỗ không nhất quán giữa log và storage, nhưng một RPC sai một cách nhất quán vẫn có thể đánh lừa nó.
 - **Chưa test với ví thật.** Test trình duyệt dùng ví giả được nhúng vào trang; luồng MetaMask thật chưa xác minh.
-- **npm audit:** frontend báo 27 advisory (cảnh báo lỗ hổng) (16 high, 11 moderate, 0 critical), đến từ cây phụ thuộc connector của wagmi (`@wagmi/connectors`). Ứng dụng chỉ khởi tạo connector `injected()`. Muốn hết cảnh báo phải nâng lên wagmi v3, việc này chưa được quyết định. CLI verify báo 0.
+- **npm audit:** frontend 0 advisory sau khi nâng wagmi 3.7.9 / connectors 8.2.2 (trước: 27, gồm 16 high và 11 moderate). Chỉ khởi tạo `injected()`; không thêm WalletConnect. Audit 0 không thay thế audit bảo mật contract hoặc QA MetaMask thật.
 - Không owner, không role, không setter, không mint sau deploy. Muốn đổi quy tắc thì phải deploy contract mới.
 
 ## Cấu trúc repo
