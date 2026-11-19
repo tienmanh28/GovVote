@@ -5,20 +5,21 @@
 
 ## Snapshot (đo ngày 17/11/2026, tối đa 40 dòng)
 
-- main = origin/main = `29f02ee` (merge PR #8). Kiểm bằng `git rev-parse main origin/main`.
-- CI trên main: run [43745990411](https://github.com/tienmanh28/GovVote/actions/runs/43745990411) tại `29f02ee`, conclusion success (`gh run list --branch main`).
-- Số test gần nhất có log CI (run 43744115832 tại `2cc3477`, ghi trong PROGRESS mục PR-F): Forge 54, Vitest 177, CLI 37, browser 67. Chưa chạy lại local trong phiên 17/11.
+- main = origin/main = `252d9dd` (merge PR #6, wagmi v3). Kiểm bằng `git rev-parse main origin/main`.
+- CI trên main: run [44584543060](https://github.com/tienmanh28/GovVote/actions/runs/44584543060) tại `252d9dd`, 4 job success (`gh run list --branch main`).
+- Số test theo log CI run đó: Forge 54, Vitest 177 (13 file), browser Playwright 67 (34 + 12 + 3 + 18). CLI 37 theo run trước; chưa chạy lại local.
+- Bytecode chuẩn (`forge build --sizes`, đo lại sau merge): GovToken 6.846 B, GovVote 4.603 B runtime. Contract `src/` đóng băng, không được đổi.
 - Contract: Phase 1–2 Verified local; chưa deploy testnet nào (Not proven trên Sepolia).
 - Frontend: Verified local + CI; chưa deploy Cloudflare (Not proven).
-- PR mở: #6 `feat/p4-wagmi-v3` (nâng wagmi v3, npm audit) ở `2593b36`. Hai run CI (push 43746291319, pull_request 43746295944) đều success. Chờ Owner merge.
-- Đang dở, chưa kết luận: SeedDemo treo trong bước dựng chain CI. Owner ghi việc điều tra ở nhánh `fix/p4-ci-setup-hang`; ngày 17/11 nhánh này chưa có trên local lẫn origin.
-  - Bằng chứng (run 43740310900, pull_request tại `c0bd781`, artifact `anvil-diagnostics`): SeedDemo gửi 4 giao dịch, Anvil chỉ đào 2 (block 2 và 3). Có 1.426 lần gọi `eth_getTransactionReceipt` (17:20:00 tới 17:22:57 UTC) cho tới khi guard `timeout 180s` trong `ci.yml` dừng bước.
-  - Run 43740268031 (push, cùng `c0bd781`) xanh, log ghi `END forge script SeedDemo elapsed=1s`. Nguyên nhân gốc chưa xác minh.
+- PR mở: #9 `docs/ai-handoff` (bộ file bàn giao AI).
+- Đang dở, chưa kết luận: điều tra SeedDemo treo trong bước dựng chain CI. Nhánh `fix/p4-ci-setup-hang` KHÔNG còn tồn tại (mất khi chuyển WSL); cần làm lại từ đầu.
+  - Bằng chứng cũ (run 43740310900, pull_request tại `c0bd781`, artifact `anvil-diagnostics`): SeedDemo gửi 4 giao dịch nhưng log Anvil chỉ ghi 2 transfer được mine (block 2 và 3). Có 1.426 lần hỏi `eth_getTransactionReceipt` (17:20:00 tới 17:22:57 UTC) cho tới khi guard `timeout 180s` trong `ci.yml` dừng bước.
+  - Run 43740268031 (push, cùng `c0bd781`) xanh, SeedDemo xong trong 1s. Nguyên nhân gốc chưa xác minh.
 - Ruleset main 27262992 chỉ có `non_fast_forward` và `deletion`; chưa có required status checks (đọc API 17/11).
 
 ### Bước tiếp theo (theo thứ tự đề xuất, mỗi bước cần Owner duyệt)
 
-1. Owner quyết PR #6 (wagmi v3): merge hay đóng. AGENTS.md cấm tự nâng.
+1. PR #6 (wagmi v3) đã merge; không nâng thêm bản lớn wagmi/viem khi chưa có quyết định của Owner.
 2. Owner quyết đề xuất ruleset required status checks (lệnh mẫu trong PROGRESS mục PR-F); AI không tự PUT.
 3. Chạy F1 local theo `docs/acceptance-metamask.md` trên Anvil cổng riêng (không 8545), lưu bằng chứng vào `docs/`.
 4. D2/D3 Sepolia theo `docs/sepolia-runbook.md`: chỉ Owner ký bằng keystore `govvote-deployer`.
@@ -27,7 +28,7 @@
 
 ### Blocker
 
-- D2/D3 và Cloudflare: cần keystore, ETH Sepolia, RPC, API key của Owner. AI không có và không được dùng.
+- D2/D3 chờ Owner chuẩn bị: keystore `govvote-deployer` (chưa có), ETH Sepolia, RPC, Etherscan API key, 4 tài khoản MetaMask. Cloudflare cũng chờ D2/D3. AI không có và không được dùng các thứ này.
 - F1: cần MetaMask thật do Owner thao tác.
 
 ### Quyền cần hỏi lại mỗi phiên
