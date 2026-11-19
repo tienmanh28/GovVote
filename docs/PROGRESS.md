@@ -1,5 +1,7 @@
 # PROGRESS: tiến độ GovVote (bộ nhớ chung giữa các phiên AI)
 
+> Trạng thái hiện tại: xem `docs/PROJECT_STATE.md`. File này là nhật ký chi tiết; các mục số 1 tới 6 ở cuối (cập nhật 14/11/2026) là lịch sử, không còn phản ánh trạng thái hiện tại.
+
 ## PR-F — nghiệm thu MetaMask, CV và đề xuất ruleset, 16/11/2026, Codex
 
 - Nhánh `docs/p4-acceptance-and-cv`, base main **022a3aa**; fetch/pull ff-only, working tree sạch trước tạo. **PR #1–#5 đã MERGED** (verifier hardening, chain profile, deploy guard, backlog polish, hosting prep); các checkpoint OPEN bên dưới là lịch sử. PR #7 được merge đồng thời ngoài phiên này thành main2cc3477; đã merge origin/main vào nhánh PR-F bằng 795965c, giữ mục PR-E khi giải quyết xung đột docs. PR #6 vẫn OPEN, không merge. Chuyển sang worktree /tmp/govvote-pr-f để tránh checkout đồng thời của phiên khác.
@@ -550,6 +552,8 @@ Bản sửa trong phiên: App, config, main, ConfigGuard, bốn pages, useCurren
 
 ---
 
+
+> LỊCH SỬ: các mục số 1 tới 6 dưới đây ghi trạng thái ngày 14/11/2026 và đã cũ. Trạng thái hiện tại xem `docs/PROJECT_STATE.md`.
 
 - **Cập nhật:** 2026-11-14 01:39 +0700
 - **Bởi:** Claude Code (Claude Opus 5.5)
